@@ -1,26 +1,10 @@
 ﻿<Window x:Class="MechanicWorkshopApp.Views.ClienteForm"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:MechanicWorkshopApp.Converters"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         Title="Formulario de Cliente" Height="500" Width="400">
     <Window.Resources>
-        <!-- Convertidor para controlar la visibilidad -->
-        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <local:ValidationErrorConverter x:Key="ValidationErrorConverter"/>
-        <local:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter"/>
-
-        <!-- Estilo para TextBox con borde rojo después de interacción -->
-        <Style TargetType="TextBox">
-            <Setter Property="ToolTip"
-        Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors), Converter={StaticResource FirstValidationErrorConverter}}"/>
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="BorderBrush" Value="Red"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
     </Window.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
@@ -32,57 +16,40 @@
 
             <!-- Campos de Entrada -->
             <StackPanel Grid.Row="0" VerticalAlignment="Top">
-                <TextBlock Text="Nombre" Margin="5"/>
                 <TextBox x:Name="txtNombre" Margin="5"
-                Text="{Binding Nombre, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
-                LostFocus="TextBox_LostFocus">
-                </TextBox>
+                    Text="{Binding Nombre, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                    materialDesign:HintAssist.Hint="Nombre"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 
-                <TextBlock Margin="5" Foreground="Red" FontSize="12"
-                Text="{Binding ElementName=txtNombre, Path=(Validation.Errors), Converter={StaticResource FirstValidationErrorConverter}, FallbackValue=''}"
-                Visibility="{Binding ElementName=txtNombre, Path=(Validation.HasError), Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
-                <TextBlock Text="DNI/CIF" Margin="5"/>
-                <TextBox x:Name="txtDNI_CIF" Margin="5" Text="{Binding DNI_CIF, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <TextBlock Margin="5" Foreground="Red" FontSize="12"
-                Text="{Binding ElementName=txtDNI_CIF, Path=(Validation.Errors), Converter={StaticResource FirstValidationErrorConverter}, FallbackValue=''}"
-                Visibility="{Binding ElementName=txtDNI_CIF, Path=(Validation.HasError), Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <TextBox x:Name="txtDNI_CIF" Margin="5" 
+                    Text="{Binding DNI_CIF, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                    materialDesign:HintAssist.Hint="DNI/CIF"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
                 
-                <TextBlock Text="Dirección" Margin="5"/>
-                <TextBox x:Name="txtDireccion" Margin="5" Text="{Binding Direccion, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <TextBlock Margin="5" Foreground="Red" FontSize="12"
-                Text="{Binding ElementName=txtDireccion, Path=(Validation.Errors), Converter={StaticResource FirstValidationErrorConverter}, FallbackValue=''}"
-                Visibility="{Binding ElementName=txtDireccion, Path=(Validation.HasError), Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <TextBox x:Name="txtDireccion" Margin="5" 
+                    Text="{Binding Direccion, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                    materialDesign:HintAssist.Hint="Dirección"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
                 
-                <TextBlock Text="Código Postal" Margin="5"/>
-                <TextBox x:Name="txtCodigoPostal" Margin="5" Text="{Binding CodigoPostal, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <TextBlock Margin="5" Foreground="Red" FontSize="12"
-                Text="{Binding ElementName=txtCodigoPostal, Path=(Validation.Errors), Converter={StaticResource FirstValidationErrorConverter}, FallbackValue=''}"
-                Visibility="{Binding ElementName=txtCodigoPostal, Path=(Validation.HasError), Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <TextBox x:Name="txtCodigoPostal" Margin="5" 
+                    Text="{Binding CodigoPostal, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                    materialDesign:HintAssist.Hint="Código Postal"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}" />
                 
-                <TextBlock Text="Municipio" Margin="5"/>
-                <TextBox x:Name="txtMunicipio" Margin="5" Text="{Binding Municipio, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <TextBlock Margin="5" Foreground="Red" FontSize="12"
-                Text="{Binding ElementName=txtMunicipio, Path=(Validation.Errors), Converter={StaticResource FirstValidationErrorConverter}, FallbackValue=''}"
-                Visibility="{Binding ElementName=txtMunicipio, Path=(Validation.HasError), Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
-                <TextBlock Text="Provincia" Margin="5"/>
-                <TextBox x:Name="txtProvincia" Margin="5" Text="{Binding Provincia, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <TextBlock Margin="5" Foreground="Red" FontSize="12"
-                Text="{Binding ElementName=txtProvincia, Path=(Validation.Errors), Converter={StaticResource FirstValidationErrorConverter}, FallbackValue=''}"
-                Visibility="{Binding ElementName=txtProvincia, Path=(Validation.HasError), Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
-                <TextBlock Text="Teléfono" Margin="5"/>
-                <TextBox x:Name="txtTelefono" Margin="5" Text="{Binding Telefono, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <TextBlock Margin="5" Foreground="Red" FontSize="12"
-                Text="{Binding ElementName=txtTelefono, Path=(Validation.Errors), Converter={StaticResource FirstValidationErrorConverter}, FallbackValue=''}"
-                Visibility="{Binding ElementName=txtTelefono, Path=(Validation.HasError), Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <TextBox x:Name="txtMunicipio" Margin="5" 
+                    Text="{Binding Municipio, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                    materialDesign:HintAssist.Hint="Municipio"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                
+                <TextBox x:Name="txtProvincia" Margin="5" 
+                    Text="{Binding Provincia, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                    materialDesign:HintAssist.Hint="Provincia"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                
+                <TextBox x:Name="txtTelefono" Margin="5" 
+                    Text="{Binding Telefono, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                    materialDesign:HintAssist.Hint="Teléfono"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
             </StackPanel>
 
             <!-- Botones de Acción -->
