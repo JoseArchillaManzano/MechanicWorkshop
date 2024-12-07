@@ -6,20 +6,40 @@
     <Application.Resources>
         <!-- Estilos de Material Design -->
         <ResourceDictionary>
-            <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
-                <Setter Property="Padding" Value="5" />
-            </Style>
             <ResourceDictionary.MergedDictionaries>
                 <!-- Temas de Material Design -->
                 <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="Blue" SecondaryColor="Orange" />
 
                 <!-- Diccionarios de recursos para estilos de controles -->
-                
+
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
                 <!-- Usar Material Design 3 -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+                <Setter Property="Padding" Value="5" />
+            </Style>
+            <Style TargetType="DataGridRow">
+                <Setter Property="Background" Value="White" />
+                <Setter Property="BorderBrush" Value="#E0E0E0" />
+                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                <Style.Triggers>
+                    <!-- Alternación de color para filas -->
+                    <Trigger Property="AlternationIndex" Value="1">
+                        <Setter Property="Background" Value="#FAFAFA" />
+                    </Trigger>
+                    <!-- Estilo para la fila seleccionada -->
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="#DDEEFF" />
+                        <!-- Azul claro -->
+                        <Setter Property="Foreground" Value="Black" />
+                        <Setter Property="BorderBrush" Value="#B0C4DE" />
+                        <!-- Azul pastel -->
+                        <Setter Property="BorderThickness" Value="1" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

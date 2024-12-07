@@ -1,5 +1,6 @@
 ﻿using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
+using MechanicWorkshopApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +23,13 @@ namespace MechanicWorkshopApp.Views
     public partial class ClienteForm : Window
     {
         private Cliente _cliente;
+        private ClienteService _clienteService;
 
         public ClienteForm(Cliente cliente = null)
         {
             InitializeComponent();
             _cliente = cliente ?? new Cliente();
+            _clienteService = new ClienteService(new TallerContext());
             DataContext = _cliente; // Vinculamos el DataContext al cliente
         }
 
@@ -59,38 +62,37 @@ namespace MechanicWorkshopApp.Views
             this.DialogResult = false; // Cancela la operación
             this.Close();
         }
-
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (sender is TextBox textBox)
-            {
-                textBox.Tag = true; // Marca el campo como interactuado
-            }
-        }
-
         private void GuardarCliente()
         {
-            using (var context = new TallerContext())
+            if (_cliente.Id == 0)
             {
-                _cliente.Nombre = txtNombre.Text;
-                _cliente.DNI_CIF = txtDNI_CIF.Text;
-                _cliente.Direccion = txtDireccion.Text;
-                _cliente.CodigoPostal = txtCodigoPostal.Text;
-                _cliente.Municipio = txtMunicipio.Text;
-                _cliente.Provincia = txtProvincia.Text;
-                _cliente.Telefono = txtTelefono.Text;
-
-                if (_cliente.Id == 0)
-                {
-                    context.Clientes.Add(_cliente);
-                }
-                else
-                {
-                    context.Clientes.Update(_cliente);
-                }
-
-                context.SaveChanges();
+                // Nuevo cliente
+                _clienteService.AgregarCliente(_cliente);
+            }
+            else
+            {
+                // Actualizar cliente existente
+                _clienteService.ActualizarCliente(_cliente);
             }
         }
+
+        private void BtnMostrarVehiculos_Click(object sender, RoutedEventArgs e)
+        {
+            // Obtén la fila asociada al botón que se hizo clic
+            var clienteSeleccionado = ((FrameworkElement)sender).DataContext as Cliente;
+
+            if (clienteSeleccionado != null)
+            {
+                // Abre la ventana VehiculosView con el cliente seleccionado
+                var vehiculosView = new VehiculosView(clienteSeleccionado);
+                vehiculosView.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Error al intentar cargar los vehículos. Por favor, inténtalo de nuevo.",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
     }
 }

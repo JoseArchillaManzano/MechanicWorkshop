@@ -20,5 +20,14 @@ namespace MechanicWorkshopApp.Data
             // Configura la conexión con PostgreSQL
             optionsBuilder.UseNpgsql("Host=localhost;Database=Taller;Username=postgres;Password=Postgresi-20");
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Vehiculo>()
+                .HasOne(v => v.Cliente)
+                .WithMany(c => c.Vehiculos)
+                .HasForeignKey(v => v.ClienteId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

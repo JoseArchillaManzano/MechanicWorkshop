@@ -1,0 +1,75 @@
+﻿<Window x:Class="MechanicWorkshopApp.Views.VehiculoForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Formulario de Vehículo" Height="550" Width="400">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Campos de Entrada -->
+            <StackPanel Grid.Row="0" VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <!-- Campo Cliente -->
+                    <TextBox x:Name="txtCliente" Margin="5"
+                             Text="{Binding Cliente.Nombre, FallbackValue='Seleccionar cliente...'}"
+                             IsReadOnly="True"
+                             materialDesign:HintAssist.Hint="Cliente"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                    <Button x:Name="btnSeleccionarCliente" Content="..."
+                            Margin="5"
+                            Width="30"
+                            Height="30"
+                            Click="BtnSeleccionarCliente_Click"
+                            Style="{StaticResource MaterialDesignFlatButton}" />
+                </StackPanel>
+
+                <!-- Otros campos -->
+                <TextBox x:Name="txtMarca" Margin="5"
+                         Text="{Binding Marca, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="Marca"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+
+                <TextBox x:Name="txtModelo" Margin="5"
+                         Text="{Binding Modelo, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="Modelo"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+
+                <TextBox x:Name="txtMatricula" Margin="5"
+                         Text="{Binding Matricula, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="Matrícula"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+
+                <TextBox x:Name="txtMotor" Margin="5"
+                         Text="{Binding Motor, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="Motor"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+
+                <TextBox x:Name="txtBastidor" Margin="5"
+                         Text="{Binding Bastidor, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="Bastidor"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+
+                <TextBox x:Name="txtKilometraje" Margin="5"
+                         Text="{Binding Kilometraje, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="Kilometraje"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+
+                <!-- Observaciones -->
+                <TextBox x:Name="txtObservaciones" Margin="5" AcceptsReturn="True" Height="80"
+                         Text="{Binding Observaciones, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="Observaciones"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+            </StackPanel>
+
+            <!-- Botones de Acción -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                <Button Content="Guardar" Width="100" Margin="5" Click="BtnGuardar_Click"/>
+                <Button Content="Cancelar" Width="100" Margin="5" Click="BtnCancelar_Click"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Window>

@@ -85,5 +85,29 @@ namespace MechanicWorkshopApp.Views
                 MessageBox.Show("Por favor, selecciona un cliente para eliminar.");
             }
         }
+
+        private void BtnMostrarVehiculos_Click(object sender, RoutedEventArgs e)
+        {
+            // Obtén la fila asociada al botón que se hizo clic
+            var clienteSeleccionado = ((FrameworkElement)sender).DataContext as Cliente;
+
+            if (clienteSeleccionado != null)
+            {
+                // Abre la ventana VehiculosView con el cliente seleccionado
+                var vehiculosView = new VehiculosView(clienteSeleccionado);
+                vehiculosView.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Error al intentar cargar los vehículos. Por favor, inténtalo de nuevo.",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            MessageBox.Show($"Error al cargar la imagen: {e.ErrorException.Message}");
+        }
+
     }
 }

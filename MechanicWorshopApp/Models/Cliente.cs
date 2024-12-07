@@ -132,6 +132,7 @@ namespace MechanicWorkshopApp.Models
                 }
             }
         }
+        public ICollection<Vehiculo> Vehiculos { get; set; } = new List<Vehiculo>();
 
         // Implementación de INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
