@@ -1,5 +1,7 @@
 ﻿using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
+using MechanicWorkshopApp.Views;
+using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,7 +26,10 @@ namespace MechanicWorkshopApp
         }
         private void BtnClientes_Click(object sender, RoutedEventArgs e)
         {
-            var clientesView = new Views.ClientesView();
+            var serviceProvider = ((App)Application.Current).Services;
+
+            // Resuelve la ventana desde el contenedor
+            var clientesView = serviceProvider.GetRequiredService<ClientesView>();
             clientesView.Show();
         }
     }

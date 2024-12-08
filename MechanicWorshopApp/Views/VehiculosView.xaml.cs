@@ -1,6 +1,7 @@
 ﻿using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,12 +26,12 @@ namespace MechanicWorkshopApp.Views
         private readonly VehiculoService _vehiculoService;
         private Cliente _cliente;
 
-        public VehiculosView(Cliente cliente)
+        public VehiculosView(Cliente cliente, VehiculoService vehiculoService)
         {
             InitializeComponent();
 
             _cliente = cliente;
-            _vehiculoService = new VehiculoService(new TallerContext());
+            _vehiculoService = vehiculoService;
 
             Title = $"Vehículos del Cliente: {_cliente.Nombre}";
 
@@ -45,7 +46,10 @@ namespace MechanicWorkshopApp.Views
 
         private void BtnAgregar_Click(object sender, RoutedEventArgs e)
         {
-            var vehiculoForm = new VehiculoForm(new Vehiculo { Cliente = _cliente });
+            var serviceProvider = ((App)Application.Current).Services;
+
+            // Resuelve la ventana desde el contenedor
+            var vehiculoForm = serviceProvider.GetRequiredService<VehiculoForm>();
             if (vehiculoForm.ShowDialog() == true)
             {
                 CargarVehiculos(); // Refrescar lista
@@ -56,7 +60,10 @@ namespace MechanicWorkshopApp.Views
         {
             if (dgVehiculos.SelectedItem is Vehiculo vehiculoSeleccionado)
             {
-                var vehiculoForm = new VehiculoForm(vehiculoSeleccionado);
+                var serviceProvider = ((App)Application.Current).Services;
+
+                // Resuelve la ventana desde el contenedor
+                var vehiculoForm = serviceProvider.GetRequiredService<VehiculoForm>();
                 if (vehiculoForm.ShowDialog() == true)
                 {
                     CargarVehiculos(); // Refrescar lista

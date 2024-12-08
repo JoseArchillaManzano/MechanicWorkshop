@@ -1,5 +1,6 @@
 ﻿using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
+using MechanicWorkshopApp.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,45 @@ namespace MechanicWorkshopApp.Services
             {
                 _context.Clientes.Remove(cliente);
                 _context.SaveChanges();
+            }
+        }
+
+        public int ObtenerTotalClientes()
+        {
+            using (var context = new TallerContext())
+            {
+                return context.Clientes.Count();
+            }
+        }
+
+        public List<Cliente> ObtenerClientesPaginados(int paginaActual, int tamanoPagina)
+        {
+            using (var context = new TallerContext())
+            {
+                return context.Clientes
+                              .OrderBy(c => c.Id)
+                              .Skip((paginaActual - 1) * tamanoPagina)
+                              .Take(tamanoPagina)
+                              .ToList();
+            }
+        }
+
+        public PagedResult<Cliente> GetClientesPaginated(int page, int pageSize)
+        {
+            if (page < 1) page = 1;
+            using (var context = new TallerContext())
+            {
+                var query = context.Clientes;
+
+                var totalItems = query.Count(); // Total de clientes
+                var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+                var items = query
+                    .OrderBy(c => c.Id)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                return new PagedResult<Cliente>(items, totalItems, page, pageSize);
             }
         }
     }

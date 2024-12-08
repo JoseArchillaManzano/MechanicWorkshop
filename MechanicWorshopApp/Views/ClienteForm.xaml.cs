@@ -1,6 +1,7 @@
 ﻿using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +26,11 @@ namespace MechanicWorkshopApp.Views
         private Cliente _cliente;
         private ClienteService _clienteService;
 
-        public ClienteForm(Cliente cliente = null)
+        public ClienteForm(ClienteService clienteService, Cliente cliente = null)
         {
             InitializeComponent();
             _cliente = cliente ?? new Cliente();
-            _clienteService = new ClienteService(new TallerContext());
+            _clienteService = clienteService;
             DataContext = _cliente; // Vinculamos el DataContext al cliente
         }
 
@@ -73,24 +74,6 @@ namespace MechanicWorkshopApp.Views
             {
                 // Actualizar cliente existente
                 _clienteService.ActualizarCliente(_cliente);
-            }
-        }
-
-        private void BtnMostrarVehiculos_Click(object sender, RoutedEventArgs e)
-        {
-            // Obtén la fila asociada al botón que se hizo clic
-            var clienteSeleccionado = ((FrameworkElement)sender).DataContext as Cliente;
-
-            if (clienteSeleccionado != null)
-            {
-                // Abre la ventana VehiculosView con el cliente seleccionado
-                var vehiculosView = new VehiculosView(clienteSeleccionado);
-                vehiculosView.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show("Error al intentar cargar los vehículos. Por favor, inténtalo de nuevo.",
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

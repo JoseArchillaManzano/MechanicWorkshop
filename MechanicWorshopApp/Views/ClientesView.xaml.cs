@@ -1,5 +1,9 @@
-﻿using MechanicWorkshopApp.Data;
+﻿using MechanicWorkshopApp.Configuration;
+using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
+using MechanicWorkshopApp.Services;
+using MechanicWorkshopApp.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,27 +25,51 @@ namespace MechanicWorkshopApp.Views
     /// </summary>
     public partial class ClientesView : Window
     {
-        public ClientesView()
+        private readonly ClienteService _clienteService;
+        private int _pageSize = AppSettings.PageSize; // Tamaño de página por defecto
+
+        public int CurrentPage { get; set; } = 1; // Página inicial
+        public int TotalClientes { get; set; } // Total de clientes
+
+        private readonly ClientesViewModel _viewModel;
+        private readonly Func<ClienteForm> _clienteFormFactory;
+
+        public ClientesView(ClientesViewModel viewModel, ClienteService clienteService, Func<ClienteForm> clienteFormFactory)
         {
             InitializeComponent();
-            CargarClientes();
+
+            _clienteService = clienteService; // Instancia del servicio
+            _clienteFormFactory = clienteFormFactory;
+            _viewModel = viewModel;
+            DataContext = _viewModel;
+        }
+
+        private void CargarTotalClientes()
+        {
+            TotalClientes = _clienteService.ObtenerTotalClientes();
         }
 
         private void CargarClientes()
         {
-            using (var context = new TallerContext())
-            {
-                var clientes = context.Clientes.ToList();
-                dgClientes.ItemsSource = clientes;
-            }
+            // Llamar al servicio para obtener los clientes de la página actual
+            var clientes = _clienteService.ObtenerClientesPaginados(CurrentPage, _pageSize);
+            dgClientes.ItemsSource = clientes;
+        }
+
+        private void PaginationControl_PageChanged(object sender, RoutedEventArgs e)
+        {
+            // Cambiar de página y recargar los clientes
+            CargarClientes();
         }
 
         private void BtnAgregar_Click(object sender, RoutedEventArgs e)
         {
-            var form = new ClienteForm();
-            if (form.ShowDialog() == true)
+            var clienteForm = _clienteFormFactory();
+            if (clienteForm.ShowDialog() == true)
             {
-                CargarClientes(); // Recarga la lista después de guardar
+                //CargarTotalClientes(); // Actualiza el total de clientes
+                //CargarClientes(); // Recarga la lista después de guardar
+                _viewModel.UpdateClientes();
             }
         }
 
@@ -50,8 +78,9 @@ namespace MechanicWorkshopApp.Views
             var clienteSeleccionado = dgClientes.SelectedItem as Cliente;
             if (clienteSeleccionado != null)
             {
-                var form = new ClienteForm(clienteSeleccionado);
-                if (form.ShowDialog() == true)
+                var clienteForm = _clienteFormFactory();
+                clienteForm.DataContext = clienteSeleccionado;
+                if (clienteForm.ShowDialog() == true)
                 {
                     CargarClientes(); // Recarga la lista después de editar
                 }
@@ -72,12 +101,9 @@ namespace MechanicWorkshopApp.Views
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    using (var context = new TallerContext())
-                    {
-                        context.Clientes.Remove(clienteSeleccionado);
-                        context.SaveChanges();
-                    }
-                    CargarClientes(); // Actualiza la lista
+                    _clienteService.EliminarCliente(clienteSeleccionado.Id);
+                    CargarTotalClientes(); // Actualiza el total de clientes
+                    CargarClientes(); // Recarga la lista
                 }
             }
             else
@@ -88,13 +114,20 @@ namespace MechanicWorkshopApp.Views
 
         private void BtnMostrarVehiculos_Click(object sender, RoutedEventArgs e)
         {
-            // Obtén la fila asociada al botón que se hizo clic
             var clienteSeleccionado = ((FrameworkElement)sender).DataContext as Cliente;
 
             if (clienteSeleccionado != null)
             {
-                // Abre la ventana VehiculosView con el cliente seleccionado
-                var vehiculosView = new VehiculosView(clienteSeleccionado);
+                // Obtiene el proveedor de servicios
+                var serviceProvider = ((App)Application.Current).Services;
+
+                // Resuelve la ventana VehiculosView desde el contenedor
+                var vehiculosView = serviceProvider.GetRequiredService<VehiculosView>();
+
+                // Establece el cliente seleccionado como contexto o parámetro
+                vehiculosView.DataContext = clienteSeleccionado;
+
+                // Muestra la ventana
                 vehiculosView.ShowDialog();
             }
             else
@@ -104,10 +137,13 @@ namespace MechanicWorkshopApp.Views
             }
         }
 
-        private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        private void OnPageSizeChanged(object sender, SelectionChangedEventArgs e)
         {
-            MessageBox.Show($"Error al cargar la imagen: {e.ErrorException.Message}");
+            if (e.AddedItems.Count > 0 && DataContext is ClientesViewModel viewModel)
+            {
+                int newPageSize = (int)e.AddedItems[0];
+                viewModel.ChangePageSize(newPageSize);
+            }
         }
-
     }
 }

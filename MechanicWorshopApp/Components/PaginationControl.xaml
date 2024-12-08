@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="MechanicWorkshopApp.Components.PaginationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MechanicWorkshopApp.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="300">
+    <Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Content="&#x276E;" Command="{Binding PreviousPageCommand}" 
+        IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:PaginationControl}}, Path=CanGoPrevious}"
+        Style="{StaticResource MaterialDesignOutlinedButton}" 
+        Margin="5"
+        ToolTip="Ir a la página anterior" />
+            <TextBlock Text="{Binding CurrentPage}" Margin="10,0" VerticalAlignment="Center" />
+            <TextBlock Text="de" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding TotalPages}" Margin="10,0" VerticalAlignment="Center" />
+            <Button Content="&#x276F;" Command="{Binding NextPageCommand}" 
+        IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:PaginationControl}}, Path=CanGoNext}"
+        Style="{StaticResource MaterialDesignOutlinedButton}" 
+        Margin="5"
+        ToolTip="Ir a la página siguiente" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,6 +1,7 @@
 ﻿using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,11 +28,11 @@ namespace MechanicWorkshopApp.Views
 
         private readonly bool _clienteFijo;
 
-        public VehiculoForm(Vehiculo vehiculo, bool clienteFijo = true)
+        public VehiculoForm(Vehiculo vehiculo, VehiculoService vehiculoService, bool clienteFijo = true )
         {
             InitializeComponent();
             DataContext = vehiculo;
-
+            _vehiculoService = vehiculoService;
             _clienteFijo = clienteFijo;
 
             ConfigurarFormulario();
@@ -99,8 +100,8 @@ namespace MechanicWorkshopApp.Views
 
         private void BtnSeleccionarCliente_Click(object sender, RoutedEventArgs e)
         {
-            var clienteService = new ClienteService(new TallerContext()); // Asegúrate de tener acceso al servicio
-            var clienteDialog = new ClienteSearchDialog(clienteService);
+            var serviceProvider = ((App)Application.Current).Services;
+            var clienteDialog = serviceProvider.GetService<ClienteSearchDialog>();
 
             if (clienteDialog.ShowDialog() == true)
             {
