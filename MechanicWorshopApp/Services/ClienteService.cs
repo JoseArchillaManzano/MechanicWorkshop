@@ -70,13 +70,17 @@ namespace MechanicWorkshopApp.Services
             }
         }
 
-        public PagedResult<Cliente> GetClientesPaginated(int page, int pageSize)
+        public PagedResult<Cliente> GetClientesPaginated(int page, int pageSize, string searchQuery)
         {
             if (page < 1) page = 1;
             using (var context = new TallerContext())
             {
-                var query = context.Clientes;
+                var query = context.Clientes.AsQueryable();
 
+                if (!string.IsNullOrWhiteSpace(searchQuery))
+                {
+                    query = query.Where(c => c.Nombre.Contains(searchQuery) || c.DNI_CIF.Contains(searchQuery));
+                }
                 var totalItems = query.Count(); // Total de clientes
                 var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
                 var items = query

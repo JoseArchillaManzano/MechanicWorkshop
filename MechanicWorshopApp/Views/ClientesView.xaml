@@ -16,13 +16,19 @@
             <RowDefinition Height="Auto"/>
             <!-- Fila para los botones -->
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            <TextBlock Text="Tamaño de página:" VerticalAlignment="Top" Margin="0,0,10,0"/>
+        
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10" VerticalAlignment="Top">
+            <TextBlock Text="Buscar por DNI o Nombre:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox Width="200" 
+                     Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     VerticalAlignment="Center" 
+                     Margin="0,0,20,0"/>
+            <TextBlock Text="Tamaño de página:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <ComboBox Width="100" 
-                  ItemsSource="{Binding PageSizes}" 
-                  SelectedItem="{Binding PageSize, Mode=TwoWay}" 
-                  SelectionChanged="OnPageSizeChanged" 
-                  HorizontalAlignment="Left"/>
+                      ItemsSource="{Binding PageSizes}" 
+                      SelectedItem="{Binding PageSize, Mode=TwoWay}" 
+                      SelectionChanged="OnPageSizeChanged" 
+                      VerticalAlignment="Center" />
         </StackPanel>
         <!-- Lista de Clientes -->
         <DataGrid x:Name="dgClientes"  Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
