@@ -46,6 +46,7 @@ namespace MechanicWorkshopApp
             services.AddTransient<VehiculosView>();
             services.AddTransient<VehiculoForm>();
 
+            services.AddTransient<Func<VehiculosView>>(sp => () => sp.GetRequiredService<VehiculosView>());
             // Registro de la Factory para formularios
             services.AddTransient<Func<ClienteForm>>(provider => () => provider.GetRequiredService<ClienteForm>());
             services.AddTransient<Func<VehiculoForm>>(provider => () => provider.GetRequiredService<VehiculoForm>());

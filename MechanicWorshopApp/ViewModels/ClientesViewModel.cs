@@ -5,6 +5,7 @@ using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Services;
 using MechanicWorkshopApp.Utils;
+using MechanicWorkshopApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MechanicWorkshopApp.ViewModels
@@ -20,6 +22,8 @@ namespace MechanicWorkshopApp.ViewModels
     public partial class ClientesViewModel :  ObservableObject
     {
         private readonly ClienteService _clienteService;
+        private readonly Func<ClienteForm> _clienteFormFactory;
+        private readonly Func<VehiculosView> _vehiculosViewFactory;
 
         [ObservableProperty]
         private int currentPage = 1; // Valor inicial
@@ -31,7 +35,7 @@ namespace MechanicWorkshopApp.ViewModels
         private ObservableCollection<Cliente> clientes;
 
         [ObservableProperty]
-        private int _pageSize = AppSettings.PageSize;
+        private int pageSize = AppSettings.PageSize;
 
         [ObservableProperty]
         private string searchQuery = string.Empty;
@@ -39,11 +43,22 @@ namespace MechanicWorkshopApp.ViewModels
         [ObservableProperty]
         private ObservableCollection<int> pageSizes; // Tamaños de página disponibles
 
+        [ObservableProperty]
+        private Cliente selectedCliente;
+
         private readonly System.Timers.Timer _debounceTimer;
 
-        public ClientesViewModel(ClienteService clienteService)
+        public IRelayCommand AgregarClienteCommand { get; }
+        public IRelayCommand EditarClienteCommand { get; }
+        public IRelayCommand EliminarClienteCommand { get; }
+        public IRelayCommand MostrarVehiculosCommand { get; }
+
+        public ClientesViewModel(ClienteService clienteService, Func<ClienteForm> clienteFormFactory, Func<VehiculosView> vehiculosViewFactory)
         {
             _clienteService = clienteService;
+
+            _clienteFormFactory = clienteFormFactory;
+            _vehiculosViewFactory = vehiculosViewFactory;
 
             _debounceTimer = new System.Timers.Timer(500); // 300 ms de retraso
             _debounceTimer.AutoReset = false; // Solo se dispara una vez
@@ -52,6 +67,12 @@ namespace MechanicWorkshopApp.ViewModels
                 // Actualizar clientes en el hilo de la interfaz
                 App.Current.Dispatcher.Invoke(UpdateClientes);
             };
+
+            AgregarClienteCommand = new RelayCommand(ExecuteAgregarCliente);
+            EditarClienteCommand = new RelayCommand(ExecuteEditarCliente);
+            EliminarClienteCommand = new RelayCommand(ExecuteEliminarCliente);
+            MostrarVehiculosCommand = new RelayCommand(ExecuteMostrarVehiculos);
+
             // Inicializar comandos
             NextPageCommand = new RelayCommand(ExecuteNextPage, CanExecuteNextPage);
             PreviousPageCommand = new RelayCommand(ExecutePreviousPage, CanExecutePreviousPage);
@@ -114,19 +135,89 @@ namespace MechanicWorkshopApp.ViewModels
             // Actualizar estados de los botones
             NextPageCommand.NotifyCanExecuteChanged();
             PreviousPageCommand.NotifyCanExecuteChanged();
+
+            EditarClienteCommand.NotifyCanExecuteChanged();
+            EliminarClienteCommand.NotifyCanExecuteChanged();
+            MostrarVehiculosCommand.NotifyCanExecuteChanged();
         }
 
-        public void ChangePageSize(int newSize)
+        partial void OnPageSizeChanged(int value)
         {
-            PageSize = newSize;
             CurrentPage = 1; // Reiniciar a la primera página
-            UpdateClientes();
+            UpdateClientes(); // Actualizar la lista con el nuevo tamaño de página
         }
 
         private void DebounceTimerElapsed(object sender, ElapsedEventArgs e)
         {
             // Ejecutar actualización en el hilo de la interfaz
             App.Current.Dispatcher.Invoke(UpdateClientes);
+        }
+
+        private void ExecuteAgregarCliente()
+        {
+            var clienteForm = _clienteFormFactory();
+            var viewModel = new ClientesFormViewModel(
+                null,
+                _clienteService,
+                result =>
+                {
+                    if (result) UpdateClientes();
+                }
+            );
+
+            clienteForm.Initialize(viewModel);
+            clienteForm.ShowDialog();
+        }
+
+        private void ExecuteEditarCliente()
+        {
+            if (SelectedCliente == null)
+            {
+                MessageBox.Show("Por favor, selecciona un cliente para editar.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var clienteForm = _clienteFormFactory();
+            var viewModel = new ClientesFormViewModel(
+                SelectedCliente,
+                _clienteService,
+                result =>
+                {
+                    if (result) UpdateClientes();
+                }
+            );
+
+            clienteForm.Initialize(viewModel);
+            clienteForm.ShowDialog();
+        }
+
+        private void ExecuteEliminarCliente()
+        {
+            if (SelectedCliente == null)
+            {
+                MessageBox.Show("Por favor, selecciona un cliente para eliminar.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var result = MessageBox.Show("¿Estás seguro de que deseas eliminar este cliente?",
+                "Confirmar Eliminación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                _clienteService.EliminarCliente(SelectedCliente.Id);
+                UpdateClientes();
+            }
+        }
+
+        private void ExecuteMostrarVehiculos()
+        {
+            if (SelectedCliente == null) return;
+
+            var vehiculosView = _vehiculosViewFactory();
+            var viewModel = (VehiculosViewModel)vehiculosView.DataContext;
+
+            viewModel.Initialize(SelectedCliente.Id);
+            vehiculosView.ShowDialog();
         }
     }
 }

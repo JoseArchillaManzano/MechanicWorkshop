@@ -38,109 +38,109 @@ namespace MechanicWorkshopApp.Views
         {
             InitializeComponent();
 
-            _clienteService = clienteService; // Instancia del servicio
-            _clienteFormFactory = clienteFormFactory;
+            //_clienteService = clienteService; // Instancia del servicio
+            //_clienteFormFactory = clienteFormFactory;
             _viewModel = viewModel;
             DataContext = _viewModel;
         }
 
-        private void CargarTotalClientes()
-        {
-            TotalClientes = _clienteService.ObtenerTotalClientes();
-        }
+        //private void CargarTotalClientes()
+        //{
+        //    TotalClientes = _clienteService.ObtenerTotalClientes();
+        //}
 
-        private void CargarClientes()
-        {
-            // Llamar al servicio para obtener los clientes de la página actual
-            var clientes = _clienteService.ObtenerClientesPaginados(CurrentPage, _pageSize);
-            dgClientes.ItemsSource = clientes;
-        }
+        //private void CargarClientes()
+        //{
+        //    // Llamar al servicio para obtener los clientes de la página actual
+        //    var clientes = _clienteService.ObtenerClientesPaginados(CurrentPage, _pageSize);
+        //    dgClientes.ItemsSource = clientes;
+        //}
 
-        private void PaginationControl_PageChanged(object sender, RoutedEventArgs e)
-        {
-            // Cambiar de página y recargar los clientes
-            CargarClientes();
-        }
+        //private void PaginationControl_PageChanged(object sender, RoutedEventArgs e)
+        //{
+        //    // Cambiar de página y recargar los clientes
+        //    CargarClientes();
+        //}
 
-        private void BtnAgregar_Click(object sender, RoutedEventArgs e)
-        {
-            var clienteForm = _clienteFormFactory();
-            if (clienteForm.ShowDialog() == true)
-            {
-                //CargarTotalClientes(); // Actualiza el total de clientes
-                //CargarClientes(); // Recarga la lista después de guardar
-                _viewModel.UpdateClientes();
-            }
-        }
+        //private void BtnAgregar_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var clienteForm = _clienteFormFactory();
+        //    if (clienteForm.ShowDialog() == true)
+        //    {
+        //        //CargarTotalClientes(); // Actualiza el total de clientes
+        //        //CargarClientes(); // Recarga la lista después de guardar
+        //        _viewModel.UpdateClientes();
+        //    }
+        //}
 
-        private void BtnEditar_Click(object sender, RoutedEventArgs e)
-        {
-            var clienteSeleccionado = dgClientes.SelectedItem as Cliente;
-            if (clienteSeleccionado != null)
-            {
-                var clienteForm = _clienteFormFactory();
-                clienteForm.DataContext = clienteSeleccionado;
-                if (clienteForm.ShowDialog() == true)
-                {
-                    CargarClientes(); // Recarga la lista después de editar
-                }
-            }
-            else
-            {
-                MessageBox.Show("Por favor, selecciona un cliente para editar.");
-            }
-        }
+        //private void BtnEditar_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var clienteSeleccionado = dgClientes.SelectedItem as Cliente;
+        //    if (clienteSeleccionado != null)
+        //    {
+        //        var clienteForm = _clienteFormFactory();
+        //        clienteForm.DataContext = clienteSeleccionado;
+        //        if (clienteForm.ShowDialog() == true)
+        //        {
+        //            CargarClientes(); // Recarga la lista después de editar
+        //        }
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Por favor, selecciona un cliente para editar.");
+        //    }
+        //}
 
-        private void BtnEliminar_Click(object sender, RoutedEventArgs e)
-        {
-            var clienteSeleccionado = dgClientes.SelectedItem as Cliente;
-            if (clienteSeleccionado != null)
-            {
-                var result = MessageBox.Show("¿Estás seguro de que deseas eliminar este cliente?",
-                                             "Confirmar Eliminación", MessageBoxButton.YesNo);
+        //private void BtnEliminar_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var clienteSeleccionado = dgClientes.SelectedItem as Cliente;
+        //    if (clienteSeleccionado != null)
+        //    {
+        //        var result = MessageBox.Show("¿Estás seguro de que deseas eliminar este cliente?",
+        //                                     "Confirmar Eliminación", MessageBoxButton.YesNo);
 
-                if (result == MessageBoxResult.Yes)
-                {
-                    _clienteService.EliminarCliente(clienteSeleccionado.Id);
-                    CargarTotalClientes(); // Actualiza el total de clientes
-                    CargarClientes(); // Recarga la lista
-                }
-            }
-            else
-            {
-                MessageBox.Show("Por favor, selecciona un cliente para eliminar.");
-            }
-        }
+        //        if (result == MessageBoxResult.Yes)
+        //        {
+        //            _clienteService.EliminarCliente(clienteSeleccionado.Id);
+        //            CargarTotalClientes(); // Actualiza el total de clientes
+        //            CargarClientes(); // Recarga la lista
+        //        }
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Por favor, selecciona un cliente para eliminar.");
+        //    }
+        //}
 
-        private void BtnMostrarVehiculos_Click(object sender, RoutedEventArgs e)
-        {
-            var clienteSeleccionado = ((FrameworkElement)sender).DataContext as Cliente;
+        //private void BtnMostrarVehiculos_Click(object sender, RoutedEventArgs e)
+        //{
+        //    var clienteSeleccionado = ((FrameworkElement)sender).DataContext as Cliente;
 
-            if (clienteSeleccionado != null)
-            {
+        //    if (clienteSeleccionado != null)
+        //    {
 
-                var serviceProvider = ((App)Application.Current).Services;
-                var vehiculosView = serviceProvider.GetRequiredService<VehiculosView>();
+        //        var serviceProvider = ((App)Application.Current).Services;
+        //        var vehiculosView = serviceProvider.GetRequiredService<VehiculosView>();
 
-                var viewModel = (VehiculosViewModel)vehiculosView.DataContext;
-                viewModel.Initialize(clienteSeleccionado.Id);
+        //        var viewModel = (VehiculosViewModel)vehiculosView.DataContext;
+        //        viewModel.Initialize(clienteSeleccionado.Id);
 
-                vehiculosView.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show("Error al intentar cargar los vehículos. Por favor, inténtalo de nuevo.",
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+        //        vehiculosView.ShowDialog();
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Error al intentar cargar los vehículos. Por favor, inténtalo de nuevo.",
+        //                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //}
 
-        private void OnPageSizeChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems.Count > 0 && DataContext is ClientesViewModel viewModel)
-            {
-                int newPageSize = (int)e.AddedItems[0];
-                viewModel.ChangePageSize(newPageSize);
-            }
-        }
+        //private void OnPageSizeChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (e.AddedItems.Count > 0 && DataContext is ClientesViewModel viewModel)
+        //    {
+        //        int newPageSize = (int)e.AddedItems[0];
+        //        viewModel.ChangePageSize(newPageSize);
+        //    }
+        //}
     }
 }

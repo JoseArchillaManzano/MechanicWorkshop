@@ -47,6 +47,8 @@ namespace MechanicWorkshopApp.ViewModels
         public ICommand EditarVehiculoCommand { get; }
         public ICommand EliminarVehiculoCommand { get; }
 
+        private readonly System.Timers.Timer _debounceTimer;
+
         public VehiculosViewModel(VehiculoService vehiculoService, Func<VehiculoForm> vehiculoFormFactory)
         {
             _vehiculoService = vehiculoService;
@@ -60,6 +62,14 @@ namespace MechanicWorkshopApp.ViewModels
             EditarVehiculoCommand = new RelayCommand(ExecuteEditarVehiculo);
             EliminarVehiculoCommand = new RelayCommand(ExecuteEliminarVehiculo);
 
+            _debounceTimer = new System.Timers.Timer(300); // 300 ms de retraso
+            _debounceTimer.AutoReset = false; // Solo se dispara una vez
+            _debounceTimer.Elapsed += (s, e) =>
+            {
+                // Actualizar clientes en el hilo de la interfaz
+                App.Current.Dispatcher.Invoke(UpdateVehiculos);
+            };
+
             // Cargar datos iniciales
             UpdateVehiculos();
         }
@@ -67,6 +77,14 @@ namespace MechanicWorkshopApp.ViewModels
         {
             _clienteId = clienteId;
             UpdateVehiculos();
+        }
+
+        partial void OnSearchQueryChanged(string value)
+        {
+            CurrentPage = 1; // Reinicia a la primera página
+                             // Reiniciar el temporizador
+            _debounceTimer.Stop();
+            _debounceTimer.Start();
         }
 
         private void ExecuteNextPage()
@@ -150,10 +168,10 @@ namespace MechanicWorkshopApp.ViewModels
         {
             if (SelectedVehiculo != null)
             {
-                var result = System.Windows.MessageBox.Show("¿Estás seguro de que deseas eliminar este vehículo?",
+                var result = MessageBox.Show("¿Estás seguro de que deseas eliminar este vehículo?",
                     "Confirmar Eliminación", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning);
 
-                if (result == System.Windows.MessageBoxResult.Yes)
+                if (result == MessageBoxResult.Yes)
                 {
                     _vehiculoService.EliminarVehiculo(SelectedVehiculo.Id);
                     UpdateVehiculos();

@@ -27,13 +27,13 @@
             <ComboBox Width="100" 
                       ItemsSource="{Binding PageSizes}" 
                       SelectedItem="{Binding PageSize, Mode=TwoWay}" 
-                      SelectionChanged="OnPageSizeChanged" 
                       VerticalAlignment="Center" />
         </StackPanel>
         <!-- Lista de Clientes -->
-        <DataGrid x:Name="dgClientes"  Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
+        <DataGrid ItemsSource="{Binding Clientes}" 
+                  SelectedItem="{Binding SelectedCliente, Mode=TwoWay}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,60"
-                  ColumnHeaderHeight="35" AlternationCount="2" ItemsSource="{Binding Clientes, Mode=TwoWay}">
+                  ColumnHeaderHeight="35" AlternationCount="2" >
             <DataGrid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#DDEEFF"/>
                 <!-- Brocha para el texto en la selección inactiva -->
@@ -165,9 +165,10 @@
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                 <Button Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center"
-                        Background="Transparent" BorderBrush="Transparent"
-                        ToolTip="Mostrar vehículos"
-                        Click="BtnMostrarVehiculos_Click">
+                                        Background="Transparent" BorderBrush="Transparent"
+                                        ToolTip="Mostrar vehículos"
+                                        Command="{Binding DataContext.MostrarVehiculosCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}">
                                     <materialDesign:PackIcon Kind="Car"
                                              Width="30" Height="30"
                                              HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -191,15 +192,15 @@
             <Button Content="Agregar" Width="100" Margin="5" 
                     Background="#4CAF50" Foreground="White" 
                     Style="{StaticResource MaterialDesignRaisedButton}"
-                    Click="BtnAgregar_Click"/>
+                    Command="{Binding AgregarClienteCommand}"/>
             <Button Content="Editar" Width="100" Margin="5" 
                     Background="#FFC107" Foreground="Black" 
                     Style="{StaticResource MaterialDesignRaisedButton}"
-                    Click="BtnEditar_Click"/>
+                    Command="{Binding EditarClienteCommand}"/>
             <Button Content="Eliminar" Width="100" Margin="5" 
                     Background="#F44336" Foreground="White" 
                     Style="{StaticResource MaterialDesignRaisedButton}"
-                    Click="BtnEliminar_Click"/>
+                    Command="{Binding EliminarClienteCommand}"/>
         </StackPanel>
     </Grid>
 </Window>

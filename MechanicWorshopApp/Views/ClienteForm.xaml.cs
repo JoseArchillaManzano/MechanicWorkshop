@@ -1,6 +1,7 @@
 ﻿using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Services;
+using MechanicWorkshopApp.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -33,48 +34,15 @@ namespace MechanicWorkshopApp.Views
             _clienteService = clienteService;
             DataContext = _cliente; // Vinculamos el DataContext al cliente
         }
-
-        private void BtnGuardar_Click(object sender, RoutedEventArgs e)
+        public void Initialize(ClientesFormViewModel viewModel)
         {
-            // Forzar la validación en todos los campos
-            _cliente.ForzarValidacion();
-
-            // Verificar si hay errores antes de guardar
-            if (Validation.GetHasError(txtNombre) ||
-                Validation.GetHasError(txtDNI_CIF) ||
-                Validation.GetHasError(txtDireccion) ||
-                Validation.GetHasError(txtCodigoPostal) ||
-                Validation.GetHasError(txtTelefono))
+            DataContext = viewModel;
+            // Suscribirse al evento de cierre del formulario desde el ViewModel
+            viewModel.OnClose += () =>
             {
-                
-                MessageBox.Show("Por favor, corrige los errores antes de guardar.", "Errores de Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            GuardarCliente();
-
-            MessageBox.Show("Cliente guardado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-            this.DialogResult = true;
-            this.Close();
-        }
-
-        private void BtnCancelar_Click(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = false; // Cancela la operación
-            this.Close();
-        }
-        private void GuardarCliente()
-        {
-            if (_cliente.Id == 0)
-            {
-                // Nuevo cliente
-                _clienteService.AgregarCliente(_cliente);
-            }
-            else
-            {
-                // Actualizar cliente existente
-                _clienteService.ActualizarCliente(_cliente);
-            }
+                DialogResult = true;
+                Close();
+            };
         }
 
     }
