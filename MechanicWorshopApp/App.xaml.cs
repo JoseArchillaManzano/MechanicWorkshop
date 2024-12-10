@@ -36,6 +36,7 @@ namespace MechanicWorkshopApp
 
             // Registrar ViewModels
             services.AddTransient<ClientesViewModel>();
+            services.AddTransient<VehiculosViewModel>();
 
             // Registrar ventanas
             services.AddTransient<MainWindow>();

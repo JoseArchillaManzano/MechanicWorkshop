@@ -1,11 +1,13 @@
 ﻿using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
+using MechanicWorkshopApp.Utils;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace MechanicWorkshopApp.Services
 {
@@ -45,6 +47,33 @@ namespace MechanicWorkshopApp.Services
                  _context.SaveChanges();
              }
             
+        }
+
+        public PagedResult<Vehiculo> ObtenerVehiculosPaginadosPorCliente(int clienteId, int paginaActual, int pageSize, string filtro = null)
+        {
+            var query = _context.Vehiculos
+                                .Where(v => v.ClienteId == clienteId)
+                                .Include(v => v.Cliente)
+                                .AsQueryable();
+
+            // Aplicar filtro si existe
+            if (!string.IsNullOrWhiteSpace(filtro))
+            {
+                query = query.Where(v => v.Matricula.Contains(filtro) || v.Modelo.Contains(filtro));
+            }
+
+            // Calcular totales
+            var totalItems = query.Count();
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            // Obtener los elementos paginados
+            var items = query
+                .OrderBy(v => v.Id)
+                .Skip((paginaActual - 1) * pageSize)
+                .Take(pageSize)
+            .ToList();
+
+            return new PagedResult<Vehiculo>(items, totalItems, totalPages, pageSize);
         }
     }
 }

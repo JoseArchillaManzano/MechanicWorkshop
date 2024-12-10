@@ -118,16 +118,13 @@ namespace MechanicWorkshopApp.Views
 
             if (clienteSeleccionado != null)
             {
-                // Obtiene el proveedor de servicios
-                var serviceProvider = ((App)Application.Current).Services;
 
-                // Resuelve la ventana VehiculosView desde el contenedor
+                var serviceProvider = ((App)Application.Current).Services;
                 var vehiculosView = serviceProvider.GetRequiredService<VehiculosView>();
 
-                // Establece el cliente seleccionado como contexto o parámetro
-                vehiculosView.DataContext = clienteSeleccionado;
+                var viewModel = (VehiculosViewModel)vehiculosView.DataContext;
+                viewModel.Initialize(clienteSeleccionado.Id);
 
-                // Muestra la ventana
                 vehiculosView.ShowDialog();
             }
             else

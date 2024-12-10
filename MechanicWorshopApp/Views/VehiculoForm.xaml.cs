@@ -1,6 +1,7 @@
 ﻿using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Services;
+using MechanicWorkshopApp.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -23,96 +24,21 @@ namespace MechanicWorkshopApp.Views
     /// </summary>
     public partial class VehiculoForm : Window
     {
-        private readonly VehiculoService _vehiculoService;
-        private Vehiculo _vehiculo;
 
-        private readonly bool _clienteFijo;
-
-        public VehiculoForm(Vehiculo vehiculo, VehiculoService vehiculoService, bool clienteFijo = true )
+        public VehiculoForm()
         {
             InitializeComponent();
-            DataContext = vehiculo;
-            _vehiculoService = vehiculoService;
-            _clienteFijo = clienteFijo;
-
-            ConfigurarFormulario();
         }
 
-        private void BtnGuardar_Click(object sender, RoutedEventArgs e)
+        public void Initialize(VehiculoFormViewModel viewModel)
         {
-            // Forzar la validación
-            _vehiculo.ForzarValidacion();
-
-            // Verificar errores antes de guardar
-            if (Validation.GetHasError(txtMarca) ||
-                Validation.GetHasError(txtModelo) ||
-                Validation.GetHasError(txtMatricula) ||
-                Validation.GetHasError(txtMotor) ||
-                Validation.GetHasError(txtBastidor) ||
-                Validation.GetHasError(txtKilometraje))
+            DataContext = viewModel;
+            // Suscribirse al evento de cierre del formulario desde el ViewModel
+            viewModel.OnClose += () =>
             {
-                MessageBox.Show("Por favor, corrige los errores antes de guardar.",
-                                "Errores de Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            GuardarVehiculo();
-
-            MessageBox.Show("Vehículo guardado correctamente.",
-                            "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-            DialogResult = true;
-            Close();
-        }
-
-        private void BtnCancelar_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false; // Cancela la operación
-            Close();
-        }
-
-        private void GuardarVehiculo()
-        {
-            if (_vehiculo.Id == 0)
-            {
-                _vehiculoService.AgregarVehiculo(_vehiculo);
-            }
-            else
-            {
-                _vehiculoService.ActualizarVehiculo(_vehiculo);
-            }
-        }
-
-        private void ConfigurarFormulario()
-        {
-            if (_clienteFijo)
-            {
-                // Mostrar el cliente como texto fijo
-                txtCliente.IsReadOnly = true;
-                btnSeleccionarCliente.Visibility = Visibility.Collapsed; // Botón para buscar clientes
-            }
-            else
-            {
-                // Habilitar selección de cliente
-                txtCliente.IsReadOnly = false;
-                btnSeleccionarCliente.Visibility = Visibility.Visible; // Botón para abrir el filtro
-            }
-        }
-
-        private void BtnSeleccionarCliente_Click(object sender, RoutedEventArgs e)
-        {
-            var serviceProvider = ((App)Application.Current).Services;
-            var clienteDialog = serviceProvider.GetService<ClienteSearchDialog>();
-
-            if (clienteDialog.ShowDialog() == true)
-            {
-                var clienteSeleccionado = clienteDialog.ClienteSeleccionado;
-
-                if (clienteSeleccionado != null)
-                {
-                    _vehiculo.Cliente = clienteSeleccionado;
-                    txtCliente.Text = clienteSeleccionado.Nombre; // Actualizar visualmente
-                }
-            }
+                DialogResult = true;
+                Close();
+            };
         }
     }
 }

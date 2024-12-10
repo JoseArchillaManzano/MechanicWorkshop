@@ -15,7 +15,7 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <!-- Campo Cliente -->
                     <TextBox x:Name="txtCliente" Margin="5"
-                             Text="{Binding Cliente.Nombre, FallbackValue='Seleccionar cliente...'}"
+                             Text="{Binding ClienteNombre, FallbackValue='Seleccionar cliente...', Mode=TwoWay}"
                              IsReadOnly="True"
                              materialDesign:HintAssist.Hint="Cliente"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}" />
@@ -23,52 +23,54 @@
                             Margin="5"
                             Width="30"
                             Height="30"
-                            Click="BtnSeleccionarCliente_Click"
+                            Command="{Binding SeleccionarClienteCommand}"
                             Style="{StaticResource MaterialDesignFlatButton}" />
                 </StackPanel>
 
                 <!-- Otros campos -->
                 <TextBox x:Name="txtMarca" Margin="5"
-                         Text="{Binding Marca, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding Vehiculo.Marca, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                          materialDesign:HintAssist.Hint="Marca"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 
                 <TextBox x:Name="txtModelo" Margin="5"
-                         Text="{Binding Modelo, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding Vehiculo.Modelo, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                          materialDesign:HintAssist.Hint="Modelo"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 
                 <TextBox x:Name="txtMatricula" Margin="5"
-                         Text="{Binding Matricula, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding Vehiculo.Matricula, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                          materialDesign:HintAssist.Hint="Matrícula"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 
                 <TextBox x:Name="txtMotor" Margin="5"
-                         Text="{Binding Motor, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding Vehiculo.Motor, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                          materialDesign:HintAssist.Hint="Motor"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 
                 <TextBox x:Name="txtBastidor" Margin="5"
-                         Text="{Binding Bastidor, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding Vehiculo.Bastidor, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                          materialDesign:HintAssist.Hint="Bastidor"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 
                 <TextBox x:Name="txtKilometraje" Margin="5"
-                         Text="{Binding Kilometraje, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding Vehiculo.Kilometraje, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                          materialDesign:HintAssist.Hint="Kilometraje"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 
                 <!-- Observaciones -->
                 <TextBox x:Name="txtObservaciones" Margin="5" AcceptsReturn="True" Height="80"
-                         Text="{Binding Observaciones, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding Vehiculo.Observaciones, UpdateSourceTrigger=PropertyChanged}"
                          materialDesign:HintAssist.Hint="Observaciones"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
             </StackPanel>
 
             <!-- Botones de Acción -->
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-                <Button Content="Guardar" Width="100" Margin="5" Click="BtnGuardar_Click"/>
-                <Button Content="Cancelar" Width="100" Margin="5" Click="BtnCancelar_Click"/>
+                <Button Content="Guardar" Width="100" Margin="5" 
+                        Command="{Binding GuardarCommand}" />
+                <Button Content="Cancelar" Width="100" Margin="5" 
+                        Command="{Binding CancelarCommand}" />
             </StackPanel>
         </Grid>
     </ScrollViewer>
