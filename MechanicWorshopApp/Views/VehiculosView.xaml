@@ -38,9 +38,23 @@
                 <DataGridTemplateColumn Header="Observaciones" Width="200">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Observaciones}" 
-                                       TextTrimming="CharacterEllipsis" 
-                                       ToolTip="{Binding Observaciones}" />
+                            <Border Background="Transparent" 
+                            ToolTipService.ShowDuration="60000" 
+                            ToolTipService.InitialShowDelay="0">
+                                <Border.ToolTip>
+                                    <ToolTip MaxWidth="400" Padding="10"
+                                     Background="White"
+                                     Foreground="Black">
+                                        <TextBlock Text="{Binding Observaciones}" 
+                                           TextWrapping="Wrap"
+                                           Foreground="Black"/>
+                                    </ToolTip>
+                                </Border.ToolTip>
+
+                                <TextBlock Text="{Binding Observaciones}" 
+                                   TextWrapping="NoWrap" 
+                                   TextTrimming="CharacterEllipsis"/>
+                            </Border>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

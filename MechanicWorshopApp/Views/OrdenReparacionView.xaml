@@ -1,0 +1,67 @@
+﻿<Window x:Class="MechanicWorkshopApp.Views.OrdenReparacionView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:local="clr-namespace:MechanicWorkshopApp.Components"
+        Title="Órdenes de Reparación" Height="600" Width="900">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <!-- Barra de búsqueda -->
+            <RowDefinition Height="*" />
+            <!-- Tabla -->
+            <RowDefinition Height="Auto" />
+            <!-- Paginación -->
+            <RowDefinition Height="Auto" />
+            <!-- Botones de acción -->
+        </Grid.RowDefinitions>
+
+        <!-- Barra de búsqueda -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+            <TextBlock Text="Buscar por matrícula o observaciones:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox Width="200" Margin="0,0,10,0" 
+                     Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
+        <!-- Lista de Órdenes -->
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Ordenes}" 
+                  SelectedItem="{Binding SelectedOrden, Mode=TwoWay}"
+                  AutoGenerateColumns="False" IsReadOnly="True"
+                  AlternationCount="2" ColumnHeaderHeight="35">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" />
+                <DataGridTextColumn Header="Fecha Entrada" Binding="{Binding FechaEntrada, StringFormat='dd/MM/yyyy'}" Width="150" />
+                <DataGridTextColumn Header="Fecha Salida" Binding="{Binding FechaSalida, StringFormat='dd/MM/yyyy'}" Width="150" />
+                <DataGridTextColumn Header="Cliente" Binding="{Binding Vehiculo.Cliente.Nombre}" Width="200" />
+                <DataGridTextColumn Header="Vehículo" Binding="{Binding Vehiculo.Matricula}" Width="150" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Paginación -->
+        <local:PaginationControl Grid.Row="2"
+                         HorizontalAlignment="Center"
+                         CurrentPage="{Binding CurrentPage, Mode=TwoWay}"
+                         TotalPages="{Binding TotalPages,  Mode=OneWay}"
+                         PreviousPageCommand="{Binding PreviousPageCommand}"
+                         NextPageCommand="{Binding NextPageCommand}" />
+
+        <!-- Botones de Acción -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Content="Agregar" Width="100" Margin="5"
+                    Background="#4CAF50" Foreground="White"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding AgregarOrdenCommand}" />
+            <Button Content="Editar" Width="100" Margin="5"
+                    Background="#FFC107" Foreground="Black"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding EditarOrdenCommand}" />
+            <Button Content="Eliminar" Width="100" Margin="5"
+                    Background="#F44336" Foreground="White"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Command="{Binding EliminarOrdenCommand}" />
+        </StackPanel>
+    </Grid>
+</Window>

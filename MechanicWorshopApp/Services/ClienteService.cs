@@ -52,45 +52,40 @@ namespace MechanicWorkshopApp.Services
 
         public int ObtenerTotalClientes()
         {
-            using (var context = new TallerContext())
-            {
-                return context.Clientes.Count();
-            }
+            return _context.Clientes.Count();
+            
         }
 
         public List<Cliente> ObtenerClientesPaginados(int paginaActual, int tamanoPagina)
-        {
-            using (var context = new TallerContext())
-            {
-                return context.Clientes
-                              .OrderBy(c => c.Id)
-                              .Skip((paginaActual - 1) * tamanoPagina)
-                              .Take(tamanoPagina)
-                              .ToList();
-            }
+        {            
+            return _context.Clientes
+                            .OrderBy(c => c.Id)
+                            .Skip((paginaActual - 1) * tamanoPagina)
+                            .Take(tamanoPagina)
+                            .ToList();
+            
         }
 
         public PagedResult<Cliente> GetClientesPaginated(int page, int pageSize, string searchQuery)
         {
             if (page < 1) page = 1;
-            using (var context = new TallerContext())
+            
+            var query = _context.Clientes.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchQuery))
             {
-                var query = context.Clientes.AsQueryable();
-
-                if (!string.IsNullOrWhiteSpace(searchQuery))
-                {
-                    query = query.Where(c => c.Nombre.Contains(searchQuery) || c.DNI_CIF.Contains(searchQuery));
-                }
-                var totalItems = query.Count(); // Total de clientes
-                var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-                var items = query
-                    .OrderBy(c => c.Id)
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToList();
-
-                return new PagedResult<Cliente>(items, totalItems, page, pageSize);
+                query = query.Where(c => c.Nombre.Contains(searchQuery) || c.DNI_CIF.Contains(searchQuery));
             }
+            var totalItems = query.Count(); // Total de clientes
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            var items = query
+                .OrderBy(c => c.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return new PagedResult<Cliente>(items, totalItems, page, pageSize);
+            
         }
     }
 }

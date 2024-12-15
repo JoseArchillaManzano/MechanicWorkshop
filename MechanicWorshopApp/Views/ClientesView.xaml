@@ -4,7 +4,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:materialDesignIcons="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:MechanicWorkshopApp.Components" 
-        Title="Gestión de Clientes" Height="500" Width="900">
+        Title="Gestión de Clientes" Height="600" Width="900">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

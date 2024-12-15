@@ -1,10 +1,4 @@
-﻿using MechanicWorkshopApp.Configuration;
-using MechanicWorkshopApp.Data;
-using MechanicWorkshopApp.Models;
-using MechanicWorkshopApp.Services;
-using MechanicWorkshopApp.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,15 +15,13 @@ using System.Windows.Shapes;
 namespace MechanicWorkshopApp.Views
 {
     /// <summary>
-    /// Lógica de interacción para ClientesView.xaml
+    /// Lógica de interacción para SelectorClienteDialog.xaml
     /// </summary>
-    public partial class ClientesView : Window
+    public partial class SelectorClienteView : Window
     {
-
-        public ClientesView(ClientesViewModel viewModel)
+        public SelectorClienteView()
         {
             InitializeComponent();
-            DataContext = viewModel;
         }
     }
 }

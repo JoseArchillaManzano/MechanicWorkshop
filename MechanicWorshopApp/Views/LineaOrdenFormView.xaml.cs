@@ -1,9 +1,4 @@
-﻿using MechanicWorkshopApp.Configuration;
-using MechanicWorkshopApp.Data;
-using MechanicWorkshopApp.Models;
-using MechanicWorkshopApp.Services;
-using MechanicWorkshopApp.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
+﻿using MechanicWorkshopApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +16,11 @@ using System.Windows.Shapes;
 namespace MechanicWorkshopApp.Views
 {
     /// <summary>
-    /// Lógica de interacción para ClientesView.xaml
+    /// Lógica de interacción para LineaOrdenView.xaml
     /// </summary>
-    public partial class ClientesView : Window
+    public partial class LineaOrdenFormView : Window
     {
-
-        public ClientesView(ClientesViewModel viewModel)
+        public LineaOrdenFormView(LineaOrdenFormViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;

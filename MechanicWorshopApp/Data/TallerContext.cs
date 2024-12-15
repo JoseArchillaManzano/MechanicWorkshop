@@ -15,12 +15,15 @@ namespace MechanicWorkshopApp.Data
         public DbSet<OrdenReparacion> OrdenesReparacion { get; set; }
         public DbSet<LineaOrden> LineasOrden { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    // Configura la conexión con PostgreSQL
+        //    optionsBuilder.UseNpgsql("Host=localhost;Database=Taller;Username=postgres;Password=Postgresi-20");
+        //}
+        public TallerContext(DbContextOptions<TallerContext> options)
+        : base(options)
         {
-            // Configura la conexión con PostgreSQL
-            optionsBuilder.UseNpgsql("Host=localhost;Database=Taller;Username=postgres;Password=Postgresi-20");
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Vehiculo>()
@@ -28,6 +31,13 @@ namespace MechanicWorkshopApp.Data
                 .WithMany(c => c.Vehiculos)
                 .HasForeignKey(v => v.ClienteId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<LineaOrden>(entity =>
+            {
+                entity.Property(lo => lo.TipoLinea)
+                      .HasConversion<string>() // Guardar como texto
+                      .IsRequired();
+            });
         }
     }
 }

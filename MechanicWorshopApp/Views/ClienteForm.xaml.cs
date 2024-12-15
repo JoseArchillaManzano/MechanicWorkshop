@@ -24,15 +24,10 @@ namespace MechanicWorkshopApp.Views
     /// </summary>
     public partial class ClienteForm : Window
     {
-        private Cliente _cliente;
-        private ClienteService _clienteService;
-
-        public ClienteForm(ClienteService clienteService, Cliente cliente = null)
+        public ClienteForm(Cliente cliente = null)
         {
             InitializeComponent();
-            _cliente = cliente ?? new Cliente();
-            _clienteService = clienteService;
-            DataContext = _cliente; // Vinculamos el DataContext al cliente
+            DataContext = cliente ?? new Cliente(); ; // Vinculamos el DataContext al cliente
         }
         public void Initialize(ClientesFormViewModel viewModel)
         {

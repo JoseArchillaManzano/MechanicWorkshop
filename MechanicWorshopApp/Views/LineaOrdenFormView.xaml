@@ -1,0 +1,51 @@
+﻿<Window x:Class="MechanicWorkshopApp.Views.LineaOrdenFormView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MechanicWorkshopApp.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Línea de Orden" Height="400" Width="400" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Campos del formulario -->
+        <StackPanel Grid.Row="0" VerticalAlignment="Top">
+            <TextBox Margin="0,10,0,0"
+                     Text="{Binding Concepto, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                     materialDesign:HintAssist.Hint="Concepto"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+
+            <TextBox Margin="0,10,0,0"
+                     Text="{Binding Cantidad, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                     materialDesign:HintAssist.Hint="Cantidad"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+
+            <TextBox Margin="0,10,0,0"
+                     Text="{Binding Precio, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                     materialDesign:HintAssist.Hint="Precio"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+
+            <ComboBox Margin="0,10,0,0"
+                  SelectedItem="{Binding Tipo, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding TiposLinea}"
+                  materialDesign:HintAssist.Hint="Tipo"
+                  Style="{StaticResource MaterialDesignOutlinedComboBox}" Cursor="" />    
+        </StackPanel>
+
+        <!-- Botones de acción -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Guardar"
+                    Command="{Binding GuardarCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}" Width="100" />
+            <Button Content="Cancelar"
+                    Command="{Binding CancelarCommand}"
+                    Style="{StaticResource MaterialDesignFlatButton}" Width="100" />
+        </StackPanel>
+    </Grid>
+</Window>

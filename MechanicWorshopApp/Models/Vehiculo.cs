@@ -118,6 +118,8 @@ namespace MechanicWorkshopApp.Models
             }
         }
 
+        public ICollection<OrdenReparacion> OrdenesReparacion { get; set; } = new HashSet<OrdenReparacion>();
+
         // Implementación de INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)

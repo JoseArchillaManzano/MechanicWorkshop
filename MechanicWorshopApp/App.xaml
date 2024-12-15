@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:components="clr-namespace:MechanicWorkshopApp.Components"
+             xmlns:local="clr-namespace:MechanicWorkshopApp.Converters"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <!-- Estilos de Material Design -->
@@ -12,15 +13,20 @@
                 <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="Blue" SecondaryColor="Orange" />
 
                 <!-- Diccionarios de recursos para estilos de controles -->
-
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
-                <!-- Usar Material Design 3 -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Convertidor global -->
+            <local:NullToBooleanConverter x:Key="NullToBooleanConverter" />
+
+            <!-- Estilo para TextBox -->
             <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
                 <Setter Property="Padding" Value="5" />
             </Style>
+
+            <!-- Estilo para DataGridRow -->
             <Style TargetType="DataGridRow">
                 <Setter Property="Background" Value="White" />
                 <Setter Property="BorderBrush" Value="#E0E0E0" />
