@@ -33,6 +33,8 @@ namespace MechanicWorkshopApp.ViewModels
         public IRelayCommand AceptarCommand { get; }
         public IRelayCommand CancelarCommand { get; }
 
+        private readonly System.Timers.Timer _debounceTimer;
+
         public SelectorClienteViewModel(ClienteService clienteService, Action<Cliente> onClienteSeleccionado)
         {
             _clienteService = clienteService;
@@ -41,7 +43,13 @@ namespace MechanicWorkshopApp.ViewModels
             AceptarCommand = new RelayCommand(Aceptar, () => ClienteSeleccionado != null);
             CancelarCommand = new RelayCommand(Cancelar);
 
-            SearchQuery = string.Empty;
+            _debounceTimer = new System.Timers.Timer(300);
+            _debounceTimer.AutoReset = false; // Solo se dispara una vez
+            _debounceTimer.Elapsed += (s, e) =>
+            {
+                // Actualizar clientes en el hilo de la interfaz
+                App.Current.Dispatcher.Invoke(LoadClientes);
+            };
             LoadClientes();
         }
 
@@ -81,6 +89,14 @@ namespace MechanicWorkshopApp.ViewModels
         {
             // Notificar que el comando puede ejecutarse
             ((RelayCommand)AceptarCommand).NotifyCanExecuteChanged();
+        }
+
+        partial void OnSearchQueryChanged(string value)
+        {
+            CurrentPage = 1; // Reinicia a la primera página
+                             // Reiniciar el temporizador
+            _debounceTimer.Stop();
+            _debounceTimer.Start();
         }
     }
 }

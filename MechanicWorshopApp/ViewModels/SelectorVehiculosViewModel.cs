@@ -34,6 +34,8 @@ namespace MechanicWorkshopApp.ViewModels
         public IRelayCommand AceptarCommand { get; }
         public IRelayCommand CancelarCommand { get; }
 
+        private readonly System.Timers.Timer _debounceTimer;
+
         public SelectorVehiculosViewModel(int clienteId, VehiculoService vehiculoService, Action<Vehiculo> onVehiculoSeleccionado)
         {
             _clienteId = clienteId;
@@ -43,7 +45,14 @@ namespace MechanicWorkshopApp.ViewModels
             AceptarCommand = new RelayCommand(Aceptar);
             CancelarCommand = new RelayCommand(Cancelar);
 
-            SearchQuery = string.Empty;
+            _debounceTimer = new System.Timers.Timer(300);
+            _debounceTimer.AutoReset = false; // Solo se dispara una vez
+            _debounceTimer.Elapsed += (s, e) =>
+            {
+                // Actualizar clientes en el hilo de la interfaz
+                App.Current.Dispatcher.Invoke(LoadVehiculos);
+            };
+
             LoadVehiculos();
         }
 
@@ -83,6 +92,14 @@ namespace MechanicWorkshopApp.ViewModels
         private void CerrarVentanaActual()
         {
             Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive)?.Close();
+        }
+
+        partial void OnSearchQueryChanged(string value)
+        {
+            CurrentPage = 1; // Reinicia a la primera página
+                             // Reiniciar el temporizador
+            _debounceTimer.Stop();
+            _debounceTimer.Start();
         }
     }
 }

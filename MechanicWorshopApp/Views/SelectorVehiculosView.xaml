@@ -28,6 +28,7 @@
                 <DataGridTextColumn Header="Marca" Binding="{Binding Marca}" Width="150"/>
                 <DataGridTextColumn Header="Modelo" Binding="{Binding Modelo}" Width="150"/>
                 <DataGridTextColumn Header="Matrícula" Binding="{Binding Matricula}" Width="150"/>
+                <DataGridTextColumn Header="Matrícula" Binding="{Binding Bastidor}" Width="200"/>
             </DataGrid.Columns>
         </DataGrid>
 
