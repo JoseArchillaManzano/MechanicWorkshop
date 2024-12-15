@@ -13,6 +13,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -45,9 +46,17 @@
                 <TextBlock Text="Fecha de Salida:" VerticalAlignment="Center" Margin="0,0,10,0" />
                 <DatePicker SelectedDate="{Binding Orden.FechaSalida}" Width="200" />
             </StackPanel>
+            
+            <!-- Trabajo a realizar u Observaciones -->
+            <StackPanel Grid.Row="3" Margin="0,0,0,10">
+                <TextBlock Text="Trabajo a realizar / Observaciones:" VerticalAlignment="Top" Margin="0,0,10,0" />
+                <TextBox Text="{Binding Orden.Descripcion, UpdateSourceTrigger=PropertyChanged}"
+             AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Height="100"
+             Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+            </StackPanel>
 
             <!-- Líneas de Orden -->
-            <GroupBox Header="Líneas de Orden" Grid.Row="3" Margin="0,10,0,0">
+            <GroupBox Header="Líneas de Orden" Grid.Row="4" Margin="0,10,0,0">
                 <StackPanel>
                     <DataGrid ItemsSource="{Binding LineasOrden}" 
                               SelectedItem="{Binding LineaSeleccionada, Mode=TwoWay}" AutoGenerateColumns="False"
@@ -72,7 +81,7 @@
             </GroupBox>
 
             <!-- Botones de acción -->
-            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
                 <Button Content="Guardar" Command="{Binding GuardarCommand}" 
                     Style="{StaticResource MaterialDesignRaisedButton}" Width="100" Margin="5" />
                 <Button Content="Cancelar" Command="{Binding CancelarCommand}" 
