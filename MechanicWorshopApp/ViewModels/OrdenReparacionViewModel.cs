@@ -55,6 +55,8 @@ namespace MechanicWorkshopApp.ViewModels
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
 
+        private readonly System.Timers.Timer _debounceTimer;
+
         public OrdenReparacionViewModel(
             OrdenReparacionService ordenReparacionService,
             VehiculoService vehiculoService,
@@ -78,6 +80,14 @@ namespace MechanicWorkshopApp.ViewModels
 
             NextPageCommand = new RelayCommand(NextPage, CanNextPage);
             PreviousPageCommand = new RelayCommand(PreviousPage, CanPreviousPage);
+
+            _debounceTimer = new System.Timers.Timer(500);
+            _debounceTimer.AutoReset = false; // Solo se dispara una vez
+            _debounceTimer.Elapsed += (s, e) =>
+            {
+                // Actualizar clientes en el hilo de la interfaz
+                App.Current.Dispatcher.Invoke(UpdateOrdenes);
+            };
 
             UpdateOrdenes();
         }
@@ -207,6 +217,14 @@ namespace MechanicWorkshopApp.ViewModels
         }
 
         private bool CanPreviousPage() => CurrentPage > 1;
+
+        partial void OnSearchQueryChanged(string value)
+        {
+            CurrentPage = 1; // Reinicia a la primera página
+                             // Reiniciar el temporizador
+            _debounceTimer.Stop();
+            _debounceTimer.Start();
+        }
     }
 }
 

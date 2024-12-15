@@ -60,7 +60,7 @@ namespace MechanicWorkshopApp.ViewModels
             _clienteFormFactory = clienteFormFactory;
             _vehiculosViewFactory = vehiculosViewFactory;
 
-            _debounceTimer = new System.Timers.Timer(500); // 300 ms de retraso
+            _debounceTimer = new System.Timers.Timer(500); 
             _debounceTimer.AutoReset = false; // Solo se dispara una vez
             _debounceTimer.Elapsed += (s, e) =>
             {

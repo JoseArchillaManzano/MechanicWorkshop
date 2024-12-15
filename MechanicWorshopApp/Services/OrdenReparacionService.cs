@@ -32,8 +32,7 @@ namespace MechanicWorkshopApp.Services
             {
                 query = query.Where(o =>
                     o.Cliente.Nombre.Contains(searchQuery) ||
-                    o.Vehiculo.Matricula.Contains(searchQuery) ||
-                    o.Descripcion.Contains(searchQuery));
+                    o.Vehiculo.Matricula.Contains(searchQuery));
             }
 
             var totalItems = query.Count();

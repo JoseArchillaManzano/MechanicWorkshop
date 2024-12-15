@@ -21,7 +21,7 @@
 
         <!-- Barra de búsqueda -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            <TextBlock Text="Buscar por matrícula o observaciones:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBlock Text="Buscar por matrícula o nombre del cliente:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <TextBox Width="200" Margin="0,0,10,0" 
                      Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
@@ -35,8 +35,8 @@
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" />
                 <DataGridTextColumn Header="Fecha Entrada" Binding="{Binding FechaEntrada, StringFormat='dd/MM/yyyy'}" Width="150" />
                 <DataGridTextColumn Header="Fecha Salida" Binding="{Binding FechaSalida, StringFormat='dd/MM/yyyy'}" Width="150" />
-                <DataGridTextColumn Header="Cliente" Binding="{Binding Vehiculo.Cliente.Nombre}" Width="200" />
-                <DataGridTextColumn Header="Vehículo" Binding="{Binding Vehiculo.Matricula}" Width="150" />
+                <DataGridTextColumn Header="Nombre Cliente" Binding="{Binding Vehiculo.Cliente.Nombre}" Width="200" />
+                <DataGridTextColumn Header="Matricula Vehiculo" Binding="{Binding Vehiculo.Matricula}" Width="150" />
             </DataGrid.Columns>
         </DataGrid>
 
