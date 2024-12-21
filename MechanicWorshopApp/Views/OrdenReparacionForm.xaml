@@ -14,12 +14,21 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Command="{Binding GenerarFacturaCommand}"
+                        ToolTip="Generar Factura"
+                        Style="{StaticResource MaterialDesignFloatingActionButton}">
+                    <materialDesign:PackIcon Kind="FilePdfBox" Width="24" Height="24" />
+                </Button>
+            </StackPanel>
+            
             <!-- Información del cliente -->
-            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
                 <TextBlock Text="Cliente:" VerticalAlignment="Center" Margin="0,0,10,0" />
                 <TextBox Text="{Binding ClienteSeleccionado.Nombre}" IsReadOnly="True" 
                      Style="{StaticResource MaterialDesignOutlinedTextBox}" Width="300" Margin="0,0,10,0" />
@@ -29,7 +38,7 @@
             </StackPanel>
 
             <!-- Información del vehículo -->
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
                 <TextBlock Text="Vehículo:" VerticalAlignment="Center" Margin="0,0,10,0" />
                 <TextBox Text="{Binding VehiculoSeleccionado.Matricula}" IsReadOnly="True" 
                      Style="{StaticResource MaterialDesignOutlinedTextBox}" Width="300" Margin="0,0,10,0" />
@@ -40,7 +49,7 @@
             </StackPanel>
 
             <!-- Detalles de la Orden -->
-            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+            <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,10">
                 <TextBlock Text="Fecha de Entrada:" VerticalAlignment="Center" Margin="0,0,10,0" />
                 <DatePicker SelectedDate="{Binding Orden.FechaEntrada}" Width="200" Margin="0,0,10,0" />
                 <TextBlock Text="Fecha de Salida:" VerticalAlignment="Center" Margin="0,0,10,0" />
@@ -48,7 +57,7 @@
             </StackPanel>
             
             <!-- Trabajo a realizar u Observaciones -->
-            <StackPanel Grid.Row="3" Margin="0,0,0,10">
+            <StackPanel Grid.Row="4" Margin="0,0,0,10">
                 <TextBlock Text="Trabajo a realizar / Observaciones:" VerticalAlignment="Top" Margin="0,0,10,0" />
                 <TextBox Text="{Binding Orden.Descripcion, UpdateSourceTrigger=PropertyChanged}"
              AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Height="100"
@@ -56,7 +65,7 @@
             </StackPanel>
 
             <!-- Líneas de Orden -->
-            <GroupBox Header="Líneas de Orden" Grid.Row="4" Margin="0,10,0,0">
+            <GroupBox Header="Líneas de Orden" Grid.Row="5" Margin="0,10,0,0">
                 <StackPanel>
                     <DataGrid ItemsSource="{Binding LineasOrden}" 
                               SelectedItem="{Binding LineaSeleccionada, Mode=TwoWay}" AutoGenerateColumns="False"
@@ -81,7 +90,7 @@
             </GroupBox>
 
             <!-- Botones de acción -->
-            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
                 <Button Content="Guardar" Command="{Binding GuardarCommand}" 
                     Style="{StaticResource MaterialDesignRaisedButton}" Width="100" Margin="5" />
                 <Button Content="Cancelar" Command="{Binding CancelarCommand}" 

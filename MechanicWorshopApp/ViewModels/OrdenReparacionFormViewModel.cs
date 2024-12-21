@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Services;
+using MechanicWorkshopApp.Utils;
 using MechanicWorkshopApp.Views;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -53,7 +54,7 @@ namespace MechanicWorkshopApp.ViewModels
         public ICommand EliminarLineaCommand { get; }
         public ICommand GuardarCommand { get; }
         public ICommand CancelarCommand { get; }
-
+        public ICommand GenerarFacturaCommand { get; }
         public OrdenReparacionFormViewModel(
             OrdenReparacionService ordenReparacionService,
             VehiculoService vehiculoService,
@@ -80,7 +81,7 @@ namespace MechanicWorkshopApp.ViewModels
             EliminarLineaCommand = new RelayCommand(EliminarLinea);
             GuardarCommand = new RelayCommand(GuardarOrden);
             CancelarCommand = new RelayCommand(Cancelar);
-
+            GenerarFacturaCommand = new RelayCommand(GenerarFactura);
 
             Orden ??= new OrdenReparacion
             {
@@ -269,6 +270,19 @@ namespace MechanicWorkshopApp.ViewModels
                 OnClose?.Invoke(); // Evento para cerrar cualquier lógica adicional asociada
             }
             
+        }
+
+        private void GenerarFactura()
+        {
+
+            GuardarOrden();
+            var facturaGenerator = new FacturaPdfGenerator(Orden);
+
+            // Genera dos PDFs: uno de materiales y otro de trabajo realizado
+            facturaGenerator.GenerarFactura($"Factura_Materiales_{Orden.Id}.pdf",
+                                            $"Factura_Trabajo_{Orden.Id}.pdf");
+
+            MessageBox.Show("Factura generada correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

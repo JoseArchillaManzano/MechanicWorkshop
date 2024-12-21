@@ -4,6 +4,7 @@ using MechanicWorkshopApp.ViewModels;
 using MechanicWorkshopApp.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using QuestPDF.Infrastructure;
 using System.Configuration;
 using System.Data;
 using System.Windows;
@@ -21,6 +22,7 @@ namespace MechanicWorkshopApp
         {
             base.OnStartup(e);
 
+            QuestPDF.Settings.License = LicenseType.Community;
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             Services = serviceCollection.BuildServiceProvider();
