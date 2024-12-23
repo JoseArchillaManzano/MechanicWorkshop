@@ -79,7 +79,7 @@ namespace MechanicWorkshopApp.ViewModels
             AgregarLineaCommand = new RelayCommand(AgregarLinea);
             EditarLineaCommand = new RelayCommand(EditarLinea);
             EliminarLineaCommand = new RelayCommand(EliminarLinea);
-            GuardarCommand = new RelayCommand(GuardarOrden);
+            GuardarCommand = new RelayCommand(() => GuardarOrden(true));
             CancelarCommand = new RelayCommand(Cancelar);
             GenerarFacturaCommand = new RelayCommand(GenerarFactura);
 
@@ -231,7 +231,7 @@ namespace MechanicWorkshopApp.ViewModels
             selectorVehiculosView.ShowDialog();
         }
 
-        private void GuardarOrden()
+        private void GuardarOrden(bool cerrarFormulario = true)
         {
             if(ClienteSeleccionado is null || VehiculoSeleccionado is null)
             {
@@ -253,13 +253,18 @@ namespace MechanicWorkshopApp.ViewModels
                 _ordenReparacionService.ActualizarOrden(Orden);
             }
 
-            _callback?.Invoke(true);
-            OnClose?.Invoke();
+            if (cerrarFormulario)
+            {
+                //MessageBox.Show("La orden se guardó correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                _callback?.Invoke(true);
+                OnClose?.Invoke();
+            }
+            
         }
 
         private void Cancelar()
         {
-            var result = MessageBox.Show("Los cambios que haya realizado se perderan si no los guarda. ¿Está seguro que desea salir?",
+            var result = MessageBox.Show("Los cambios que haya realizado se perderán si no los guarda. ¿Está seguro que desea salir?",
                                              "Confirmar",
                                              MessageBoxButton.YesNo,
                                              MessageBoxImage.Warning);
@@ -275,7 +280,7 @@ namespace MechanicWorkshopApp.ViewModels
         private void GenerarFactura()
         {
 
-            GuardarOrden();
+            GuardarOrden(false);
             var facturaGenerator = new FacturaPdfGenerator(Orden);
 
             // Genera dos PDFs: uno de materiales y otro de trabajo realizado

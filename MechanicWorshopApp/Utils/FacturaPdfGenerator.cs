@@ -24,8 +24,8 @@ namespace MechanicWorkshopApp.Utils
                 Directory.CreateDirectory(directorio);
             }
 
-            var rutaFacturaMateriales = Path.Combine(directorio, "Factura_Materiales.pdf");
-            var rutaFacturaTrabajo = Path.Combine(directorio, "Factura_Trabajo.pdf");
+            var rutaFacturaMateriales = Path.Combine(directorio, filePathMateriales);
+            var rutaFacturaTrabajo = Path.Combine(directorio, filePathTrabajo);
             GenerarFacturaMateriales(rutaFacturaMateriales);
             GenerarFacturaTrabajo(rutaFacturaTrabajo);
         }

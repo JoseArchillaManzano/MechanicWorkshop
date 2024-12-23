@@ -26,5 +26,20 @@ namespace MechanicWorkshopApp.Views
                 Close();
             };
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var result = MessageBox.Show(
+                "Los cambios que haya realizado se perderán si no los guarda. ¿Está seguro que desea salir?",
+                "Confirmar",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes)
+            {
+                // Cancela el cierre de la ventana
+                e.Cancel = true;
+            }
+        }
     }
 }
