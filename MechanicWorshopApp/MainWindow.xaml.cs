@@ -1,5 +1,7 @@
 ﻿using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
+using MechanicWorkshopApp.Services;
+using MechanicWorkshopApp.ViewModels;
 using MechanicWorkshopApp.Views;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
@@ -41,5 +43,15 @@ namespace MechanicWorkshopApp
             var ordenesView = serviceProvider.GetRequiredService<OrdenReparacionView>();
             ordenesView.Show();
         }
+
+        private void BtnConfiguracion_Click(object sender, RoutedEventArgs e)
+        {
+            var serviceProvider = ((App)Application.Current).Services;
+
+            // Resuelve la ventana desde el contenedor
+            var ordenesView = serviceProvider.GetRequiredService<TallerConfigView>();
+            ordenesView.Show();
+        }
+
     }
 }

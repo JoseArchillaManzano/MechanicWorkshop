@@ -1,0 +1,46 @@
+﻿<Window x:Class="MechanicWorkshopApp.Views.TallerConfigView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MechanicWorkshopApp.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Configuración del Taller" Height="450" Width="500">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBox Text="{Binding Configuracion.Nombre, UpdateSourceTrigger=PropertyChanged}" 
+                     Margin="0,10,0,0"
+                     materialDesign:HintAssist.Hint="Nombre del Taller"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+            <TextBox Text="{Binding Configuracion.CIF, UpdateSourceTrigger=PropertyChanged}" 
+                     Margin="0,10,0,0"
+                     materialDesign:HintAssist.Hint="CIF/NIF"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+            <TextBox Text="{Binding Configuracion.Direccion, UpdateSourceTrigger=PropertyChanged}" 
+                     Margin="0,10,0,0"
+                     materialDesign:HintAssist.Hint="Dirección"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+            <TextBox Text="{Binding Configuracion.Telefono, UpdateSourceTrigger=PropertyChanged}" 
+                     Margin="0,10,0,0"
+                     materialDesign:HintAssist.Hint="Teléfono"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+            <TextBox Text="{Binding Configuracion.RegistroIndustrial, UpdateSourceTrigger=PropertyChanged}" 
+                     Margin="0,10,0,0"
+                     materialDesign:HintAssist.Hint="Registro Industrial"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Guardar" Command="{Binding GuardarCommand}" Width="100" Margin="5"
+                    Style="{StaticResource MaterialDesignRaisedButton}" />
+            <Button Content="Cancelar" Command="{Binding CancelarCommand}" Width="100" Margin="5"
+                    Style="{StaticResource MaterialDesignRaisedButton}" />
+        </StackPanel>
+    </Grid>
+</Window>

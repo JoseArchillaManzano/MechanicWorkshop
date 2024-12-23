@@ -42,6 +42,7 @@ namespace MechanicWorkshopApp
             services.AddScoped<VehiculoService>();
             services.AddScoped<OrdenReparacionService>();
             services.AddScoped<LineaOrdenService>();
+            services.AddScoped<TallerConfigService>();
 
             // Registrar ViewModels
             services.AddTransient<ClientesViewModel>();
@@ -53,6 +54,7 @@ namespace MechanicWorkshopApp
             services.AddTransient<OrdenReparacionViewModel>();
             services.AddTransient<OrdenReparacionFormViewModel>();
             services.AddTransient<LineaOrdenFormViewModel>();
+            services.AddTransient<TallerConfigViewModel>();
 
             // Registrar ventanas
             services.AddTransient<MainWindow>();
@@ -66,6 +68,7 @@ namespace MechanicWorkshopApp
             services.AddTransient<LineaOrdenFormView>();
             services.AddTransient<OrdenReparacionView>();
             services.AddTransient<OrdenReparacionForm>();
+            services.AddTransient<TallerConfigView>();
 
             services.AddTransient<Func<VehiculosView>>(sp => () => sp.GetRequiredService<VehiculosView>());
             // Registro de la Factory para formularios

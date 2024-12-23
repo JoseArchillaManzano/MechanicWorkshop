@@ -9,7 +9,9 @@
     <Grid>
         <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Button Content="Gestionar Clientes" Click="BtnClientes_Click" Width="200" Height="50" Margin="10"/>
+            <Button Content="Gestionar Taller" Click="BtnConfiguracion_Click" Width="200" Height="50" Margin="10"/>
             <Button Content="Gestionar Órdenes de Reparación" Click="BtnOrdenes_Click" Width="200" Height="50" Margin="10"/>
+            
         </StackPanel>
     </Grid>
 </Window>
