@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MechanicWorkshopApp.Views"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:local1="clr-namespace:MechanicWorkshopApp.Converters"
-        Title="Orden de Reparación" Height="600" Width="400"
+        Title="Orden de Reparación" Height="740" Width="650"
         Closing="Window_Closing">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="10">

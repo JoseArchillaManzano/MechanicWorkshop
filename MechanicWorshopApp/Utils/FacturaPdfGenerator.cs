@@ -18,7 +18,7 @@ namespace MechanicWorkshopApp.Utils
             _tallerConfig = tallerConfig;
         }
 
-        public void GenerarFactura(string filePathMateriales, string filePathTrabajo)
+        public void GenerarFactura(string filePath)
         {
             var directorio = @"C:\Facturas";
             if (!Directory.Exists(directorio))
@@ -26,49 +26,41 @@ namespace MechanicWorkshopApp.Utils
                 Directory.CreateDirectory(directorio);
             }
 
-            var rutaFacturaMateriales = Path.Combine(directorio, filePathMateriales);
-            var rutaFacturaTrabajo = Path.Combine(directorio, filePathTrabajo);
-            GenerarFacturaMateriales(rutaFacturaMateriales);
-            GenerarFacturaTrabajo(rutaFacturaTrabajo);
-        }
-
-        public void GenerarFacturaMateriales(string filePath)
-        {
-            var fechaActual = DateTime.Now.ToShortDateString();
+            var rutaFactura = Path.Combine(directorio, filePath);
 
             Document.Create(container =>
             {
                 container.Page(page =>
                 {
                     page.Margin(30);
-                    page.Header().Element(e => ComposeHeaderTrabajo(e, _ordenReparacion.Id));
+                    page.Header().Element(e => ComposeHeader(e, _ordenReparacion.Id));
                     page.Content().Element(e => ComposeMateriales(e));
                     page.Footer().Element(ComposeFooter);
                 });
-            }).GeneratePdf(filePath);
-        }
 
-        public void GenerarFacturaTrabajo(string filePath)
-        {
-            Document.Create(container =>
-            {
                 container.Page(page =>
                 {
                     page.Margin(30);
-                    page.Header().Element(e => ComposeHeaderTrabajo(e, _ordenReparacion.Id));
+                    page.Header().Element(e => ComposeHeader(e, _ordenReparacion.Id));
                     page.Content().Element(e => ComposeTrabajoContenido(e));
                     page.Footer().Element(ComposeFooter);
                 });
-            }).GeneratePdf(filePath);
+            }).GeneratePdf(rutaFactura);
         }
-
         private void ComposeMateriales(IContainer container)
         {
             container.Column(column =>
             {
+                column.Item().PaddingTop(7).PaddingBottom(7).Element(e =>
+                {
+                    e.Text($"Orden de Reparación Nº {_ordenReparacion.Id}")
+                     .Style(TextStyle.Default.FontSize(16).Bold())
+                     .Underline();
+                });
+
                 column.Item().Element(ComposeInformacionClienteVehiculo);
 
-                column.Item().Text("FACTURA DE MATERIALES").Style(TextStyle.Default.FontSize(16).Bold());
+                column.Item().Text("LISTADO MATERIALES Y MANO DE OBRA").Style(TextStyle.Default.FontSize(12).Bold());
 
                 column.Item().Table(table =>
                 {
@@ -108,7 +100,7 @@ namespace MechanicWorkshopApp.Utils
             });
         }
 
-        private void ComposeHeaderTrabajo(IContainer container, int ordenId)
+        private void ComposeHeader(IContainer container, int ordenId)
         {
 
             container.Column(column =>
@@ -124,13 +116,6 @@ namespace MechanicWorkshopApp.Utils
                 column.Item().Text($"Emitida el: {DateTime.Now:dd/MM/yyyy}")
                     .Style(TextStyle.Default.FontSize(12))
                     .AlignCenter();
-
-                column.Item().PaddingTop(10).PaddingBottom(10).Element(e =>
-                {
-                    e.Text($"Orden de Reparación Nº {ordenId}")
-                     .Style(TextStyle.Default.FontSize(14).Bold())
-                     .Underline();
-                });
             });
         }
 
@@ -138,6 +123,12 @@ namespace MechanicWorkshopApp.Utils
         {
             container.Column(column =>
             {
+                column.Item().PaddingTop(7).PaddingBottom(7).Element(e =>
+                {
+                    e.Text($"Factura Nº {_ordenReparacion.Id}")
+                     .Style(TextStyle.Default.FontSize(16).Bold())
+                     .Underline();
+                });
                 column.Item().Element(ComposeInformacionClienteVehiculo);
 
                 column.Spacing(10);

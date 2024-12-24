@@ -131,11 +131,3 @@ namespace MechanicWorkshopApp.Services
         }
     }
 }
-
-//var totalMateriales = _context.LineasOrden
-//                              .Where(lo => lo.TipoLinea == TipoLinea.Material)
-//                              .Sum(lo => lo.Total);
-
-//var totalManoDeObra = _context.LineasOrden
-//                              .Where(lo => lo.TipoLinea == TipoLinea.ManoDeObra)
-//                              .Sum(lo => lo.Total);

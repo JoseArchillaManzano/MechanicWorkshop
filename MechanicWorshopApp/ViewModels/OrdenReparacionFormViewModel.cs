@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace MechanicWorkshopApp.ViewModels
         private readonly VehiculoService _vehiculoService;
         private readonly LineaOrdenService _lineaOrdenService;
         private readonly TallerConfigService _tallerConfigService;
+        private readonly PrinterService _printerService;
         private readonly Func<SelectorClienteView> _clienteSelectorFactory;
         private readonly Func<SelectorVehiculosView> _vehiculoSelectorFactory;
         private readonly Func<LineaOrdenFormView> _lineaOrdenFormFactory;
@@ -62,6 +64,7 @@ namespace MechanicWorkshopApp.ViewModels
             ClienteService clienteService,
             LineaOrdenService lineaOrdenService,
             TallerConfigService tallerConfigService,
+            PrinterService printerService,
             Func<SelectorClienteView> clienteSelectorFactory,
             Func<SelectorVehiculosView> vehiculoSelectorFactory,
             Func<LineaOrdenFormView> lineaOrdenFormFactory,
@@ -72,6 +75,7 @@ namespace MechanicWorkshopApp.ViewModels
             _clienteService = clienteService;
             _lineaOrdenService = lineaOrdenService;
             _tallerConfigService = tallerConfigService;
+            _printerService = printerService;
             _clienteSelectorFactory = clienteSelectorFactory;
             _vehiculoSelectorFactory = vehiculoSelectorFactory;
             _lineaOrdenFormFactory = lineaOrdenFormFactory;
@@ -287,11 +291,15 @@ namespace MechanicWorkshopApp.ViewModels
             var tallerConfig = _tallerConfigService.ObtenerConfiguracion();
             var facturaGenerator = new FacturaPdfGenerator(Orden, tallerConfig);
 
-            // Genera dos PDFs: uno de materiales y otro de trabajo realizado
-            facturaGenerator.GenerarFactura($"Factura_Materiales_{Orden.Id}.pdf",
-                                            $"Factura_Trabajo_{Orden.Id}.pdf");
+            var directorio = @"C:\Facturas";
+            var filePath = $"Factura_{Orden.Id}.pdf";
 
-            MessageBox.Show("Factura generada correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+            facturaGenerator.GenerarFactura(filePath);
+            var rutaFactura = Path.Combine(directorio, filePath);
+
+            MessageBox.Show($"Factura generada correctamente en {rutaFactura}.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            _printerService.AbrirPDFEnVisor(rutaFactura);
         }
     }
 }
