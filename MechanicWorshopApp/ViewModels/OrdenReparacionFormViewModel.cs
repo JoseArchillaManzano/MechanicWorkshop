@@ -23,6 +23,7 @@ namespace MechanicWorkshopApp.ViewModels
         private readonly ClienteService _clienteService;
         private readonly VehiculoService _vehiculoService;
         private readonly LineaOrdenService _lineaOrdenService;
+        private readonly TallerConfigService _tallerConfigService;
         private readonly Func<SelectorClienteView> _clienteSelectorFactory;
         private readonly Func<SelectorVehiculosView> _vehiculoSelectorFactory;
         private readonly Func<LineaOrdenFormView> _lineaOrdenFormFactory;
@@ -60,6 +61,7 @@ namespace MechanicWorkshopApp.ViewModels
             VehiculoService vehiculoService,
             ClienteService clienteService,
             LineaOrdenService lineaOrdenService,
+            TallerConfigService tallerConfigService,
             Func<SelectorClienteView> clienteSelectorFactory,
             Func<SelectorVehiculosView> vehiculoSelectorFactory,
             Func<LineaOrdenFormView> lineaOrdenFormFactory,
@@ -69,6 +71,7 @@ namespace MechanicWorkshopApp.ViewModels
             _vehiculoService = vehiculoService;
             _clienteService = clienteService;
             _lineaOrdenService = lineaOrdenService;
+            _tallerConfigService = tallerConfigService;
             _clienteSelectorFactory = clienteSelectorFactory;
             _vehiculoSelectorFactory = vehiculoSelectorFactory;
             _lineaOrdenFormFactory = lineaOrdenFormFactory;
@@ -281,7 +284,8 @@ namespace MechanicWorkshopApp.ViewModels
         {
 
             GuardarOrden(false);
-            var facturaGenerator = new FacturaPdfGenerator(Orden);
+            var tallerConfig = _tallerConfigService.ObtenerConfiguracion();
+            var facturaGenerator = new FacturaPdfGenerator(Orden, tallerConfig);
 
             // Genera dos PDFs: uno de materiales y otro de trabajo realizado
             facturaGenerator.GenerarFactura($"Factura_Materiales_{Orden.Id}.pdf",

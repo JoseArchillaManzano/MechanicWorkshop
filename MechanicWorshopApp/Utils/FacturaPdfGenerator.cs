@@ -10,10 +10,12 @@ namespace MechanicWorkshopApp.Utils
     public class FacturaPdfGenerator
     {
         private readonly OrdenReparacion _ordenReparacion;
+        private readonly TallerConfig _tallerConfig;
 
-        public FacturaPdfGenerator(OrdenReparacion ordenReparacion)
+        public FacturaPdfGenerator(OrdenReparacion ordenReparacion, TallerConfig tallerConfig)
         {
             _ordenReparacion = ordenReparacion;
+            _tallerConfig = tallerConfig;
         }
 
         public void GenerarFactura(string filePathMateriales, string filePathTrabajo)
@@ -72,13 +74,12 @@ namespace MechanicWorkshopApp.Utils
                 {
                     table.ColumnsDefinition(columns =>
                     {
-                        columns.RelativeColumn(2); // Concepto
-                        columns.RelativeColumn(1); // Cantidad
-                        columns.RelativeColumn(1); // Precio U.
-                        columns.RelativeColumn(1); // Subtotal
+                        columns.RelativeColumn(2); 
+                        columns.RelativeColumn(1); 
+                        columns.RelativeColumn(1); 
+                        columns.RelativeColumn(1); 
                     });
 
-                    // Cabecera de la tabla
                     table.Header(header =>
                     {
                         header.Cell().Text("Concepto").Style(TextStyle.Default.Bold());
@@ -102,47 +103,6 @@ namespace MechanicWorkshopApp.Utils
 
                 column.Spacing(15);
 
-                // Totales desglosados
-                //column.Item().Text("Totales")
-                //    .Style(TextStyle.Default.Bold().FontSize(14));
-
-                //column.Item().PaddingTop(5).BorderBottom(1).BorderColor(Colors.Grey.Lighten1);
-
-                //column.Item().Row(row =>
-                //{
-                //    // Títulos en una fila con recuadros individuales
-                //    row.RelativeItem().Table(table =>
-                //    {
-                //        table.ColumnsDefinition(columns =>
-                //        {
-                //            columns.RelativeColumn(1); // Materiales
-                //            columns.RelativeColumn(1); // Mano de Obra
-                //            columns.RelativeColumn(1); // Base Imponible
-                //            columns.RelativeColumn(1); // IVA
-                //            columns.RelativeColumn(1); // Total General
-                //        });
-
-                //        // Cabecera de los totales
-                //        table.Header(header =>
-                //        {
-                //            header.Cell().Border(1).Padding(5).Text("Materiales").Style(TextStyle.Default.Bold().FontSize(12)).AlignCenter();
-                //            header.Cell().Border(1).Padding(5).Text("Mano de Obra").Style(TextStyle.Default.Bold().FontSize(12)).AlignCenter();
-                //            header.Cell().Border(1).Padding(5).Text("Base Imponible").Style(TextStyle.Default.Bold().FontSize(12)).AlignCenter();
-                //            header.Cell().Border(1).Padding(5).Text("IVA (21%)").Style(TextStyle.Default.Bold().FontSize(12)).AlignCenter();
-                //            header.Cell().Border(1).Padding(5).Text("Total General").Style(TextStyle.Default.Bold().FontSize(12)).AlignCenter();
-                //        });
-
-                //        // Valores correspondientes debajo de las cabeceras
-                //        table.Cell().Border(1).Padding(5).Text($"{_ordenReparacion.LineasOrden.Where(l => l.TipoLinea == TipoLinea.Material).Sum(l => l.Cantidad * l.PrecioUnitario):C}").AlignCenter();
-                //        table.Cell().Border(1).Padding(5).Text($"{_ordenReparacion.LineasOrden.Where(l => l.TipoLinea == TipoLinea.ManoDeObra).Sum(l => l.Cantidad * l.PrecioUnitario):C}").AlignCenter();
-                //        var baseImponible = _ordenReparacion.LineasOrden.Sum(l => l.Cantidad * l.PrecioUnitario);
-                //        var iva = baseImponible * 0.21m; // IVA al 21%
-                //        var totalGeneral = baseImponible + iva;
-                //        table.Cell().Border(1).Padding(5).Text($"{baseImponible:C}").AlignCenter();
-                //        table.Cell().Border(1).Padding(5).Text($"{iva:C}").AlignCenter();
-                //        table.Cell().Border(1).Padding(5).Text($"{totalGeneral:C}").Style(TextStyle.Default.Bold()).AlignCenter();
-                //    });
-                //});
 
                 column.Item().PaddingTop(15).Element(e => ComposeTotales(e));
             });
@@ -150,33 +110,14 @@ namespace MechanicWorkshopApp.Utils
 
         private void ComposeHeaderTrabajo(IContainer container, int ordenId)
         {
-            //container.Column(column =>
-            //{
-            //    column.Item().Text("LAICRAM MOTOR")
-            //        .Style(TextStyle.Default.FontSize(20).Bold());
-
-            //    column.Item().Text("CIF/NIF: 45582886-Z | Dirección: C/ EL SOLANILLO, CRRLL TRES 5104, VICAR")
-            //        .Style(TextStyle.Default.FontSize(10));
-
-            //    column.Item().Text("Teléfono: 667351080")
-            //        .Style(TextStyle.Default.FontSize(10));
-
-            //    // Orden de Reparación Nº {id de la orden} subrayado con separación
-            //    column.Item().PaddingTop(10).Element(e =>
-            //    {
-            //        e.Text($"Orden de Reparación Nº {ordenId}")
-            //         .Style(TextStyle.Default.FontSize(14).Bold())
-            //         .Underline();
-            //    });
-            //});
 
             container.Column(column =>
             {
-                column.Item().Text("LAICRAM MOTOR").Style(TextStyle.Default.FontSize(20).Bold());
-                column.Item().PaddingBottom(3).Text($"CIF/NIF: 45582886-Z").Style(TextStyle.Default.FontSize(10));
-                column.Item().PaddingBottom(3).Text($"Dirección: C/ EL SOLANILLO, CRRLL TRES 5104, VICAR").Style(TextStyle.Default.FontSize(10));
-                column.Item().PaddingBottom(3).Text($"Teléfono: 667351080").Style(TextStyle.Default.FontSize(10));
-                column.Item().PaddingBottom(3).Text($"Registro Industrial: 1").Style(TextStyle.Default.FontSize(10));
+                column.Item().Text(_tallerConfig.Nombre).Style(TextStyle.Default.FontSize(20).Bold());
+                column.Item().PaddingBottom(3).Text($"CIF/NIF: {_tallerConfig.CIF}").Style(TextStyle.Default.FontSize(10));
+                column.Item().PaddingBottom(3).Text($"Dirección:{_tallerConfig.Direccion}").Style(TextStyle.Default.FontSize(10));
+                column.Item().PaddingBottom(3).Text($"Teléfono: {_tallerConfig.Telefono}").Style(TextStyle.Default.FontSize(10));
+                column.Item().PaddingBottom(3).Text($"Registro Industrial: {_tallerConfig.RegistroIndustrial}").Style(TextStyle.Default.FontSize(10));
 
                 column.Spacing(5);
 
@@ -225,7 +166,7 @@ namespace MechanicWorkshopApp.Utils
                 column.Item().PaddingTop(20).Text("Conforme Cliente: ___________________________")
                     .Style(TextStyle.Default.FontSize(10)).AlignLeft();
 
-                // Agrega espacio adicional al final si es necesario
+                
                 column.Item().PaddingTop(20).Text(" ").Style(TextStyle.Default.FontSize(10));
             });
         }
@@ -234,7 +175,6 @@ namespace MechanicWorkshopApp.Utils
         {
             container.Row(row =>
             {
-                // Información del Cliente
                 row.RelativeItem().Border(1).Padding(5).Column(clienteColumn =>
                 {
                     clienteColumn.Item().Text("Información del Cliente").Style(TextStyle.Default.Bold());
@@ -246,10 +186,8 @@ namespace MechanicWorkshopApp.Utils
                     clienteColumn.Item().Text($"Provincia: {_ordenReparacion.Cliente.Provincia}");
                 });
 
-                // Espaciado entre columnas
                 row.Spacing(10);
 
-                // Información del Vehículo
                 row.RelativeItem().Border(1).Padding(5).Column(vehiculoColumn =>
                 {
                     vehiculoColumn.Item().Text("Información del Vehículo").Style(TextStyle.Default.Bold());
@@ -278,11 +216,9 @@ namespace MechanicWorkshopApp.Utils
             {
                 column.Item().EnsureSpace().Column(totalesColumn =>
                 {
-                    // Título "Totales"
                     totalesColumn.Item().Text("Totales").Style(TextStyle.Default.Size(16).Bold());
                     totalesColumn.Item().PaddingTop(5).BorderBottom(1).BorderColor(Colors.Grey.Lighten1);
 
-                    // Totales desglosados
                     totalesColumn.Item().Row(row =>
                     {
                         row.RelativeItem().Border(1).Padding(5).Column(col =>

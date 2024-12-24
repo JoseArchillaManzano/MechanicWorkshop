@@ -110,6 +110,7 @@ namespace MechanicWorkshopApp
                 var vehiculoService = provider.GetRequiredService<VehiculoService>();
                 var clienteService = provider.GetRequiredService<ClienteService>();
                 var lineaOrdenService = provider.GetRequiredService<LineaOrdenService>();
+                var tallerConfigService = provider.GetRequiredService<TallerConfigService>();
                 var clienteSelectorFactory = provider.GetRequiredService<Func<SelectorClienteView>>();
                 var vehiculoSelectorFactory = provider.GetRequiredService<Func<SelectorVehiculosView>>();
                 var lineaOrdenFormFactory = provider.GetRequiredService<Func<LineaOrdenFormView>>();
@@ -119,6 +120,7 @@ namespace MechanicWorkshopApp
                     vehiculoService,
                     clienteService,
                     lineaOrdenService,
+                    tallerConfigService,
                     clienteSelectorFactory,
                     vehiculoSelectorFactory,
                     lineaOrdenFormFactory,
