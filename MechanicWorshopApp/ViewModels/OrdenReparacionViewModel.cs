@@ -115,25 +115,9 @@ namespace MechanicWorkshopApp.ViewModels
 
             var ordenForm = _ordenFormFactory();
 
-            //var ordenFormViewModel = new OrdenReparacionFormViewModel(
-            //   _ordenReparacionService,
-            //   _vehiculoService,
-            //   _clienteService,
-            //   _clienteSelectorFactory,
-            //   _vehiculoSelectorFactory,
-            //   _lineaOrdenFormFactory,
-            //   result =>
-            //   {
-            //       if (result) UpdateOrdenes();
-            //   });
-
             ordenForm.Initialize(ordenReparacion);
-
-            if (ordenForm.ShowDialog() == true)
-            {
-                //_ordenReparacionService.CrearOrden(ordenReparacion);
-                UpdateOrdenes();
-            }
+            ordenForm.ShowDialog();
+            
         }
 
         private void EditarOrden()
@@ -143,26 +127,9 @@ namespace MechanicWorkshopApp.ViewModels
             {
                 var ordenForm = _ordenFormFactory();
 
-                //var ordenFormViewModel = new OrdenReparacionFormViewModel(
-                //   _ordenReparacionService,
-                //   _vehiculoService,
-                //   _clienteService,
-                //   _clienteSelectorFactory,
-                //   _vehiculoSelectorFactory,
-                //   _lineaOrdenFormFactory,
-                //   result =>
-                //   {
-                //       if (result) UpdateOrdenes();
-                //   });
-
                 ordenForm.Initialize(SelectedOrden);
-
-                if (ordenForm.ShowDialog() == true)
-                {
-                    //_ordenReparacionService.ActualizarOrden(SelectedOrden);
-                    UpdateOrdenes();
-                }
-            }
+                ordenForm.ShowDialog();
+        }
             else
             {
                 MessageBox.Show("Debe seleccionar una orden de reparación para editar.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);

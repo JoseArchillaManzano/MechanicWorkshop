@@ -89,10 +89,6 @@ namespace MechanicWorkshopApp
                     {
                         // La orden se guardó correctamente
                         MessageBox.Show("La orden de reparación se guardó correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                        // Aquí puedes llamar a un método para actualizar la lista de órdenes en la vista principal
-                        var ordenReparacionViewModel = provider.GetRequiredService<OrdenReparacionViewModel>();
-                        ordenReparacionViewModel.UpdateOrdenes();
                     }
                     else
                     {
@@ -100,6 +96,9 @@ namespace MechanicWorkshopApp
                         MessageBox.Show("La operación fue cancelada.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     // (Podrías agregar lógica adicional aquí si es necesario)
+                    // Aquí puedes llamar a un método para actualizar la lista de órdenes en la vista principal
+                    var ordenReparacionViewModel = provider.GetRequiredService<OrdenReparacionViewModel>();
+                    ordenReparacionViewModel.UpdateOrdenes();
                 });
 
                 return new OrdenReparacionForm(ordenReparacionFormViewModel);
@@ -116,6 +115,7 @@ namespace MechanicWorkshopApp
                 var clienteSelectorFactory = provider.GetRequiredService<Func<SelectorClienteView>>();
                 var vehiculoSelectorFactory = provider.GetRequiredService<Func<SelectorVehiculosView>>();
                 var lineaOrdenFormFactory = provider.GetRequiredService<Func<LineaOrdenFormView>>();
+                var vehiculoFormFactory = provider.GetRequiredService<Func<VehiculoForm>>();
 
                 return new OrdenReparacionFormViewModel(
                     ordenReparacionService,
@@ -127,6 +127,7 @@ namespace MechanicWorkshopApp
                     clienteSelectorFactory,
                     vehiculoSelectorFactory,
                     lineaOrdenFormFactory,
+                    vehiculoFormFactory,
                     callback
                 );
             });

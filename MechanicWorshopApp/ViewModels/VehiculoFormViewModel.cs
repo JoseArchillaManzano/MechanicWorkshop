@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Services;
+using MechanicWorkshopApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace MechanicWorkshopApp.ViewModels
     public partial class VehiculoFormViewModel : ObservableObject
     {
         private readonly VehiculoService _vehiculoService;
+        private readonly ClienteService _clienteService;
         private readonly Action<bool> _callback;
 
         public event Action OnClose;
@@ -27,11 +29,12 @@ namespace MechanicWorkshopApp.ViewModels
         public IRelayCommand CancelarCommand { get; }
         public IRelayCommand SeleccionarClienteCommand { get; }
 
-        public VehiculoFormViewModel(Vehiculo vehiculo, VehiculoService vehiculoService, Action<bool> callback)
+        public VehiculoFormViewModel(Vehiculo vehiculo, VehiculoService vehiculoService, ClienteService clienteService, Action<bool> callback)
         {
             Vehiculo = vehiculo ?? new Vehiculo();
             ClienteNombre = vehiculo.Cliente?.Nombre ?? "Seleccionar cliente...";
             _vehiculoService = vehiculoService;
+            _clienteService = clienteService;
             _callback = callback;
 
             GuardarCommand = new RelayCommand(GuardarVehiculo);
@@ -45,7 +48,12 @@ namespace MechanicWorkshopApp.ViewModels
                string.IsNullOrWhiteSpace(Vehiculo.Modelo) ||
                string.IsNullOrWhiteSpace(Vehiculo.Matricula))
             {
-                // Aquí puedes usar un servicio de notificación para mostrar errores.
+                System.Windows.MessageBox.Show("Todos los campos del vehículo son obligatorios.", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                return;
+            }
+            if (Vehiculo.ClienteId == 0)
+            {
+                System.Windows.MessageBox.Show("Debe seleccionar un cliente para asociar el vehículo.", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 return;
             }
             if (Vehiculo.Id == 0)
@@ -68,7 +76,21 @@ namespace MechanicWorkshopApp.ViewModels
 
         private void SeleccionarCliente()
         {
-            // Lógica para seleccionar cliente
+            var selectorClientesView = new SelectorClienteView();
+            var selectorClientesViewModel = new SelectorClienteViewModel(
+                _clienteService,
+                cliente =>
+                {
+                    if (cliente != null)
+                    {
+                        Vehiculo.ClienteId = cliente.Id;
+                        Vehiculo.Cliente = cliente;
+                        ClienteNombre = cliente.Nombre;
+                    }
+                });
+
+            selectorClientesView.DataContext = selectorClientesViewModel;
+            selectorClientesView.ShowDialog();
         }
     }
 }

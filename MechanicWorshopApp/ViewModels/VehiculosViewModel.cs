@@ -19,6 +19,7 @@ namespace MechanicWorkshopApp.ViewModels
     public partial class VehiculosViewModel : ObservableObject
     {
         private readonly VehiculoService _vehiculoService;
+        private readonly ClienteService _clienteService;
         private readonly Func<VehiculoForm> _vehiculoFormFactory;
         private  int _clienteId;
 
@@ -49,9 +50,10 @@ namespace MechanicWorkshopApp.ViewModels
 
         private readonly System.Timers.Timer _debounceTimer;
 
-        public VehiculosViewModel(VehiculoService vehiculoService, Func<VehiculoForm> vehiculoFormFactory)
+        public VehiculosViewModel(VehiculoService vehiculoService, ClienteService clienteService, Func<VehiculoForm> vehiculoFormFactory)
         {
             _vehiculoService = vehiculoService;
+            _clienteService = clienteService;
             _vehiculoFormFactory = vehiculoFormFactory;
             // Configurar comandos
             NextPageCommand = new RelayCommand(ExecuteNextPage, CanExecuteNextPage);
@@ -124,10 +126,17 @@ namespace MechanicWorkshopApp.ViewModels
 
         private void ExecuteAgregarVehiculo()
         {
+            var cliente = _clienteService.ObtenerClientePorId(_clienteId);
+            var vehiculoNuevo = new Vehiculo
+            {
+                Cliente = cliente,
+                ClienteId = _clienteId
+            };
             var vehiculoForm = _vehiculoFormFactory();
             var viewModel = new VehiculoFormViewModel(
-                new Vehiculo { ClienteId = _clienteId },
+                vehiculoNuevo,
                 _vehiculoService,
+                _clienteService,
                 result =>
                 {
                     if (result) UpdateVehiculos();
@@ -147,6 +156,7 @@ namespace MechanicWorkshopApp.ViewModels
                 var viewModel = new VehiculoFormViewModel(
                     SelectedVehiculo,
                     _vehiculoService,
+                    _clienteService,
                     result =>
                     {
                         if (result) UpdateVehiculos();

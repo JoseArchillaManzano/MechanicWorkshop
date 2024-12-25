@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:MechanicWorkshopApp.Views"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:local1="clr-namespace:MechanicWorkshopApp.Converters"
-        Title="Orden de Reparación" Height="740" Width="650"
-        Closing="Window_Closing">
+        Title="Orden de Reparación" Height="740" Width="650">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="10">
             <Grid.RowDefinitions>
@@ -23,7 +22,7 @@
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Command="{Binding GenerarFacturaCommand}"
                         ToolTip="Generar Factura"
-                        Style="{StaticResource MaterialDesignFloatingActionButton}">
+                        Style="{StaticResource MaterialDesignFloatingActionButton}" Cursor="Hand">
                     <materialDesign:PackIcon Kind="FilePdfBox" Width="24" Height="24" />
                 </Button>
             </StackPanel>
@@ -54,7 +53,7 @@
                 <TextBlock Text="Fecha de Entrada:" VerticalAlignment="Center" Margin="0,0,10,0" />
                 <DatePicker SelectedDate="{Binding Orden.FechaEntrada}" Width="200" Margin="0,0,10,0" />
                 <TextBlock Text="Fecha de Salida:" VerticalAlignment="Center" Margin="0,0,10,0" />
-                <DatePicker SelectedDate="{Binding Orden.FechaSalida}" Width="200" />
+                <DatePicker SelectedDate="{Binding Orden.FechaSalida, UpdateSourceTrigger=PropertyChanged}" Width="200" />
             </StackPanel>
             
             <!-- Trabajo a realizar u Observaciones -->

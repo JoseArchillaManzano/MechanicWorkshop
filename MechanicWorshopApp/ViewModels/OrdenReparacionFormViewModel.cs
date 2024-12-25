@@ -29,6 +29,7 @@ namespace MechanicWorkshopApp.ViewModels
         private readonly Func<SelectorClienteView> _clienteSelectorFactory;
         private readonly Func<SelectorVehiculosView> _vehiculoSelectorFactory;
         private readonly Func<LineaOrdenFormView> _lineaOrdenFormFactory;
+        private readonly Func<VehiculoForm> _vehiculoFormFactory;
         private readonly Action<bool> _callback;
         public event Action OnClose;
         private readonly List<int> _lineasEliminadas = new();
@@ -68,6 +69,7 @@ namespace MechanicWorkshopApp.ViewModels
             Func<SelectorClienteView> clienteSelectorFactory,
             Func<SelectorVehiculosView> vehiculoSelectorFactory,
             Func<LineaOrdenFormView> lineaOrdenFormFactory,
+            Func<VehiculoForm> vehiculoFormFactory,
             Action<bool> callback)
         {
             _ordenReparacionService = ordenReparacionService;
@@ -79,6 +81,7 @@ namespace MechanicWorkshopApp.ViewModels
             _clienteSelectorFactory = clienteSelectorFactory;
             _vehiculoSelectorFactory = vehiculoSelectorFactory;
             _lineaOrdenFormFactory = lineaOrdenFormFactory;
+            _vehiculoFormFactory = vehiculoFormFactory;
             _callback = callback;
 
             SeleccionarClienteCommand = new RelayCommand(SeleccionarCliente);
@@ -217,25 +220,75 @@ namespace MechanicWorkshopApp.ViewModels
 
         private void SeleccionarVehiculo()
         {
-            var serviceProvider = ((App)App.Current).Services;
-            var selectorVehiculosView = serviceProvider.GetRequiredService<SelectorVehiculosView>();
+            //var serviceProvider = ((App)App.Current).Services;
+            //var selectorVehiculosView = serviceProvider.GetRequiredService<SelectorVehiculosView>();
 
-            var viewModel = new SelectorVehiculosViewModel(
-                Orden.ClienteId, // Cliente actual
-                _vehiculoService,
-                vehiculo =>
+            //var viewModel = new SelectorVehiculosViewModel(
+            //    Orden.ClienteId, // Cliente actual
+            //    _vehiculoService,
+            //    vehiculo =>
+            //    {
+            //        if (vehiculo != null)
+            //        {
+            //            VehiculoSeleccionado = vehiculo;
+            //            Orden.Vehiculo = vehiculo; // Asignar vehículo a la orden
+            //            Orden.VehiculoId = vehiculo.Id;
+            //        }
+            //    }
+            //);
+
+            //selectorVehiculosView.DataContext = viewModel;
+            //selectorVehiculosView.ShowDialog();
+            var vehiculos = _vehiculoService.ObtenerVehiculosPorCliente(ClienteSeleccionado.Id);
+
+            if (vehiculos == null || !vehiculos.Any())
+            {
+                // Si no hay vehículos asociados, abrir el formulario para agregar uno
+                MessageBox.Show("No se encontraron vehículos para el cliente seleccionado. Debe de añadir un vehiculo", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                var nuevoVehiculo = new Vehiculo
                 {
-                    if (vehiculo != null)
-                    {
-                        VehiculoSeleccionado = vehiculo;
-                        Orden.Vehiculo = vehiculo; // Asignar vehículo a la orden
-                        Orden.VehiculoId = vehiculo.Id;
-                    }
-                }
-            );
+                    ClienteId = ClienteSeleccionado.Id,
+                    Cliente = ClienteSeleccionado,
+                };
 
-            selectorVehiculosView.DataContext = viewModel;
-            selectorVehiculosView.ShowDialog();
+                var vehiculoFormViewModel = new VehiculoFormViewModel(nuevoVehiculo, _vehiculoService, _clienteService, result =>
+                {
+                    if (result)
+                    {
+                        VehiculoSeleccionado = nuevoVehiculo;
+                        Orden.Vehiculo = nuevoVehiculo;
+                        Orden.VehiculoId = nuevoVehiculo.Id;
+                    }
+                });
+
+                var vehiculoForm = _vehiculoFormFactory();
+                
+                vehiculoForm.Initialize(vehiculoFormViewModel);
+
+                vehiculoForm.ShowDialog();
+            }
+            else
+            {
+                // Si hay vehículos, abrir el selector de vehículos
+                var selectorVehiculosView = _vehiculoSelectorFactory();
+
+                var viewModel = new SelectorVehiculosViewModel(
+                    ClienteSeleccionado.Id,
+                    _vehiculoService,
+                    vehiculo =>
+                    {
+                        if (vehiculo != null)
+                        {
+                            VehiculoSeleccionado = vehiculo;
+                            Orden.Vehiculo = vehiculo;
+                            Orden.VehiculoId = vehiculo.Id;
+                        }
+                    }
+                );
+
+                selectorVehiculosView.DataContext = viewModel;
+                selectorVehiculosView.ShowDialog();
+            }
         }
 
         private void GuardarOrden(bool cerrarFormulario = true)
@@ -286,7 +339,13 @@ namespace MechanicWorkshopApp.ViewModels
 
         private void GenerarFactura()
         {
-
+            if (Orden.FechaSalida is null)
+            {
+                Orden.FechaSalida = DateTime.Now;
+                OnPropertyChanged(nameof(Orden.FechaSalida)); // Notifica el cambio a la interfaz
+                Orden = Orden; // Esto asegura que la propiedad Orden se refresque
+                OnPropertyChanged(nameof(Orden));
+            }
             GuardarOrden(false);
             var tallerConfig = _tallerConfigService.ObtenerConfiguracion();
             var facturaGenerator = new FacturaPdfGenerator(Orden, tallerConfig);

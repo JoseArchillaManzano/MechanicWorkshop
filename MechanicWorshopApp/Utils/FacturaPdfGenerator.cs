@@ -53,14 +53,14 @@ namespace MechanicWorkshopApp.Utils
             {
                 column.Item().PaddingTop(7).PaddingBottom(7).Element(e =>
                 {
-                    e.Text($"Orden de Reparación Nº {_ordenReparacion.Id}")
+                    e.Text($"Factura Nº {_ordenReparacion.Id}")
                      .Style(TextStyle.Default.FontSize(16).Bold())
                      .Underline();
                 });
 
                 column.Item().Element(ComposeInformacionClienteVehiculo);
 
-                column.Item().Text("LISTADO MATERIALES Y MANO DE OBRA").Style(TextStyle.Default.FontSize(12).Bold());
+                column.Item().Text("LISTADO MATERIALES Y MANO DE OBRA").Style(TextStyle.Default.FontSize(14).Bold()).Underline();
 
                 column.Item().Table(table =>
                 {
@@ -125,7 +125,7 @@ namespace MechanicWorkshopApp.Utils
             {
                 column.Item().PaddingTop(7).PaddingBottom(7).Element(e =>
                 {
-                    e.Text($"Factura Nº {_ordenReparacion.Id}")
+                    e.Text($"Orden de Reparación Nº {_ordenReparacion.Id}")
                      .Style(TextStyle.Default.FontSize(16).Bold())
                      .Underline();
                 });
