@@ -42,10 +42,10 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Guardar"
                     Command="{Binding GuardarCommand}"
-                    Style="{StaticResource MaterialDesignRaisedButton}" Width="100" />
+                    Style="{StaticResource MaterialDesignRaisedButton}" Width="100" Background="#dcdcdc"/>
             <Button Content="Cancelar"
                     Command="{Binding CancelarCommand}"
-                    Style="{StaticResource MaterialDesignFlatButton}" Width="100" />
+                    Style="{StaticResource MaterialDesignRaisedButton}" Width="100" Background="#ab2a3e"/>
         </StackPanel>
     </Grid>
 </Window>

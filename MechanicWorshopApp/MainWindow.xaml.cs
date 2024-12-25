@@ -24,34 +24,8 @@ namespace MechanicWorkshopApp
     {
         public MainWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            DataContext = new MainWindowViewModel();
         }
-        private void BtnClientes_Click(object sender, RoutedEventArgs e)
-        {
-            var serviceProvider = ((App)Application.Current).Services;
-
-            // Resuelve la ventana desde el contenedor
-            var clientesView = serviceProvider.GetRequiredService<ClientesView>();
-            clientesView.Show();
-        }
-
-        private void BtnOrdenes_Click(object sender, RoutedEventArgs e)
-        {
-            var serviceProvider = ((App)Application.Current).Services;
-
-            // Resuelve la ventana desde el contenedor
-            var ordenesView = serviceProvider.GetRequiredService<OrdenReparacionView>();
-            ordenesView.Show();
-        }
-
-        private void BtnConfiguracion_Click(object sender, RoutedEventArgs e)
-        {
-            var serviceProvider = ((App)Application.Current).Services;
-
-            // Resuelve la ventana desde el contenedor
-            var ordenesView = serviceProvider.GetRequiredService<TallerConfigView>();
-            ordenesView.Show();
-        }
-
     }
 }

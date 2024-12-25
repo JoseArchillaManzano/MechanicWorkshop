@@ -32,8 +32,8 @@
         <!-- Botones de Acción -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Seleccionar" Width="100" Margin="5" Click="BtnSeleccionar_Click"
-                    Style="{StaticResource MaterialDesignRaisedButton}" />
-            <Button Content="Cancelar" Width="100" Margin="5" Click="BtnCancelar_Click"
+                    Style="{StaticResource MaterialDesignRaisedButton}" Background="#dcdcdc"/>
+            <Button Content="Cancelar" Width="100" Margin="5" Click="BtnCancelar_Click" Background="#ab2a3e"
                     Style="{StaticResource MaterialDesignRaisedButton}" />
         </StackPanel>
     </Grid>

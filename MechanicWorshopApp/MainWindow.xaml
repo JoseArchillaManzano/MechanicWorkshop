@@ -5,13 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MechanicWorkshopApp"
         mc:Ignorable="d"
-        Title="Panel Principal - Gestión de Taller" Height="450" Width="800">
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Panel Principal - Gestión de Taller" Height="600" Width="800">
     <Grid>
-        <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Content="Gestionar Clientes" Click="BtnClientes_Click" Width="200" Height="50" Margin="10"/>
-            <Button Content="Gestionar Taller" Click="BtnConfiguracion_Click" Width="200" Height="50" Margin="10"/>
-            <Button Content="Gestionar Órdenes de Reparación" Click="BtnOrdenes_Click" Width="200" Height="50" Margin="10"/>
-            
-        </StackPanel>
+        <!-- Header -->
+        <Border Background="#2196F3" Height="60" VerticalAlignment="Top">
+            <TextBlock Text="Sistema de Gestión del Taller"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                       Foreground="White" FontSize="20" FontWeight="Bold" />
+        </Border>
+
+        <!-- Content Area -->
+        <Grid Margin="10,70,10,50">
+            <UniformGrid Columns="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+                <!-- Card: Gestionar Clientes -->
+                <Border BorderBrush="#2196F3" BorderThickness="2" CornerRadius="10" Padding="10" Margin="10">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="AccountMultiple" Width="50" Height="50" Foreground="#2196F3" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Gestionar Clientes" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <Button Content="Abrir" Command="{Binding AbrirClientesCommand}" 
+                                Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card: Gestionar Taller -->
+                <Border BorderBrush="#4CAF50" BorderThickness="2" CornerRadius="10" Padding="10" Margin="10">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="Tools" Width="50" Height="50" Foreground="#4CAF50" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Gestionar Taller" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <Button Content="Abrir" Command="{Binding AbrirConfiguracionCommand}" 
+                                Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Card: Gestionar Órdenes de Reparación -->
+                <Border BorderBrush="#FFC107" BorderThickness="2" CornerRadius="10" Padding="10" Margin="10">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="FileDocumentBox" Width="50" Height="50" Foreground="#FFC107" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Órdenes de Reparación" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <Button Content="Abrir" Command="{Binding AbrirOrdenesCommand}" 
+                                Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+        </Grid>
+
+        <!-- Footer -->
+        <Border Background="#EEEEEE" Height="30" VerticalAlignment="Bottom">
+            <TextBlock Text="© 2024 Taller Laicram Motor. Todos los derechos reservados."
+                       VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" Foreground="Gray"/>
+        </Border>
     </Grid>
 </Window>

@@ -16,7 +16,7 @@
             <RowDefinition Height="Auto"/>
             <!-- Fila para los botones -->
         </Grid.RowDefinitions>
-        
+
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10" VerticalAlignment="Top">
             <TextBlock Text="Buscar por DNI o Nombre:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <TextBox Width="200" 
@@ -31,8 +31,7 @@
         </StackPanel>
         <!-- Lista de Clientes -->
         <DataGrid ItemsSource="{Binding Clientes}" 
-                  SelectedItem="{Binding SelectedCliente, Mode=TwoWay}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
-                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,60"
+                  SelectedItem="{Binding SelectedCliente, Mode=TwoWay}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" Margin="10,10,10,10"
                   ColumnHeaderHeight="35" AlternationCount="2" >
             <DataGrid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#DDEEFF"/>

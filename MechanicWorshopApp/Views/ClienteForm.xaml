@@ -36,8 +36,8 @@
 
         <!-- Botones -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <Button Content="Guardar" Command="{Binding GuardarCommand}" Width="100" Margin="5" />
-            <Button Content="Cancelar" Command="{Binding CancelarCommand}" Width="100" Margin="5" />
+            <Button Content="Guardar" Command="{Binding GuardarCommand}" Width="100" Margin="5" Background="#dcdcdc"/>
+            <Button Content="Cancelar" Command="{Binding CancelarCommand}" Width="100" Margin="5" Background="#ab2a3e"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -34,8 +34,8 @@
 
         <!-- Botones -->
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="10">
-            <Button Content="Aceptar" Command="{Binding AceptarCommand}" Width="100" Margin="5"/>
-            <Button Content="Cancelar" Command="{Binding CancelarCommand}" Width="100" Margin="5"/>
+            <Button Content="Aceptar" Command="{Binding AceptarCommand}" Width="100" Margin="5"  Background="#dcdcdc"/>
+            <Button Content="Cancelar" Command="{Binding CancelarCommand}" Width="100" Margin="5" Background="#ab2a3e"/>
         </StackPanel>
     </Grid>
 </Window>
