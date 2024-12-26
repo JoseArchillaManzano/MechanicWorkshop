@@ -200,7 +200,7 @@ namespace MechanicWorkshopApp.Utils
                 .Sum(l => l.Cantidad * l.PrecioUnitario);
 
             var baseImponible = materialesTotal + manoDeObraTotal;
-            var iva = baseImponible * 0.21m;
+            var iva = baseImponible * 0.21;
             var totalGeneral = baseImponible + iva;
 
             container.Column(column =>

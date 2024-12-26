@@ -4,10 +4,14 @@ using MechanicWorkshopApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace MechanicWorkshopApp.ViewModels
 {
@@ -20,15 +24,15 @@ namespace MechanicWorkshopApp.ViewModels
         private string concepto;
 
         [ObservableProperty]
-        private int cantidad;
+        private double cantidad;
 
         [ObservableProperty]
-        private decimal precio;
+        private double precio;
 
         private TipoLinea tipo;
 
         // Propiedad calculada para el Total
-        public decimal Total => Cantidad * Precio;
+        public double Total => Cantidad * Precio;
 
         public TipoLinea Tipo
         {

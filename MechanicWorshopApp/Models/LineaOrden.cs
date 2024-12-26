@@ -14,12 +14,12 @@ namespace MechanicWorkshopApp.Models
         public OrdenReparacion OrdenReparacion { get; set; }
 
         public string Concepto { get; set; } // Descripción del material o servicio
-        public decimal PrecioUnitario { get; set; } // Precio unitario
-        public int Cantidad { get; set; } // Cantidad de materiales o unidades de mano de obra
+        public double PrecioUnitario { get; set; } // Precio unitario
+        public double Cantidad { get; set; } // Cantidad de materiales o unidades de mano de obra
         public TipoLinea TipoLinea { get; set; } // Distinción entre Material y ManoDeObra
 
         // Precio total calculado
-        public decimal Total => PrecioUnitario * Cantidad;
+        public double Total => PrecioUnitario * Cantidad;
 
         private bool _conceptoSet;
         private bool _precioUnitarioSet;

@@ -24,6 +24,12 @@ namespace MechanicWorkshopApp.Services
             
         }
 
+        public int ObtenerTotalVehiculos()
+        {
+            return _context.Vehiculos.Count();
+
+        }
+
         public void AgregarVehiculo(Vehiculo vehiculo)
         {
             _context.Vehiculos.Add(vehiculo);

@@ -23,11 +23,13 @@ namespace MechanicWorkshopApp.ViewModels
             AbrirClientesCommand = new RelayCommand(AbrirClientes);
             AbrirOrdenesCommand = new RelayCommand(AbrirOrdenes);
             AbrirConfiguracionCommand = new RelayCommand(AbrirConfiguracion);
+            AbrirMetricasCommand = new RelayCommand(AbrirMetricas);
         }
 
         public IRelayCommand AbrirClientesCommand { get; }
         public IRelayCommand AbrirOrdenesCommand { get; }
         public IRelayCommand AbrirConfiguracionCommand { get; }
+        public IRelayCommand AbrirMetricasCommand { get; }
 
         private void AbrirClientes()
         {
@@ -48,6 +50,13 @@ namespace MechanicWorkshopApp.ViewModels
             // Resuelve y muestra la ventana de Configuración del Taller
             var configView = _serviceProvider.GetRequiredService<TallerConfigView>();
             configView.Show();
+        }
+
+        private void AbrirMetricas()
+        {
+            // Resuelve y muestra la ventana de Configuración del Taller
+            var dashboardView = _serviceProvider.GetRequiredService<MetricasView>();
+            dashboardView.Show();
         }
     }
 }

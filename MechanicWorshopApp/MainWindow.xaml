@@ -47,6 +47,15 @@
                                 Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Border>
+
+                <Border BorderBrush="#673AB7" BorderThickness="2" CornerRadius="10" Padding="10" Margin="10">
+                    <StackPanel>
+                        <materialDesign:PackIcon Kind="ChartBar" Width="50" Height="50" Foreground="#673AB7" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Métricas y Estadísticas" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <Button Content="Abrir" Command="{Binding AbrirMetricasCommand}" 
+                                Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
             </UniformGrid>
         </Grid>
 

@@ -129,5 +129,109 @@ namespace MechanicWorkshopApp.Services
                 }
             }
         }
+
+        public int ObtenerOrdenesActivas()
+        {
+            return _context.OrdenesReparacion.Count(or => or.FechaSalida == null);
+        }
+
+        public int ObtenerOrdenesCerradas()
+        {
+            return _context.OrdenesReparacion.Count(or => or.FechaSalida != null);
+        }
+
+        public Dictionary<string, int> ObtenerOrdenesPorMes(int año)
+        {
+            var datos = _context.OrdenesReparacion
+                .Where(o => o.FechaEntrada != null && o.FechaEntrada.Year == año) // Filtrar por año y asegurar que la fecha no sea nula
+                .GroupBy(o => o.FechaEntrada.Month) // Agrupar solo por el mes
+                .Select(g => new
+                {
+                    Mes = g.Key, // Mes como número
+                    Cantidad = g.Count() // Contar las órdenes en ese mes
+                })
+                .OrderBy(d => d.Mes) // Ordenar por el número del mes
+                .ToList();
+
+            // Convertir a diccionario con el nombre del mes como clave
+            return datos.ToDictionary(
+                d => ObtenerNombreMes(d.Mes), // Nombre del mes
+                d => d.Cantidad); // Cantidad de órdenes
+        }
+
+        public Dictionary<string, double> ObtenerIngresosPorMes(int año)
+        {
+            var datos = _context.OrdenesReparacion
+                .Where(o => o.FechaSalida != null && o.FechaSalida.Value.Year == año) // Filtrar por año
+                .GroupBy(o => o.FechaSalida.Value.Month) // Agrupar por mes
+                .Select(g => new
+                {
+                    Mes = g.Key, // Mes como clave
+                    TotalIngresos = g.Sum(o => o.LineasOrden.Sum(l => (double)(l.Cantidad * l.PrecioUnitario)))
+                })
+                .OrderBy(d => d.Mes) // Ordenar por mes
+                .ToList();
+
+            // Convertir a diccionario con el formato "Mes"
+            return datos.ToDictionary(
+                d => ObtenerNombreMes(d.Mes), // Convertir número de mes a nombre
+                d => d.TotalIngresos);
+        }
+
+        private string ObtenerNombreMes(int mes)
+        {
+            return mes switch
+            {
+                1 => "Enero",
+                2 => "Febrero",
+                3 => "Marzo",
+                4 => "Abril",
+                5 => "Mayo",
+                6 => "Junio",
+                7 => "Julio",
+                8 => "Agosto",
+                9 => "Septiembre",
+                10 => "Octubre",
+                11 => "Noviembre",
+                12 => "Diciembre",
+                _ => "Desconocido"
+            };
+        }
+
+        public IEnumerable<string> ObtenerAñosDisponibles()
+        {
+            // Lógica para obtener los años disponibles
+            return _context.OrdenesReparacion.Select(o => o.FechaEntrada.Year.ToString()).Distinct().ToList();
+        }
+
+        public Dictionary<string, double> ObtenerIngresosPorManoDeObra(int año)
+        {
+            string tipoManoDeObra = TipoLinea.ManoDeObra.ToString();
+
+            var lineas = _context.LineasOrden
+                .Where(l => l.TipoLinea.ToString() == tipoManoDeObra
+                            && l.OrdenReparacion.FechaSalida != null
+                            && l.OrdenReparacion.FechaSalida.Value.Year == año) // Filtrar por año
+                .Select(l => new
+                {
+                    l.PrecioUnitario,
+                    l.Cantidad,
+                    FechaSalida = l.OrdenReparacion.FechaSalida
+                })
+                .ToList();
+
+            // Agrupar por mes
+            return lineas
+                .GroupBy(l => l.FechaSalida.Value.Month) // Agrupar por número de mes
+                .Select(g => new
+                {
+                    Mes = g.Key, // Mes como clave
+                    TotalIngresos = g.Sum(l => (double)(l.PrecioUnitario * l.Cantidad))
+                })
+                .OrderBy(d => d.Mes) // Ordenar por mes
+                .ToDictionary(
+                    d => ObtenerNombreMes(d.Mes), // Convertir número de mes a nombre
+                    d => d.TotalIngresos);
+        }
     }
 }

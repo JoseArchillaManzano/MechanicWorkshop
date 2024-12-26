@@ -76,9 +76,9 @@
                           Height="200" IsReadOnly="True" Margin="0,0,0,10">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Concepto" Binding="{Binding Concepto}" Width="250" />
-                            <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad}" Width="100" />
-                            <DataGridTextColumn Header="Precio Unitario" Binding="{Binding PrecioUnitario}" Width="150" />
-                            <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="150" />
+                            <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad, StringFormat=N2}" Width="100" />
+                            <DataGridTextColumn Header="Precio Unitario" Binding="{Binding PrecioUnitario, StringFormat=N2}" Width="150" />
+                            <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat=N2}" Width="150" />
                             <DataGridTextColumn Header="Tipo" Binding="{Binding TipoLinea}" Width="150" />
                         </DataGrid.Columns>
                     </DataGrid>
