@@ -122,7 +122,7 @@ namespace MechanicWorkshopApp.ViewModels
                 TipoLinea = TipoLinea.Material // Tipo inicial por defecto
             };
 
-            var lineaFormViewModel = new LineaOrdenFormViewModel(nuevaLinea, result =>
+            var lineaFormViewModel = new LineaOrdenFormViewModel(nuevaLinea, _tallerConfigService.ObtenerConfiguracion(), result =>
             {
                 if (result)
                 {
@@ -146,7 +146,7 @@ namespace MechanicWorkshopApp.ViewModels
                     PrecioUnitario = LineaSeleccionada.PrecioUnitario,
                     TipoLinea = LineaSeleccionada.TipoLinea
                 };
-                var lineaFormViewModel = new LineaOrdenFormViewModel(LineaSeleccionada, result =>
+                var lineaFormViewModel = new LineaOrdenFormViewModel(LineaSeleccionada, _tallerConfigService.ObtenerConfiguracion(), result =>
                 {
                     if (result)
                     {

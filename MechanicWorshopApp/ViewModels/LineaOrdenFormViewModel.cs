@@ -19,6 +19,7 @@ namespace MechanicWorkshopApp.ViewModels
     {
         private readonly LineaOrden _lineaOrden;
         private readonly Action<bool> _onClose;
+        private readonly TallerConfig _configTaller;
 
         [ObservableProperty]
         private string concepto;
@@ -44,10 +45,12 @@ namespace MechanicWorkshopApp.ViewModels
                     if (tipo == TipoLinea.ManoDeObra && string.IsNullOrEmpty(Concepto))
                     {
                         Concepto = "Mano de obra";
+                        Precio = _configTaller.HoraManoObra;
                     }
                     else if (tipo != TipoLinea.ManoDeObra)
                     {
                         Concepto = string.Empty;
+                        Precio = 0;
                     }
                 }
             }
@@ -60,11 +63,11 @@ namespace MechanicWorkshopApp.ViewModels
         public IRelayCommand GuardarCommand { get; }
         public IRelayCommand CancelarCommand { get; }
 
-        public LineaOrdenFormViewModel(LineaOrden lineaOrden, Action<bool> onClose)
+        public LineaOrdenFormViewModel(LineaOrden lineaOrden, TallerConfig configTaller, Action<bool> onClose )
         {
             _lineaOrden = lineaOrden;
             _onClose = onClose;
-
+            _configTaller = configTaller;
             // Inicializar propiedades con valores de la línea de orden
             Concepto = lineaOrden.Concepto;
             Cantidad = lineaOrden.Cantidad;

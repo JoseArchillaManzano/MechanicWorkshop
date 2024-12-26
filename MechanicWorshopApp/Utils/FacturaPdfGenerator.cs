@@ -87,7 +87,7 @@ namespace MechanicWorkshopApp.Utils
                     foreach (var linea in _ordenReparacion.LineasOrden)
                     {
                         table.Cell().Text(linea.Concepto);
-                        table.Cell().Text(linea.Cantidad.ToString());
+                        table.Cell().Text(Math.Round(linea.Cantidad,2).ToString());
                         table.Cell().Text($"{linea.PrecioUnitario:C}");
                         table.Cell().Text($"{(linea.Cantidad * linea.PrecioUnitario):C}");
                     }
@@ -200,7 +200,7 @@ namespace MechanicWorkshopApp.Utils
                 .Sum(l => l.Cantidad * l.PrecioUnitario);
 
             var baseImponible = materialesTotal + manoDeObraTotal;
-            var iva = baseImponible * 0.21;
+            var iva = baseImponible * _tallerConfig.IVA;
             var totalGeneral = baseImponible + iva;
 
             container.Column(column =>
@@ -232,7 +232,7 @@ namespace MechanicWorkshopApp.Utils
 
                         row.RelativeItem().Border(1).Padding(5).Column(col =>
                         {
-                            col.Item().Text("IVA (21%)").Style(TextStyle.Default.Bold());
+                            col.Item().Text($"IVA ({_tallerConfig.IVA}%)").Style(TextStyle.Default.Bold());
                             col.Item().Text($"{iva:C}");
                         });
 

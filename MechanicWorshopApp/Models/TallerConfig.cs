@@ -14,5 +14,7 @@ namespace MechanicWorkshopApp.Models
         public string Direccion { get; set; }
         public string Telefono { get; set; }
         public string RegistroIndustrial { get; set; }
+        public double HoraManoObra { get; set; }
+        public int IVA { get; set; }
     }
 }

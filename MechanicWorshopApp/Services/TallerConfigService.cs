@@ -32,8 +32,14 @@ namespace MechanicWorkshopApp.Services
                 existente.Direccion = configuracion.Direccion;
                 existente.Telefono = configuracion.Telefono;
                 existente.RegistroIndustrial = configuracion.RegistroIndustrial;
-                _context.SaveChanges();
+                existente.HoraManoObra = configuracion.HoraManoObra;
+                existente.IVA = configuracion.IVA;
             }
+            else
+            {
+                _context.TallerConfig.Add(configuracion);
+            }
+            _context.SaveChanges();
         }
     }
 }
