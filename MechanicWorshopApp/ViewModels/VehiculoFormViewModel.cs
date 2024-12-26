@@ -44,6 +44,7 @@ namespace MechanicWorkshopApp.ViewModels
 
         private void GuardarVehiculo()
         {
+            Vehiculo.ForzarValidacion();
             if (string.IsNullOrWhiteSpace(Vehiculo.Marca) ||
                string.IsNullOrWhiteSpace(Vehiculo.Modelo) ||
                string.IsNullOrWhiteSpace(Vehiculo.Matricula))

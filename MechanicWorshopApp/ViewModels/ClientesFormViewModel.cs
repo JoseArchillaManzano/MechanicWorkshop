@@ -35,6 +35,19 @@ namespace MechanicWorkshopApp.ViewModels
 
         private void ExecuteGuardar()
         {
+            Cliente.ForzarValidacion(); // Forzar la validación de todos los campos
+
+            // Verificar si hay errores antes de guardar
+            var tieneErrores = typeof(Cliente)
+                .GetProperties()
+                .Any(prop => !string.IsNullOrEmpty(Cliente[prop.Name]));
+
+            if (tieneErrores)
+            {
+                // Mostrar mensaje de error si hay campos inválidos
+                System.Windows.MessageBox.Show("Por favor, corrige los errores antes de guardar.", "Errores de validación", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                return;
+            }
             if (Cliente.Id == 0)
             {
                 _clienteService.AgregarCliente(Cliente);

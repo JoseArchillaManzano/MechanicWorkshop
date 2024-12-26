@@ -74,7 +74,7 @@ namespace MechanicWorkshopApp.Services
 
             if (!string.IsNullOrWhiteSpace(searchQuery))
             {
-                query = query.Where(c => c.Nombre.Contains(searchQuery) || c.DNI_CIF.Contains(searchQuery));
+                query = query.Where(c => c.Nombre.ToLower().Contains(searchQuery.ToLower()) || c.DNI_CIF.ToLower().Contains(searchQuery.ToLower()));
             }
             var totalItems = query.Count(); // Total de clientes
             var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);

@@ -31,8 +31,8 @@ namespace MechanicWorkshopApp.Services
             if (!string.IsNullOrEmpty(searchQuery))
             {
                 query = query.Where(o =>
-                    o.Cliente.Nombre.Contains(searchQuery) ||
-                    o.Vehiculo.Matricula.Contains(searchQuery));
+                    o.Cliente.Nombre.ToLower().Contains(searchQuery.ToLower()) ||
+                    o.Vehiculo.Matricula.ToLower().Contains(searchQuery.ToLower()));
             }
 
             var totalItems = query.Count();
@@ -167,7 +167,7 @@ namespace MechanicWorkshopApp.Services
                 .Select(g => new
                 {
                     Mes = g.Key, // Mes como clave
-                    TotalIngresos = g.Sum(o => o.LineasOrden.Sum(l => (double)(l.Cantidad * l.PrecioUnitario)))
+                    TotalIngresos = Math.Round(g.Sum(o => o.LineasOrden.Sum(l => (double)(l.Cantidad * l.PrecioUnitario))), 2)
                 })
                 .OrderBy(d => d.Mes) // Ordenar por mes
                 .ToList();
@@ -226,7 +226,7 @@ namespace MechanicWorkshopApp.Services
                 .Select(g => new
                 {
                     Mes = g.Key, // Mes como clave
-                    TotalIngresos = g.Sum(l => (double)(l.PrecioUnitario * l.Cantidad))
+                    TotalIngresos = Math.Round(g.Sum(l => (double)(l.PrecioUnitario * l.Cantidad)),2)
                 })
                 .OrderBy(d => d.Mes) // Ordenar por mes
                 .ToDictionary(

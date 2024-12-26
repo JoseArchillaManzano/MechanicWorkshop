@@ -65,7 +65,7 @@ namespace MechanicWorkshopApp.Services
             // Aplicar filtro si existe
             if (!string.IsNullOrWhiteSpace(filtro))
             {
-                query = query.Where(v => v.Matricula.Contains(filtro) || v.Modelo.Contains(filtro));
+                query = query.Where(v => v.Matricula.ToLower().Contains(filtro.ToLower()) || v.Modelo.ToLower().Contains(filtro.ToLower()));
             }
 
             // Calcular totales

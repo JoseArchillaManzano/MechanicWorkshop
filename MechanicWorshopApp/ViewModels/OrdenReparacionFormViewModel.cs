@@ -220,25 +220,6 @@ namespace MechanicWorkshopApp.ViewModels
 
         private void SeleccionarVehiculo()
         {
-            //var serviceProvider = ((App)App.Current).Services;
-            //var selectorVehiculosView = serviceProvider.GetRequiredService<SelectorVehiculosView>();
-
-            //var viewModel = new SelectorVehiculosViewModel(
-            //    Orden.ClienteId, // Cliente actual
-            //    _vehiculoService,
-            //    vehiculo =>
-            //    {
-            //        if (vehiculo != null)
-            //        {
-            //            VehiculoSeleccionado = vehiculo;
-            //            Orden.Vehiculo = vehiculo; // Asignar vehículo a la orden
-            //            Orden.VehiculoId = vehiculo.Id;
-            //        }
-            //    }
-            //);
-
-            //selectorVehiculosView.DataContext = viewModel;
-            //selectorVehiculosView.ShowDialog();
             var vehiculos = _vehiculoService.ObtenerVehiculosPorCliente(ClienteSeleccionado.Id);
 
             if (vehiculos == null || !vehiculos.Any())
@@ -315,7 +296,6 @@ namespace MechanicWorkshopApp.ViewModels
 
             if (cerrarFormulario)
             {
-                //MessageBox.Show("La orden se guardó correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
                 _callback?.Invoke(true);
                 OnClose?.Invoke();
             }
@@ -356,7 +336,7 @@ namespace MechanicWorkshopApp.ViewModels
             facturaGenerator.GenerarFactura(filePath);
             var rutaFactura = Path.Combine(directorio, filePath);
 
-            MessageBox.Show($"Factura generada correctamente en {rutaFactura}.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show($"Factura generada correctamente en {rutaFactura}. Los datos que haya podido modificar se han guardado correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
 
             _printerService.AbrirPDFEnVisor(rutaFactura);
         }

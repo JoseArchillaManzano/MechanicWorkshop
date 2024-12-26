@@ -81,7 +81,7 @@ namespace MechanicWorkshopApp.ViewModels
             NextPageCommand = new RelayCommand(NextPage, CanNextPage);
             PreviousPageCommand = new RelayCommand(PreviousPage, CanPreviousPage);
 
-            _debounceTimer = new System.Timers.Timer(500);
+            _debounceTimer = new System.Timers.Timer(300);
             _debounceTimer.AutoReset = false; // Solo se dispara una vez
             _debounceTimer.Elapsed += (s, e) =>
             {

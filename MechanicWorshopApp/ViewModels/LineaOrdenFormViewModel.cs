@@ -98,7 +98,7 @@ namespace MechanicWorkshopApp.ViewModels
             }
             else
             {
-                MessageBox.Show("Por favor, corrige los errores antes de guardar.", "Errores", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Por favor, rellene todos los campos antes de guardar.", "Errores", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -110,6 +110,7 @@ namespace MechanicWorkshopApp.ViewModels
 
         private bool ValidarFormulario()
         {
+            _lineaOrden.ForzarValidacion();
             return !string.IsNullOrWhiteSpace(Concepto) &&
                    Cantidad > 0 &&
                    Precio >= 0;
