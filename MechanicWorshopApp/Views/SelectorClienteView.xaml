@@ -4,25 +4,84 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MechanicWorkshopApp.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-       Title="Seleccionar Cliente" Height="400" Width="600">
+        xmlns:local1="clr-namespace:MechanicWorkshopApp.Components" 
+        WindowStartupLocation="CenterScreen"
+       Title="Seleccionar Cliente" Height="400" Width="660">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Barra de búsqueda -->
-        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0">
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0" VerticalAlignment="Top">
             <TextBlock Text="Buscar por nombre o DNI:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBox Width="200" Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Width="200" Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,20,0"/>
+            <TextBlock Text="Tamaño de página:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox Width="100" 
+                      ItemsSource="{Binding PageSizes}" 
+                      SelectedItem="{Binding PageSize, Mode=TwoWay}" 
+                      VerticalAlignment="Center" /> 
         </StackPanel>
 
         <!-- Tabla de clientes -->
         <DataGrid ItemsSource="{Binding Clientes}" 
                   SelectedItem="{Binding ClienteSeleccionado, Mode=TwoWay}" 
+                  IsReadOnly="True" 
                   AutoGenerateColumns="False" Grid.Row="1" Margin="10">
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#DDEEFF"/>
+                <!-- Brocha para el texto en la selección inactiva -->
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black"/>
+                <!-- Estilo para las filas -->
+                <Style TargetType="DataGridRow">
+                    <!-- Estilo base -->
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="BorderBrush" Value="#E0E0E0" />
+                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                    <Setter Property="Height" Value="50" />
+                    <Style.Triggers>
+                        <!-- Alternar color para filas no seleccionadas -->
+                        <Trigger Property="AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="#FAFAFA" />
+                        </Trigger>
+
+                        <!-- Estilo para la fila seleccionada -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#DDEEFF" />
+                            <!-- Azul claro -->
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="BorderBrush" Value="#B0C4DE" />
+                            <Setter Property="BorderThickness" Value="1" />
+                        </Trigger>
+
+                        <!-- Estilo al pasar el ratón por encima -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#E0F7FA" />
+                            <!-- Azul más intenso -->
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+
+                        <!-- Fila seleccionada pero no enfocada (prioridad adicional) -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="IsMouseOver" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="#DDEEFF" />
+                        </MultiTrigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="materialDesign:PackIcon">
+                    <Setter Property="Width" Value="20" />
+                    <Setter Property="Height" Value="20" />
+                    <Setter Property="Foreground" Value="Black" />
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                 <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="150"/>
@@ -30,7 +89,11 @@
                 <DataGridTextColumn Header="Teléfono" Binding="{Binding Telefono}" Width="150"/>
             </DataGrid.Columns>
         </DataGrid>
-
+        <local1:PaginationControl Grid.Row="2"
+                         CurrentPage="{Binding CurrentPage, Mode=TwoWay}"
+                         TotalPages="{Binding TotalPages,  Mode=OneWay}"
+                         PreviousPageCommand="{Binding PreviousPageCommand}"
+                         NextPageCommand="{Binding NextPageCommand}" />
         <!-- Botones -->
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="10">
             <Button Content="Aceptar" Command="{Binding AceptarCommand}" Width="100" Margin="5" Background="#dcdcdc"/>

@@ -22,10 +22,19 @@ namespace MechanicWorkshopApp.ViewModels
         private ObservableCollection<Cliente> clientes;
 
         [ObservableProperty]
+        private int totalPages;
+
+        [ObservableProperty]
         private int currentPage = 1;
 
         [ObservableProperty]
         private Cliente clienteSeleccionado;
+
+        [ObservableProperty]
+        private int pageSize = AppSettings.PageSize;
+
+        [ObservableProperty]
+        private ObservableCollection<int> pageSizes; // Tamaños de página disponibles
 
         [ObservableProperty]
         private string searchQuery;
@@ -40,7 +49,7 @@ namespace MechanicWorkshopApp.ViewModels
             _clienteService = clienteService;
             _onClienteSeleccionado = onClienteSeleccionado;
 
-            AceptarCommand = new RelayCommand(Aceptar, () => ClienteSeleccionado != null);
+            AceptarCommand = new RelayCommand(Aceptar);
             CancelarCommand = new RelayCommand(Cancelar);
 
             _debounceTimer = new System.Timers.Timer(300);
@@ -50,15 +59,63 @@ namespace MechanicWorkshopApp.ViewModels
                 // Actualizar clientes en el hilo de la interfaz
                 App.Current.Dispatcher.Invoke(LoadClientes);
             };
+
+            NextPageCommand = new RelayCommand(ExecuteNextPage, CanExecuteNextPage);
+            PreviousPageCommand = new RelayCommand(ExecutePreviousPage, CanExecutePreviousPage);
+            PageSizes = new ObservableCollection<int>(AppSettings.AvailablePageSizes);
             LoadClientes();
+        }
+
+        public RelayCommand NextPageCommand { get; }
+        public RelayCommand PreviousPageCommand { get; }
+
+        private void ExecuteNextPage()
+        {
+            if (CurrentPage < TotalPages) // Usa los campos internos
+            {
+                CurrentPage++;
+                LoadClientes();
+            }
+        }
+
+        private bool CanExecuteNextPage()
+        {
+            return CurrentPage < TotalPages; // Usa los campos internos
+        }
+
+        private void ExecutePreviousPage()
+        {
+            if (CurrentPage > 1) // Usa los campos internos
+            {
+                CurrentPage--;
+                LoadClientes();
+            }
+        }
+
+        private bool CanExecutePreviousPage()
+        {
+            return CurrentPage > 1; // Usa los campos internos
         }
 
         private void LoadClientes()
         {
-            var result = _clienteService.GetClientesPaginated(CurrentPage, AppSettings.PageSize, SearchQuery);
+            var result = _clienteService.GetClientesPaginated(CurrentPage, PageSize, SearchQuery);
 
-            // Actualizar propiedades
             Clientes = new ObservableCollection<Cliente>(result.Items);
+            TotalPages = result.TotalPages;
+
+            // Notificar cambios
+            OnPropertyChanged(nameof(CurrentPage));
+            OnPropertyChanged(nameof(TotalPages));
+            // Actualizar estados de los botones
+            NextPageCommand.NotifyCanExecuteChanged();
+            PreviousPageCommand.NotifyCanExecuteChanged();
+        }
+
+        partial void OnPageSizeChanged(int value)
+        {
+            CurrentPage = 1; // Reiniciar a la primera página
+            LoadClientes(); // Actualizar la lista con el nuevo tamaño de página
         }
 
         private void Aceptar()

@@ -6,6 +6,7 @@
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
         xmlns:local="clr-namespace:MechanicWorkshopApp.Components"
+        WindowStartupLocation="CenterScreen"
         Title="Órdenes de Reparación" Height="600" Width="900">
     <Grid>
         <Grid.RowDefinitions>
@@ -24,6 +25,11 @@
             <TextBlock Text="Buscar por matrícula o nombre del cliente:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <TextBox Width="200" Margin="0,0,10,0" 
                      Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Text="Tamaño de página:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox Width="100" 
+                      ItemsSource="{Binding PageSizes}" 
+                      SelectedItem="{Binding PageSize, Mode=TwoWay}" 
+                      VerticalAlignment="Center" /> 
         </StackPanel>
 
         <!-- Lista de Órdenes -->

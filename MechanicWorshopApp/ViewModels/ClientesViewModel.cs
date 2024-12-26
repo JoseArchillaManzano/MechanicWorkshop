@@ -38,10 +38,10 @@ namespace MechanicWorkshopApp.ViewModels
         private int pageSize = AppSettings.PageSize;
 
         [ObservableProperty]
-        private string searchQuery = string.Empty;
+        private ObservableCollection<int> pageSizes; // Tamaños de página disponibles
 
         [ObservableProperty]
-        private ObservableCollection<int> pageSizes; // Tamaños de página disponibles
+        private string searchQuery = string.Empty;
 
         [ObservableProperty]
         private Cliente selectedCliente;

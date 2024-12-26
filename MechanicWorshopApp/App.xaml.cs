@@ -62,7 +62,6 @@ namespace MechanicWorkshopApp
             services.AddTransient<MainWindow>();
             services.AddTransient<ClientesView>();
             services.AddTransient<ClienteForm>();
-            services.AddTransient<ClienteSearchDialog>();
             services.AddTransient<VehiculosView>();
             services.AddTransient<VehiculoForm>();
             services.AddTransient<SelectorClienteView>();
@@ -134,5 +133,6 @@ namespace MechanicWorkshopApp
                 );
             });
         }
+
     }
 }

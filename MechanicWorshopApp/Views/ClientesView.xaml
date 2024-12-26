@@ -4,7 +4,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:materialDesignIcons="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:MechanicWorkshopApp.Components" 
-        Title="Gestión de Clientes" Height="600" Width="900">
+        WindowStartupLocation="CenterScreen"
+        Title="Gestión de Clientes" Height="600" Width="1250">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -159,7 +160,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <!-- Columna del icono de coche -->
-                <DataGridTemplateColumn Header="Acciones" Width="100">
+                <DataGridTemplateColumn Header="Vehículos" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

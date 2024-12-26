@@ -4,6 +4,7 @@ using MechanicWorkshopApp.Configuration;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Services;
 using MechanicWorkshopApp.Views;
+using QuestPDF.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,8 +41,12 @@ namespace MechanicWorkshopApp.ViewModels
 
         [ObservableProperty]
         private OrdenReparacion selectedOrden;
+
         [ObservableProperty]
         private int pageSize = AppSettings.PageSize;
+
+        [ObservableProperty]
+        private ObservableCollection<int> pageSizes; // Tamaños de página disponibles
 
         private readonly Action<bool> _callback;
 
@@ -88,13 +93,13 @@ namespace MechanicWorkshopApp.ViewModels
                 // Actualizar clientes en el hilo de la interfaz
                 App.Current.Dispatcher.Invoke(UpdateOrdenes);
             };
-
+            PageSizes = new ObservableCollection<int>(AppSettings.AvailablePageSizes);
             UpdateOrdenes();
         }
 
         public void UpdateOrdenes()
         {
-            var result = _ordenReparacionService.ObtenerOrdenesPaginadas(currentPage,PageSize, SearchQuery);
+            var result = _ordenReparacionService.ObtenerOrdenesPaginadas(CurrentPage,PageSize, SearchQuery);
             Ordenes = new ObservableCollection<OrdenReparacion>(result.Items);
             TotalPages = result.TotalPages;
 
@@ -191,6 +196,12 @@ namespace MechanicWorkshopApp.ViewModels
                              // Reiniciar el temporizador
             _debounceTimer.Stop();
             _debounceTimer.Start();
+        }
+
+        partial void OnPageSizeChanged(int value)
+        {
+            CurrentPage = 1; // Reiniciar a la primera página
+            UpdateOrdenes(); // Actualizar la lista con el nuevo tamaño de página
         }
     }
 }

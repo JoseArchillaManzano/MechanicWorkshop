@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:MechanicWorkshopApp"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="Panel Principal - Gestión de Taller" Height="600" Width="800">
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
+        Title="Panel Principal - Gestión de Taller">
     <Grid>
         <!-- Header -->
         <Border Background="#2196F3" Height="60" VerticalAlignment="Top">

@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MechanicWorkshopApp.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Seleccionar Vehículo" Height="400" Width="600">
+        WindowStartupLocation="CenterScreen"
+        Title="Seleccionar Vehículo" Height="400" Width="700">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -22,7 +24,57 @@
         <!-- Tabla de vehículos -->
         <DataGrid ItemsSource="{Binding Vehiculos}" 
                   SelectedItem="{Binding VehiculoSeleccionado, Mode=TwoWay}" 
+                  IsReadOnly="True" 
                   AutoGenerateColumns="False" Grid.Row="1" Margin="10">
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#DDEEFF"/>
+                <!-- Brocha para el texto en la selección inactiva -->
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="Black"/>
+                <!-- Estilo para las filas -->
+                <Style TargetType="DataGridRow">
+                    <!-- Estilo base -->
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="BorderBrush" Value="#E0E0E0" />
+                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                    <Setter Property="Height" Value="50" />
+                    <Style.Triggers>
+                        <!-- Alternar color para filas no seleccionadas -->
+                        <Trigger Property="AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="#FAFAFA" />
+                        </Trigger>
+
+                        <!-- Estilo para la fila seleccionada -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#DDEEFF" />
+                            <!-- Azul claro -->
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="BorderBrush" Value="#B0C4DE" />
+                            <Setter Property="BorderThickness" Value="1" />
+                        </Trigger>
+
+                        <!-- Estilo al pasar el ratón por encima -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#E0F7FA" />
+                            <!-- Azul más intenso -->
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+
+                        <!-- Fila seleccionada pero no enfocada (prioridad adicional) -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="IsMouseOver" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="#DDEEFF" />
+                        </MultiTrigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="materialDesign:PackIcon">
+                    <Setter Property="Width" Value="20" />
+                    <Setter Property="Height" Value="20" />
+                    <Setter Property="Foreground" Value="Black" />
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                 <DataGridTextColumn Header="Marca" Binding="{Binding Marca}" Width="150"/>
