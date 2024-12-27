@@ -159,7 +159,7 @@ namespace MechanicWorkshopApp.ViewModels
                     _clienteService,
                     result =>
                     {
-                        if (result) UpdateVehiculos();
+                       UpdateVehiculos();
                     }
                 );
 
@@ -178,7 +178,7 @@ namespace MechanicWorkshopApp.ViewModels
         {
             if (SelectedVehiculo != null)
             {
-                var result = MessageBox.Show("¿Estás seguro de que deseas eliminar este vehículo?",
+                var result = MessageBox.Show("¿Estás seguro de que deseas eliminar este vehículo? Las reparaciones vinculadas al vehículo también serán eliminadas.",
                     "Confirmar Eliminación", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning);
 
                 if (result == MessageBoxResult.Yes)

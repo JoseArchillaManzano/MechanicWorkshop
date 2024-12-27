@@ -22,6 +22,7 @@ namespace MechanicWorkshopApp.Services
                                 .Include(o => o.Cliente)
                                 .Include(o => o.Vehiculo)
                                 .Include(o => o.LineasOrden)
+                                .Where(o => o.Cliente != null && o.Vehiculo != null)
                                 .AsQueryable();
 
             // Aplicar búsqueda si se proporciona un query
@@ -57,6 +58,8 @@ namespace MechanicWorkshopApp.Services
         public void CrearOrden(OrdenReparacion orden)
         {
             using var _context = _contextFactory();
+            orden.Cliente = null;
+            orden.Vehiculo = null;
             AdjustDatesToUtc(orden);
             _context.OrdenesReparacion.Add(orden);
             _context.SaveChanges();

@@ -280,7 +280,12 @@ namespace MechanicWorkshopApp.ViewModels
 
             foreach (var lineaEliminada in _lineasEliminadas)
             {
-                _lineaOrdenService.EliminarLineaOrden(lineaEliminada);
+                var linea = Orden.LineasOrden.FirstOrDefault(l => l.Id == lineaEliminada);
+                if (linea != null)
+                {
+                    Orden.LineasOrden.Remove(linea); // Elimina de la colección en memoria
+                    _lineaOrdenService.EliminarLineaOrden(lineaEliminada); // Elimina en la base de datos
+                }
             }
 
             if (Orden.Id == 0)
@@ -300,7 +305,7 @@ namespace MechanicWorkshopApp.ViewModels
             
         }
 
-        private void Cancelar()
+        public void Cancelar()
         {
             var result = MessageBox.Show("Los cambios que haya realizado se perderán si no los guarda. ¿Está seguro que desea salir?",
                                              "Confirmar",
@@ -331,8 +336,9 @@ namespace MechanicWorkshopApp.ViewModels
                 }
                 _callback?.Invoke(false); // Notificar que se canceló la operación
                 OnClose?.Invoke(); // Evento para cerrar cualquier lógica adicional asociada
+
             }
-            
+
         }
 
         private void GenerarFactura()

@@ -47,17 +47,17 @@ namespace MechanicWorkshopApp
             services.AddTransient<PrinterService>();
 
             // Registrar ViewModels
-            services.AddSingleton<ClientesViewModel>();
-            services.AddSingleton<ClientesFormViewModel>();
-            services.AddSingleton<SelectorClienteViewModel>();
-            services.AddSingleton<VehiculosViewModel>();
-            services.AddSingleton<VehiculoFormViewModel>();
-            services.AddSingleton<SelectorVehiculosViewModel>();
-            services.AddSingleton<OrdenReparacionViewModel>();
+            services.AddTransient<ClientesViewModel>();
+            services.AddTransient<ClientesFormViewModel>();
+            services.AddTransient<SelectorClienteViewModel>();
+            services.AddTransient<VehiculosViewModel>();
+            services.AddTransient<VehiculoFormViewModel>();
+            services.AddTransient<SelectorVehiculosViewModel>();
+            services.AddTransient<OrdenReparacionViewModel>();
             services.AddSingleton<OrdenReparacionFormViewModel>();
-            services.AddSingleton<LineaOrdenFormViewModel>();
-            services.AddSingleton<TallerConfigViewModel>();
-            services.AddSingleton<MetricasViewModel>();
+            services.AddTransient<LineaOrdenFormViewModel>();
+            services.AddTransient<TallerConfigViewModel>();
+            services.AddTransient<MetricasViewModel>();
 
             // Registrar ventanas
             services.AddTransient<MainWindow>();

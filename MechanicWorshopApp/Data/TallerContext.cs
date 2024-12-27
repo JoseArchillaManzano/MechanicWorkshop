@@ -31,8 +31,28 @@ namespace MechanicWorkshopApp.Data
                 .HasOne(v => v.Cliente)
                 .WithMany(c => c.Vehiculos)
                 .HasForeignKey(v => v.ClienteId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade); // Eliminar un Cliente elimina todos sus Vehiculos
 
+            // Relación Vehiculo -> OrdenReparacion (1 Vehiculo tiene muchas OrdenesReparacion)
+            modelBuilder.Entity<OrdenReparacion>()
+                .HasOne(o => o.Vehiculo)
+                .WithMany(v => v.OrdenesReparacion)
+                .HasForeignKey(o => o.VehiculoId)
+                .OnDelete(DeleteBehavior.Cascade); // Eliminar un Vehiculo elimina todas sus OrdenesReparacion
+
+            // Relación Cliente -> OrdenReparacion (1 Cliente tiene muchas OrdenesReparacion)
+            modelBuilder.Entity<OrdenReparacion>()
+                .HasOne(o => o.Cliente)
+                .WithMany(c => c.OrdenesReparacion)
+                .HasForeignKey(o => o.ClienteId)
+                .OnDelete(DeleteBehavior.Cascade); // Eliminar un Cliente no elimina las Ordenes directamente
+
+            // Relación OrdenReparacion -> LineaOrden (1 OrdenReparacion tiene muchas LineasOrden)
+            modelBuilder.Entity<LineaOrden>()
+                .HasOne(l => l.OrdenReparacion)
+                .WithMany(o => o.LineasOrden)
+                .HasForeignKey(l => l.OrdenReparacionId)
+                .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<LineaOrden>(entity =>
             {
                 entity.Property(lo => lo.TipoLinea)

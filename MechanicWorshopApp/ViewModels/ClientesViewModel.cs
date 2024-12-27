@@ -183,7 +183,7 @@ namespace MechanicWorkshopApp.ViewModels
                 _clienteService,
                 result =>
                 {
-                    if (result) UpdateClientes();
+                    UpdateClientes();
                 }
             );
 
@@ -199,7 +199,7 @@ namespace MechanicWorkshopApp.ViewModels
                 return;
             }
 
-            var result = MessageBox.Show("¿Estás seguro de que deseas eliminar este cliente?",
+            var result = MessageBox.Show("¿Estás seguro de que deseas eliminar este cliente? Toda la información que este relacionada también será eliminada.",
                 "Confirmar Eliminación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
             if (result == MessageBoxResult.Yes)

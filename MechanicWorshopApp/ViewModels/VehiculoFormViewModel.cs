@@ -71,7 +71,7 @@ namespace MechanicWorkshopApp.ViewModels
 
         private void Cancelar()
         {
-            _callback?.Invoke(true);
+            _callback?.Invoke(false);
             OnClose?.Invoke();
         }
 

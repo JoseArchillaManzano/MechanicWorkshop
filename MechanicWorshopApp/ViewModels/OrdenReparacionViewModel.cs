@@ -123,9 +123,10 @@ namespace MechanicWorkshopApp.ViewModels
             
             if (SelectedOrden != null)
             {
+                var ordenEditable = _ordenReparacionService.ObtenerOrdenParaEdicion(SelectedOrden.Id);
                 var ordenForm = _ordenFormFactory();
 
-                ordenForm.Initialize(SelectedOrden);
+                ordenForm.Initialize(ordenEditable);
                 ordenForm.ShowDialog();
             }
             else

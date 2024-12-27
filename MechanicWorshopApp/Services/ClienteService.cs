@@ -46,6 +46,9 @@ namespace MechanicWorkshopApp.Services
             var cliente = _context.Clientes.Find(id);
             if (cliente != null)
             {
+                //_context.OrdenesReparacion.RemoveRange(cliente.OrdenesReparacion);
+                //_context.Vehiculos.RemoveRange(cliente.Vehiculos);
+
                 _context.Clientes.Remove(cliente);
                 _context.SaveChanges();
             }

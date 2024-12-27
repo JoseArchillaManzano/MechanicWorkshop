@@ -28,6 +28,8 @@ namespace MechanicWorkshopApp.Services
 
         public void AgregarVehiculo(Vehiculo vehiculo)
         {
+            //vehiculo.ClienteId = cliente.Id; // Asignar la clave externa directamente
+            vehiculo.Cliente = null; // Opcionalmente desvincular el objeto Cliente
             using var _context = _contextFactory();
             _context.Vehiculos.Add(vehiculo);
             _context.SaveChanges();
