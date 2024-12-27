@@ -10,61 +10,72 @@
         WindowStartupLocation="CenterScreen"
         Title="Panel Principal - Gestión de Taller">
     <Grid>
+        <!-- Grid con 3 filas: Header, Contenido principal y Footer -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Header -->
+            <RowDefinition Height="*"/>
+            <!-- Contenido principal -->
+            <RowDefinition Height="Auto"/>
+            <!-- Footer -->
+        </Grid.RowDefinitions>
+
         <!-- Header -->
-        <Border Background="#2196F3" Height="60" VerticalAlignment="Top">
+        <Border Background="#2196F3" Height="60" Grid.Row="0">
             <TextBlock Text="Sistema de Gestión del Taller"
                        VerticalAlignment="Center" HorizontalAlignment="Center"
-                       Foreground="White" FontSize="20" FontWeight="Bold" />
+                       Foreground="White" FontSize="24" FontWeight="Bold" />
         </Border>
 
         <!-- Content Area -->
-        <Grid Margin="10,70,10,50">
-            <UniformGrid Columns="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+        <Grid Grid.Row="1" Margin="20">
+            <UniformGrid Columns="2" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <!-- Card: Gestionar Clientes -->
-                <Border BorderBrush="#2196F3" BorderThickness="2" CornerRadius="10" Padding="10" Margin="10">
+                <Border BorderBrush="#2196F3" BorderThickness="2" CornerRadius="10" Padding="20" Margin="20">
                     <StackPanel>
-                        <materialDesign:PackIcon Kind="AccountMultiple" Width="50" Height="50" Foreground="#2196F3" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Gestionar Clientes" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <materialDesign:PackIcon Kind="AccountMultiple" Width="60" Height="60" Foreground="#2196F3" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Gestionar Clientes" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="10,10,0,0"/>
                         <Button Content="Abrir" Command="{Binding AbrirClientesCommand}" 
-                                Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center"/>
+                                Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center" Margin="10"/>
                     </StackPanel>
                 </Border>
 
                 <!-- Card: Gestionar Taller -->
-                <Border BorderBrush="#4CAF50" BorderThickness="2" CornerRadius="10" Padding="10" Margin="10">
+                <Border BorderBrush="#4CAF50" BorderThickness="2" CornerRadius="10" Padding="20" Margin="20">
                     <StackPanel>
-                        <materialDesign:PackIcon Kind="Tools" Width="50" Height="50" Foreground="#4CAF50" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Gestionar Taller" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <materialDesign:PackIcon Kind="Tools" Width="60" Height="60" Foreground="#4CAF50" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Gestionar Taller" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="10,10,0,0"/>
                         <Button Content="Abrir" Command="{Binding AbrirConfiguracionCommand}" 
-                                Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center"/>
+                                Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center" Margin="10"/>
                     </StackPanel>
                 </Border>
 
-                <!-- Card: Gestionar Órdenes de Reparación -->
-                <Border BorderBrush="#FFC107" BorderThickness="2" CornerRadius="10" Padding="10" Margin="10">
+                <!-- Card: Órdenes de Reparación -->
+                <Border BorderBrush="#FFC107" BorderThickness="2" CornerRadius="10" Padding="20" Margin="20">
                     <StackPanel>
-                        <materialDesign:PackIcon Kind="FileDocumentBox" Width="50" Height="50" Foreground="#FFC107" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Órdenes de Reparación" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <materialDesign:PackIcon Kind="FileDocumentBox" Width="60" Height="60" Foreground="#FFC107" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Órdenes de Reparación" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="10,10,0,0"/>
                         <Button Content="Abrir" Command="{Binding AbrirOrdenesCommand}" 
-                                Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center"/>
+                                Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center" Margin="10"/>
                     </StackPanel>
                 </Border>
 
-                <Border BorderBrush="#673AB7" BorderThickness="2" CornerRadius="10" Padding="10" Margin="10">
+                <!-- Card: Métricas y Estadísticas -->
+                <Border BorderBrush="#673AB7" BorderThickness="2" CornerRadius="10" Padding="20" Margin="20">
                     <StackPanel>
-                        <materialDesign:PackIcon Kind="ChartBar" Width="50" Height="50" Foreground="#673AB7" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Métricas y Estadísticas" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <materialDesign:PackIcon Kind="ChartBar" Width="60" Height="60" Foreground="#673AB7" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Métricas y Estadísticas" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="10,10,0,0"/>
                         <Button Content="Abrir" Command="{Binding AbrirMetricasCommand}" 
-                                Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center"/>
+                                Style="{StaticResource MaterialDesignRaisedButton}" HorizontalAlignment="Center" Margin="10"/>
                     </StackPanel>
                 </Border>
             </UniformGrid>
         </Grid>
 
         <!-- Footer -->
-        <Border Background="#EEEEEE" Height="30" VerticalAlignment="Bottom">
+        <Border Background="#EEEEEE" Height="40" Grid.Row="2">
             <TextBlock Text="© 2024 Taller Laicram Motor. Todos los derechos reservados."
-                       VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" Foreground="Gray"/>
+                       VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" Foreground="Gray"/>
         </Border>
     </Grid>
 </Window>
