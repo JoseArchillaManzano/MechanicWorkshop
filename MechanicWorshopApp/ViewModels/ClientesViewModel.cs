@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using MechanicWorkshopApp.Configuration;
 using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
@@ -176,10 +177,10 @@ namespace MechanicWorkshopApp.ViewModels
                 MessageBox.Show("Por favor, selecciona un cliente para editar.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
+            var ordenEditable = _clienteService.ObtenerClienteParaEdicion(SelectedCliente.Id);
             var clienteForm = _clienteFormFactory();
             var viewModel = new ClientesFormViewModel(
-                SelectedCliente,
+                ordenEditable,
                 _clienteService,
                 result =>
                 {
@@ -204,8 +205,10 @@ namespace MechanicWorkshopApp.ViewModels
 
             if (result == MessageBoxResult.Yes)
             {
-                _clienteService.EliminarCliente(SelectedCliente.Id);
+                var idCliente = SelectedCliente.Id;
+                _clienteService.EliminarCliente(idCliente);
                 UpdateClientes();
+                WeakReferenceMessenger.Default.Send(new ClienteEliminadoMessage(idCliente));
             }
         }
 

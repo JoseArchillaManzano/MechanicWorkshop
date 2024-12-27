@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using MechanicWorkshopApp.Configuration;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Services;
@@ -136,7 +137,7 @@ namespace MechanicWorkshopApp.ViewModels
             var viewModel = new VehiculoFormViewModel(
                 vehiculoNuevo,
                 _vehiculoService,
-                _clienteService,
+                cliente.Nombre,
                 result =>
                 {
                     if (result) UpdateVehiculos();
@@ -152,11 +153,12 @@ namespace MechanicWorkshopApp.ViewModels
         {
             if (SelectedVehiculo != null)
             {
+                var vehiculoEditable = _vehiculoService.ObtenerVehiculoParaEdicion(SelectedVehiculo.Id);
                 var vehiculoForm = _vehiculoFormFactory();
                 var viewModel = new VehiculoFormViewModel(
-                    SelectedVehiculo,
+                    vehiculoEditable,
                     _vehiculoService,
-                    _clienteService,
+                    SelectedVehiculo.Cliente.Nombre,
                     result =>
                     {
                        UpdateVehiculos();
@@ -183,8 +185,10 @@ namespace MechanicWorkshopApp.ViewModels
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    _vehiculoService.EliminarVehiculo(SelectedVehiculo.Id);
+                    int idVehiculo = SelectedVehiculo.Id;
+                    _vehiculoService.EliminarVehiculo(idVehiculo);
                     UpdateVehiculos();
+                    WeakReferenceMessenger.Default.Send(new VehiculoEliminadoMessage(idVehiculo));
                 }
             }
             else

@@ -230,7 +230,7 @@ namespace MechanicWorkshopApp.ViewModels
                     Cliente = ClienteSeleccionado,
                 };
 
-                var vehiculoFormViewModel = new VehiculoFormViewModel(nuevoVehiculo, _vehiculoService, _clienteService, result =>
+                var vehiculoFormViewModel = new VehiculoFormViewModel(nuevoVehiculo, _vehiculoService, ClienteSeleccionado.Nombre, result =>
                 {
                     if (result)
                     {

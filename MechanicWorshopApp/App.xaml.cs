@@ -53,8 +53,8 @@ namespace MechanicWorkshopApp
             services.AddTransient<VehiculosViewModel>();
             services.AddTransient<VehiculoFormViewModel>();
             services.AddTransient<SelectorVehiculosViewModel>();
-            services.AddTransient<OrdenReparacionViewModel>();
-            services.AddSingleton<OrdenReparacionFormViewModel>();
+            services.AddSingleton<OrdenReparacionViewModel>();
+            services.AddTransient<OrdenReparacionFormViewModel>();
             services.AddTransient<LineaOrdenFormViewModel>();
             services.AddTransient<TallerConfigViewModel>();
             services.AddTransient<MetricasViewModel>();

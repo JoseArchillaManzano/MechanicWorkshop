@@ -21,12 +21,6 @@
                              IsReadOnly="True"
                              materialDesign:HintAssist.Hint="Cliente"
                              Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-                    <Button x:Name="btnSeleccionarCliente" Content="..."
-                            Margin="5"
-                            Width="30"
-                            Height="30"
-                            Command="{Binding SeleccionarClienteCommand}"
-                            Style="{StaticResource MaterialDesignFlatButton}" />
                 </StackPanel>
 
                 <!-- Otros campos -->

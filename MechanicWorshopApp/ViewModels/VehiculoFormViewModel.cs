@@ -29,17 +29,15 @@ namespace MechanicWorkshopApp.ViewModels
         public IRelayCommand CancelarCommand { get; }
         public IRelayCommand SeleccionarClienteCommand { get; }
 
-        public VehiculoFormViewModel(Vehiculo vehiculo, VehiculoService vehiculoService, ClienteService clienteService, Action<bool> callback)
+        public VehiculoFormViewModel(Vehiculo vehiculo, VehiculoService vehiculoService, string nombreCliente, Action<bool> callback)
         {
             Vehiculo = vehiculo ?? new Vehiculo();
-            ClienteNombre = vehiculo.Cliente?.Nombre ?? "Seleccionar cliente...";
+            ClienteNombre = nombreCliente;
             _vehiculoService = vehiculoService;
-            _clienteService = clienteService;
             _callback = callback;
 
             GuardarCommand = new RelayCommand(GuardarVehiculo);
             CancelarCommand = new RelayCommand(Cancelar);
-            SeleccionarClienteCommand = new RelayCommand(SeleccionarCliente);
         }
 
         private void GuardarVehiculo()
@@ -73,25 +71,6 @@ namespace MechanicWorkshopApp.ViewModels
         {
             _callback?.Invoke(false);
             OnClose?.Invoke();
-        }
-
-        private void SeleccionarCliente()
-        {
-            var selectorClientesView = new SelectorClienteView();
-            var selectorClientesViewModel = new SelectorClienteViewModel(
-                _clienteService,
-                cliente =>
-                {
-                    if (cliente != null)
-                    {
-                        Vehiculo.ClienteId = cliente.Id;
-                        Vehiculo.Cliente = cliente;
-                        ClienteNombre = cliente.Nombre;
-                    }
-                });
-
-            selectorClientesView.DataContext = selectorClientesViewModel;
-            selectorClientesView.ShowDialog();
         }
     }
 }

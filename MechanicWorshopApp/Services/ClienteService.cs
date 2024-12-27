@@ -19,6 +19,13 @@ namespace MechanicWorkshopApp.Services
             using var _context = _contextFactory();
             return _context.Clientes.ToList();
         }
+        public Cliente ObtenerClienteParaEdicion(int id)
+        {
+            using var _context = _contextFactory();
+            return _context.Clientes
+                .AsNoTracking()
+                .FirstOrDefault(c => c.Id == id);
+        }
 
         public Cliente ObtenerClientePorId(int id)
         {

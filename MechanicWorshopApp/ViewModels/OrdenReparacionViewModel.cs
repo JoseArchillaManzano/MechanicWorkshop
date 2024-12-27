@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using MechanicWorkshopApp.Configuration;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Services;
@@ -87,7 +88,28 @@ namespace MechanicWorkshopApp.ViewModels
                 App.Current.Dispatcher.Invoke(UpdateOrdenes);
             };
             PageSizes = new ObservableCollection<int>(AppSettings.AvailablePageSizes);
+            WeakReferenceMessenger.Default.Register<VehiculoEliminadoMessage>(this, OnVehiculoEliminado);
+            WeakReferenceMessenger.Default.Register<ClienteEliminadoMessage>(this, OnClienteEliminado);
             UpdateOrdenes();
+        }
+
+        private void OnVehiculoEliminado(object recipient, VehiculoEliminadoMessage message)
+        {
+            UpdateOrdenes();
+            // Filtrar las órdenes relacionadas con el vehículo eliminado
+            Ordenes = new ObservableCollection<OrdenReparacion>(
+                Ordenes.Where(o => o.VehiculoId != message.VehiculoId)
+            );
+            OnPropertyChanged(nameof(Ordenes)); // Notificar a la UI
+        }
+        private void OnClienteEliminado(object recipient, ClienteEliminadoMessage message)
+        {
+            UpdateOrdenes();
+            // Filtrar las órdenes relacionadas con el vehículo eliminado
+            Ordenes = new ObservableCollection<OrdenReparacion>(
+                Ordenes.Where(o => o.ClienteId != message.ClienteId)
+            );
+            OnPropertyChanged(nameof(Ordenes)); // Notificar a la UI
         }
 
         public void UpdateOrdenes()
@@ -95,7 +117,7 @@ namespace MechanicWorkshopApp.ViewModels
             var result = _ordenReparacionService.ObtenerOrdenesPaginadas(CurrentPage,PageSize, SearchQuery);
             Ordenes = new ObservableCollection<OrdenReparacion>(result.Items);
             TotalPages = result.TotalPages;
-
+            OnPropertyChanged(nameof(Ordenes));
             // Actualiza los estados de los comandos
             (EditarOrdenCommand as RelayCommand)?.NotifyCanExecuteChanged();
             (EliminarOrdenCommand as RelayCommand)?.NotifyCanExecuteChanged();

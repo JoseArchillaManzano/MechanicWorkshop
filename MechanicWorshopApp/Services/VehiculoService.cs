@@ -19,6 +19,14 @@ namespace MechanicWorkshopApp.Services
             
         }
 
+        public Vehiculo ObtenerVehiculoParaEdicion(int id)
+        {
+            using var _context = _contextFactory();
+            return _context.Vehiculos
+                .AsNoTracking()
+               .FirstOrDefault(v => v.Id == id);
+        }
+
         public int ObtenerTotalVehiculos()
         {
             using var _context = _contextFactory();
