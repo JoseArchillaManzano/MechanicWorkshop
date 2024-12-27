@@ -16,23 +16,23 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBox Text="{Binding Configuracion.Nombre, UpdateSourceTrigger=PropertyChanged}" 
+            <TextBox Text="{Binding Configuracion.Nombre, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                      Margin="0,10,0,0"
                      materialDesign:HintAssist.Hint="Nombre del Taller"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-            <TextBox Text="{Binding Configuracion.CIF, UpdateSourceTrigger=PropertyChanged}" 
+            <TextBox Text="{Binding Configuracion.CIF, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                      Margin="0,10,0,0"
                      materialDesign:HintAssist.Hint="CIF/NIF"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-            <TextBox Text="{Binding Configuracion.Direccion, UpdateSourceTrigger=PropertyChanged}" 
+            <TextBox Text="{Binding Configuracion.Direccion, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                      Margin="0,10,0,0"
                      materialDesign:HintAssist.Hint="Dirección"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-            <TextBox Text="{Binding Configuracion.Telefono, UpdateSourceTrigger=PropertyChanged}" 
+            <TextBox Text="{Binding Configuracion.Telefono, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                      Margin="0,10,0,0"
                      materialDesign:HintAssist.Hint="Teléfono"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-            <TextBox Text="{Binding Configuracion.RegistroIndustrial, UpdateSourceTrigger=PropertyChanged}" 
+            <TextBox Text="{Binding Configuracion.RegistroIndustrial, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                      Margin="0,10,0,0"
                      materialDesign:HintAssist.Hint="Registro Industrial"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}" />
@@ -50,13 +50,19 @@
                            VerticalAlignment="Center"
                            ToolTip="Ingrese una cantidad" />
             </StackPanel>
-            <TextBox Text="{Binding Configuracion.IVA, UpdateSourceTrigger=PropertyChanged}" 
-                        Margin="0,10,0,0"
-                        materialDesign:HintAssist.Hint="Porcentaje de IVA a aplicar."
-                        Style="{StaticResource MaterialDesignOutlinedTextBox}" />      
-                
-            
-
+            <StackPanel Margin="0,10,0,0">
+                <TextBlock Text="Porcentaje de IVA a aplicar"
+                           FontSize="14"
+                           Foreground="Gray"
+                           Margin="0,0,0,5" />
+                <xctk:DoubleUpDown Value="{Binding Configuracion.IVA, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                           Increment="1"
+                           Minimum="0"
+                           Maximum="100"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Center"
+                           ToolTip="Ingrese una cantidad" />
+            </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">

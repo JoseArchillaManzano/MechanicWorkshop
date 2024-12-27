@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         WindowStartupLocation="CenterScreen"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="Formulario de Vehículo" Height="610" Width="400">
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <Grid Margin="10">
@@ -54,10 +55,19 @@
                          materialDesign:HintAssist.Hint="Bastidor"
                          Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 
-                <TextBox x:Name="txtKilometraje" Margin="5"
-                         Text="{Binding Vehiculo.Kilometraje, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
-                         materialDesign:HintAssist.Hint="Kilometraje"
-                         Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                <StackPanel Margin="5">
+                    <TextBlock Text="Kilometraje"
+                           FontSize="14"
+                           Foreground="Gray"
+                           Margin="0,0,0,5" />
+                    <xctk:DoubleUpDown Value="{Binding Vehiculo.Kilometraje, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                           Increment="1"
+                           Minimum="0"
+                           Maximum="9000000"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Center"
+                           ToolTip="Ingrese una cantidad" />    
+                </StackPanel>
 
                 <!-- Observaciones -->
                 <TextBox x:Name="txtObservaciones" Margin="5" AcceptsReturn="True" Height="80"
