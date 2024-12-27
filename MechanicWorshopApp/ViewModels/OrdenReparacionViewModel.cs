@@ -4,15 +4,8 @@ using MechanicWorkshopApp.Configuration;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Services;
 using MechanicWorkshopApp.Views;
-using QuestPDF.Helpers;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MechanicWorkshopApp.ViewModels
@@ -134,7 +127,7 @@ namespace MechanicWorkshopApp.ViewModels
 
                 ordenForm.Initialize(SelectedOrden);
                 ordenForm.ShowDialog();
-        }
+            }
             else
             {
                 MessageBox.Show("Debe seleccionar una orden de reparación para editar.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);

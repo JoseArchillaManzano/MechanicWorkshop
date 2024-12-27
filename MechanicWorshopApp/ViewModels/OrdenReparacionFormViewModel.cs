@@ -51,6 +51,9 @@ namespace MechanicWorkshopApp.ViewModels
         [ObservableProperty]
         private ObservableCollection<LineaOrden> lineasOrden;
 
+        private Cliente _clienteOriginal;
+        private OrdenReparacion _ordenCopia;
+
         public ICommand SeleccionarClienteCommand { get; }
         public ICommand SeleccionarVehiculoCommand { get; }
         public ICommand AgregarLineaCommand { get; }
@@ -103,15 +106,10 @@ namespace MechanicWorkshopApp.ViewModels
         public void Initialize(OrdenReparacion orden)
         {
             Orden = orden;
-            ClienteSeleccionado = orden.Cliente;
-            VehiculoSeleccionado = orden.Vehiculo;
-            LineasOrden = new ObservableCollection<LineaOrden>(orden.LineasOrden);
+            ClienteSeleccionado = Orden.Cliente;
+            VehiculoSeleccionado = Orden.Vehiculo;
+            LineasOrden = new ObservableCollection<LineaOrden>(Orden.LineasOrden);
 
-            // Sincronizar ClienteId por si no se hizo antes
-            if (orden.Cliente != null)
-            {
-                Orden.ClienteId = orden.Cliente.Id;
-            }
         }
 
         private void AgregarLinea()
@@ -205,7 +203,7 @@ namespace MechanicWorkshopApp.ViewModels
                     if (cliente != null)
                     {
                         ClienteSeleccionado = cliente;
-                        Orden.Cliente = cliente;
+                        Orden.Cliente = null; //para que no de problemas con el tracking
                         Orden.ClienteId = cliente.Id; // Sincronizar ClienteId
                         VehiculoSeleccionado = null; // Resetear vehículo seleccionado
                         Orden.Vehiculo = null; // Limpiar vehículo en la orden
@@ -311,6 +309,26 @@ namespace MechanicWorkshopApp.ViewModels
 
             if (result == MessageBoxResult.Yes)
             {
+                if (Orden.Id != 0)
+                {
+                    // 1) Recargar desde BD (con Includes)
+                    var reloaded = _ordenReparacionService.RecargarEntidad(Orden.Id);
+
+                    // 2) Forzar la notificación de cambios al ViewModel
+                    //    Reasignando la propiedad para que se dispare OnPropertyChanged.
+                    Orden = reloaded;
+                    OnPropertyChanged(nameof(Orden));
+
+                    // 3) Vuelves a asignar las propiedades que muestra tu formulario:
+                    ClienteSeleccionado = Orden.Cliente;
+                    OnPropertyChanged(nameof(ClienteSeleccionado));
+
+                    VehiculoSeleccionado = Orden.Vehiculo;
+                    OnPropertyChanged(nameof(VehiculoSeleccionado));
+
+                    LineasOrden = new ObservableCollection<LineaOrden>(Orden.LineasOrden);
+                    OnPropertyChanged(nameof(LineasOrden));
+                }
                 _callback?.Invoke(false); // Notificar que se canceló la operación
                 OnClose?.Invoke(); // Evento para cerrar cualquier lógica adicional asociada
             }

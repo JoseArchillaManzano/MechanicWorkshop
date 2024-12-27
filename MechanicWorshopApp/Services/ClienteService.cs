@@ -1,47 +1,48 @@
 ﻿using MechanicWorkshopApp.Data;
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace MechanicWorkshopApp.Services
 {
     public class ClienteService
     {
-        private readonly TallerContext _context;
+        private readonly Func<TallerContext> _contextFactory;
 
-        public ClienteService(TallerContext context)
+        public ClienteService(Func<TallerContext> contextFactory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
         }
 
         public List<Cliente> ObtenerClientes()
         {
+            using var _context = _contextFactory();
             return _context.Clientes.ToList();
         }
 
         public Cliente ObtenerClientePorId(int id)
         {
-            return _context.Clientes.FirstOrDefault(c => c.Id == id);
+            using var _context = _contextFactory();
+            return _context.Clientes.AsNoTracking().FirstOrDefault(c => c.Id == id);
         }
 
         public void AgregarCliente(Cliente cliente)
         {
+            using var _context = _contextFactory();
             _context.Clientes.Add(cliente);
             _context.SaveChanges();
         }
 
         public void ActualizarCliente(Cliente cliente)
         {
+            using var _context = _contextFactory();
             _context.Clientes.Update(cliente);
             _context.SaveChanges();
         }
 
         public void EliminarCliente(int id)
         {
+            using var _context = _contextFactory();
             var cliente = _context.Clientes.Find(id);
             if (cliente != null)
             {
@@ -52,25 +53,17 @@ namespace MechanicWorkshopApp.Services
 
         public int ObtenerTotalClientes()
         {
+            using var _context = _contextFactory();
             return _context.Clientes.Count();
-            
-        }
-
-        public List<Cliente> ObtenerClientesPaginados(int paginaActual, int tamanoPagina)
-        {            
-            return _context.Clientes
-                            .OrderBy(c => c.Id)
-                            .Skip((paginaActual - 1) * tamanoPagina)
-                            .Take(tamanoPagina)
-                            .ToList();
             
         }
 
         public PagedResult<Cliente> GetClientesPaginated(int page, int pageSize, string searchQuery)
         {
+            using var _context = _contextFactory();
             if (page < 1) page = 1;
             
-            var query = _context.Clientes.AsQueryable();
+            var query = _context.Clientes.AsNoTracking().AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(searchQuery))
             {

@@ -35,28 +35,29 @@ namespace MechanicWorkshopApp
             {
                 options.UseNpgsql("Host=localhost;Database=Taller;Username=postgres;Password=Postgresi-20");
                 options.EnableSensitiveDataLogging(); // Habilitar para depuración
-            }, ServiceLifetime.Scoped);
+              
+            }, ServiceLifetime.Transient);
 
             // Registrar servicios
-            services.AddScoped<ClienteService>();
-            services.AddScoped<VehiculoService>();
-            services.AddScoped<OrdenReparacionService>();
-            services.AddScoped<LineaOrdenService>();
-            services.AddScoped<TallerConfigService>();
-            services.AddScoped<PrinterService>();
+            services.AddTransient<ClienteService>();
+            services.AddTransient<VehiculoService>();
+            services.AddTransient<OrdenReparacionService>();
+            services.AddTransient<LineaOrdenService>();
+            services.AddTransient<TallerConfigService>();
+            services.AddTransient<PrinterService>();
 
             // Registrar ViewModels
-            services.AddTransient<ClientesViewModel>();
-            services.AddTransient<ClientesFormViewModel>();
-            services.AddTransient<SelectorClienteViewModel>();
-            services.AddTransient<VehiculosViewModel>();
-            services.AddTransient<VehiculoFormViewModel>();
-            services.AddTransient<SelectorVehiculosViewModel>();
-            services.AddTransient<OrdenReparacionViewModel>();
-            services.AddTransient<OrdenReparacionFormViewModel>();
-            services.AddTransient<LineaOrdenFormViewModel>();
-            services.AddTransient<TallerConfigViewModel>();
-            services.AddTransient<MetricasViewModel>();
+            services.AddSingleton<ClientesViewModel>();
+            services.AddSingleton<ClientesFormViewModel>();
+            services.AddSingleton<SelectorClienteViewModel>();
+            services.AddSingleton<VehiculosViewModel>();
+            services.AddSingleton<VehiculoFormViewModel>();
+            services.AddSingleton<SelectorVehiculosViewModel>();
+            services.AddSingleton<OrdenReparacionViewModel>();
+            services.AddSingleton<OrdenReparacionFormViewModel>();
+            services.AddSingleton<LineaOrdenFormViewModel>();
+            services.AddSingleton<TallerConfigViewModel>();
+            services.AddSingleton<MetricasViewModel>();
 
             // Registrar ventanas
             services.AddTransient<MainWindow>();
@@ -132,6 +133,7 @@ namespace MechanicWorkshopApp
                     callback
                 );
             });
+            services.AddTransient<Func<TallerContext>>(sp => () => sp.GetRequiredService<TallerContext>());
         }
 
     }

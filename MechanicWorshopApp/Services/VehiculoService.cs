@@ -2,36 +2,33 @@
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Utils;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 
 namespace MechanicWorkshopApp.Services
 {
     public class VehiculoService 
     {
-        private readonly TallerContext _context;
-        public VehiculoService(TallerContext context)
+        private readonly Func<TallerContext> _contextFactory;
+        public VehiculoService(Func<TallerContext> contextFactory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
         }
         public List<Vehiculo> ObtenerVehiculosPorCliente(int clienteId)
         {
-            return _context.Vehiculos.Where(v => v.ClienteId == clienteId).Include(v => v.Cliente).ToList();
+            using var _context = _contextFactory();
+            return _context.Vehiculos.AsNoTracking().Where(v => v.ClienteId == clienteId).Include(v => v.Cliente).ToList();
             
         }
 
         public int ObtenerTotalVehiculos()
         {
+            using var _context = _contextFactory();
             return _context.Vehiculos.Count();
 
         }
 
         public void AgregarVehiculo(Vehiculo vehiculo)
         {
+            using var _context = _contextFactory();
             _context.Vehiculos.Add(vehiculo);
             _context.SaveChanges();
             
@@ -39,6 +36,7 @@ namespace MechanicWorkshopApp.Services
 
         public void ActualizarVehiculo(Vehiculo vehiculo)
         {
+            using var _context = _contextFactory();
             _context.Vehiculos.Update(vehiculo);
             _context.SaveChanges();
             
@@ -46,7 +44,8 @@ namespace MechanicWorkshopApp.Services
 
         public void EliminarVehiculo(int vehiculoId)
         {
-             var vehiculo = _context.Vehiculos.Find(vehiculoId);
+            using var _context = _contextFactory();
+            var vehiculo = _context.Vehiculos.Find(vehiculoId);
              if (vehiculo != null)
              {
                  _context.Vehiculos.Remove(vehiculo);
@@ -57,7 +56,9 @@ namespace MechanicWorkshopApp.Services
 
         public PagedResult<Vehiculo> ObtenerVehiculosPaginadosPorCliente(int clienteId, int paginaActual, int pageSize, string filtro = null)
         {
+            using var _context = _contextFactory();
             var query = _context.Vehiculos
+                                .AsNoTracking()
                                 .Where(v => v.ClienteId == clienteId)
                                 .Include(v => v.Cliente)
                                 .AsQueryable();

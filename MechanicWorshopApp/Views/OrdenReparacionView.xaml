@@ -41,7 +41,7 @@
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" />
                 <DataGridTextColumn Header="Fecha Entrada" Binding="{Binding FechaEntrada, StringFormat='dd/MM/yyyy'}" Width="150" />
                 <DataGridTextColumn Header="Fecha Salida" Binding="{Binding FechaSalida, StringFormat='dd/MM/yyyy'}" Width="150" />
-                <DataGridTextColumn Header="Nombre Cliente" Binding="{Binding Vehiculo.Cliente.Nombre}" Width="200" />
+                <DataGridTextColumn Header="Nombre Cliente" Binding="{Binding Cliente.Nombre}" Width="250" />
                 <DataGridTextColumn Header="Matricula Vehiculo" Binding="{Binding Vehiculo.Matricula}" Width="150" />
             </DataGrid.Columns>
         </DataGrid>

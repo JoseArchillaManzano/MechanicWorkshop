@@ -2,26 +2,23 @@
 using MechanicWorkshopApp.Models;
 using MechanicWorkshopApp.Utils;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MechanicWorkshopApp.Services
 {
     public class OrdenReparacionService
     {
-        private readonly TallerContext _context;
+        private readonly Func<TallerContext> _contextFactory;
 
-        public OrdenReparacionService(TallerContext context)
+        public OrdenReparacionService(Func<TallerContext> contextFactory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
         }
 
         public PagedResult<OrdenReparacion> ObtenerOrdenesPaginadas(int page, int pageSize, string? searchQuery = null)
         {
+            using var _context = _contextFactory();
             var query = _context.OrdenesReparacion
+                                .AsNoTracking()
                                 .Include(o => o.Cliente)
                                 .Include(o => o.Vehiculo)
                                 .Include(o => o.LineasOrden)
@@ -46,54 +43,57 @@ namespace MechanicWorkshopApp.Services
             return new PagedResult<OrdenReparacion>(items, totalItems, totalPages, pageSize);
         }
 
-        public OrdenReparacion ObtenerOrdenPorId(int id)
+        public OrdenReparacion ObtenerOrdenParaEdicion(int id)
         {
+            using var _context = _contextFactory();
             return _context.OrdenesReparacion
-                           .Include(o => o.Cliente)
-                           .Include(o => o.Vehiculo)
-                           .Include(o => o.LineasOrden)
-                           .FirstOrDefault(o => o.Id == id);
+                .AsNoTracking()
+               .Include(o => o.Cliente)
+               .Include(o => o.Vehiculo)
+               .Include(o => o.LineasOrden)
+               .FirstOrDefault(o => o.Id == id);
         }
 
         public void CrearOrden(OrdenReparacion orden)
         {
-            if (orden.Cliente != null && _context.Entry(orden.Cliente).State != EntityState.Detached)
-            {
-                _context.Entry(orden.Cliente).State = EntityState.Detached;
-            }
-
-            // Si el vehículo está rastreado, desvincularlo
-            if (orden.Vehiculo != null && _context.Entry(orden.Vehiculo).State != EntityState.Detached)
-            {
-                _context.Entry(orden.Vehiculo).State = EntityState.Detached;
-            }
-
-            // Adjuntar cliente y vehículo al contexto actual
-            if (orden.Cliente != null)
-            {
-                _context.Attach(orden.Cliente);
-            }
-
-            if (orden.Vehiculo != null)
-            {
-                _context.Attach(orden.Vehiculo);
-            }
-
+            using var _context = _contextFactory();
             AdjustDatesToUtc(orden);
-
             _context.OrdenesReparacion.Add(orden);
             _context.SaveChanges();
         }
 
+        public void GuardarCambios(OrdenReparacion ordenReparacion)
+        {
+            using var _context = _contextFactory();
+            AdjustDatesToUtc(ordenReparacion);
+            _context.SaveChanges();
+        }
+        public OrdenReparacion RecargarEntidad(int ordenId)
+        {
+            using var _context = _contextFactory();
+            var reloaded = _context.OrdenesReparacion
+                            .Include(o => o.Cliente)
+                            .Include(o => o.Vehiculo)
+                            .Include(o => o.LineasOrden)
+                            .AsNoTracking() // para que no se mezcle con el estado previo
+                            .FirstOrDefault(o => o.Id == ordenId);
+            return reloaded;
+        }
+
         public void ActualizarOrden(OrdenReparacion orden)
         {
+            using var _context = _contextFactory();
             AdjustDatesToUtc(orden);
+
+            // "Update" marca toda la entidad (y su grafo) como Modified.
             _context.OrdenesReparacion.Update(orden);
+
             _context.SaveChanges();
         }
 
         public void EliminarOrden(int id)
         {
+            using var _context = _contextFactory();
             var orden = _context.OrdenesReparacion.Find(id);
             if (orden != null)
             {
@@ -104,6 +104,7 @@ namespace MechanicWorkshopApp.Services
 
         public void ActualizarFechaSalida(int ordenId, DateTime fechaSalida)
         {
+            using var _context = _contextFactory();
             var orden = _context.OrdenesReparacion.Find(ordenId);
             if (orden != null)
             {
@@ -132,16 +133,19 @@ namespace MechanicWorkshopApp.Services
 
         public int ObtenerOrdenesActivas()
         {
+            using var _context = _contextFactory();
             return _context.OrdenesReparacion.Count(or => or.FechaSalida == null);
         }
 
         public int ObtenerOrdenesCerradas()
         {
+            using var _context = _contextFactory();
             return _context.OrdenesReparacion.Count(or => or.FechaSalida != null);
         }
 
         public Dictionary<string, int> ObtenerOrdenesPorMes(int año)
         {
+            using var _context = _contextFactory();
             var datos = _context.OrdenesReparacion
                 .Where(o => o.FechaEntrada != null && o.FechaEntrada.Year == año) // Filtrar por año y asegurar que la fecha no sea nula
                 .GroupBy(o => o.FechaEntrada.Month) // Agrupar solo por el mes
@@ -161,6 +165,7 @@ namespace MechanicWorkshopApp.Services
 
         public Dictionary<string, double> ObtenerIngresosPorMes(int año)
         {
+            using var _context = _contextFactory();
             var datos = _context.OrdenesReparacion
                 .Where(o => o.FechaSalida != null && o.FechaSalida.Value.Year == año) // Filtrar por año
                 .GroupBy(o => o.FechaSalida.Value.Month) // Agrupar por mes
@@ -200,12 +205,14 @@ namespace MechanicWorkshopApp.Services
 
         public IEnumerable<string> ObtenerAñosDisponibles()
         {
+            using var _context = _contextFactory();
             // Lógica para obtener los años disponibles
             return _context.OrdenesReparacion.Select(o => o.FechaEntrada.Year.ToString()).Distinct().ToList();
         }
 
         public Dictionary<string, double> ObtenerIngresosPorManoDeObra(int año)
         {
+            using var _context = _contextFactory();
             string tipoManoDeObra = TipoLinea.ManoDeObra.ToString();
 
             var lineas = _context.LineasOrden
