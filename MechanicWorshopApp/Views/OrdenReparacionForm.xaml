@@ -2,110 +2,198 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        WindowStartupLocation="CenterScreen"
-        Title="Orden de Reparación" Height="930" Width="820">
+        Title="Orden de Reparación"
+        Width="870"
+        Height="700"
+        WindowStartupLocation="CenterScreen">
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <!-- Fila superior: Botón Generar Factura -->
             <RowDefinition Height="Auto" />
+            <!-- Fila central: TabControl con 3 pestañas -->
             <RowDefinition Height="*" />
+            <!-- Fila inferior: Botones de acción (Guardar, Cancelar) -->
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Botón Generar Factura -->
+        <!-- Botón Generar Factura (arriba a la derecha) -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
-            <Button Command="{Binding GenerarFacturaCommand}" ToolTip="Generar Factura" Width="45" Height="45" 
-                    Style="{StaticResource MaterialDesignFloatingActionButton}" Background="#FF5722" Cursor="Hand">
-                <materialDesign:PackIcon Kind="FilePdfBox" Width="24" Height="24" Foreground="White"/>
+            <Button Command="{Binding GenerarFacturaCommand}" ToolTip="Generar Factura"
+                    Width="45" Height="45" 
+                    Style="{StaticResource MaterialDesignFloatingActionButton}" 
+                    Background="#FF5722" Cursor="Hand">
+                <materialDesign:PackIcon Kind="FilePdfBox"
+                                         Width="24" Height="24" Foreground="White"/>
             </Button>
         </StackPanel>
 
-        <!-- Formulario Principal -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="0,0,0,10">
-
-                <!-- Información del Cliente -->
-                <GroupBox Margin="0,0,0,10">
-                    <GroupBox.Header>
-                        <TextBlock Text="Información del Cliente" FontWeight="Bold" />
-                    </GroupBox.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox Text="{Binding ClienteSeleccionado.Nombre}" IsReadOnly="True"
-                                Style="{StaticResource MaterialDesignOutlinedTextBox}" Width="300" Margin="0,0,10,0" />
-                        <Button Content="Seleccionar Cliente" Command="{Binding SeleccionarClienteCommand}"
-                                Style="{StaticResource MaterialDesignRaisedButton}" Background="#dcdcdc"/>
-                    </StackPanel>
-                </GroupBox>
-
-                <!-- Información del Vehículo -->
-                <GroupBox Margin="0,0,0,10">
-                    <GroupBox.Header>
-                        <TextBlock Text="Información del Vehículo" FontWeight="Bold" />
-                    </GroupBox.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox Text="{Binding VehiculoSeleccionado.Matricula}" IsReadOnly="True"
-                                Style="{StaticResource MaterialDesignOutlinedTextBox}" Width="300" Margin="0,0,10,0" />
-                        <Button Content="Seleccionar Vehículo" Command="{Binding SeleccionarVehiculoCommand}"
-                                IsEnabled="{Binding ClienteSeleccionado, Converter={StaticResource NullToBooleanConverter}}"
-                                Style="{StaticResource MaterialDesignRaisedButton}" Background="#dcdcdc"/>
-                    </StackPanel>
-                </GroupBox>
-
-                <GroupBox Margin="0,0,0,10">
-                    <GroupBox.Header>
-                        <TextBlock Text="Detalles de la reparación" FontWeight="Bold" />
-                    </GroupBox.Header>
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                            <TextBlock Text="Fecha de Entrada:" VerticalAlignment="Center" Margin="0,0,10,0" />
-                            <DatePicker SelectedDate="{Binding Orden.FechaEntrada}" Width="200" Margin="0,0,10,0" />
-                            <TextBlock Text="Fecha de Salida:" VerticalAlignment="Center" Margin="0,0,10,0" />
-                            <DatePicker SelectedDate="{Binding Orden.FechaSalida, UpdateSourceTrigger=PropertyChanged}" Width="200" />
-                        </StackPanel>
-                        <TextBlock Text="Trabajo a realizar / Observaciones:" VerticalAlignment="Top" Margin="0,0,10,0" />
-                        <TextBox Text="{Binding Orden.Descripcion, UpdateSourceTrigger=PropertyChanged}"
-                                AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Height="100"
-                                Style="{StaticResource MaterialDesignOutlinedTextBox}" />
-                    </StackPanel>
-                </GroupBox>
-
-                <GroupBox Margin="0,0,0,10">
-                        <GroupBox.Header>
-                            <TextBlock Text="Listado de materiales y mano de obra" FontWeight="Bold" />
-                        </GroupBox.Header>
-                        <StackPanel>
-                            <DataGrid ItemsSource="{Binding LineasOrden}" 
-                                      SelectedItem="{Binding LineaSeleccionada, Mode=TwoWay}" AutoGenerateColumns="False"
-                                      Height="200" IsReadOnly="True" Margin="0,0,0,10">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Concepto" Binding="{Binding Concepto}" Width="250" />
-                                    <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad, StringFormat=N2}" Width="100" />
-                                    <DataGridTextColumn Header="Precio Unitario" Binding="{Binding PrecioUnitario, StringFormat=N2}" Width="150" />
-                                    <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat=N2}" Width="150" />
-                                    <DataGridTextColumn Header="Tipo" Binding="{Binding TipoLinea}" Width="150" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Content="Agregar" Command="{Binding AgregarLineaCommand}" 
-                                        Background="#4CAF50" Foreground="White" 
-                                        Style="{StaticResource MaterialDesignRaisedButton}" Width="100" Margin="5,0,0,0" />
-                                <Button Content="Editar" Command="{Binding EditarLineaCommand}" 
-                                        Background="#FFC107" Foreground="Black" 
-                                        Style="{StaticResource MaterialDesignRaisedButton}" Width="100" Margin="5,0,0,0" />
-                                <Button Content="Eliminar" Command="{Binding EliminarLineaCommand}" 
-                                        Background="#F44336" Foreground="White" 
-                                        Style="{StaticResource MaterialDesignRaisedButton}" Width="100" Margin="5,0,0,0" />
+        <!-- Contenedor de pestañas -->
+        <TabControl Grid.Row="1">
+            <!-- Pestaña 1: Cliente y Vehículo -->
+            <TabItem Header="Cliente y Vehículo">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="10">
+                        <!-- Información del Cliente -->
+                        <GroupBox Margin="0,0,0,10">
+                            <GroupBox.Header>
+                                <TextBlock Text="Información del Cliente" FontWeight="Bold" />
+                            </GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Text="{Binding ClienteSeleccionado.Nombre}" 
+                                         IsReadOnly="True"
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                         Width="300" 
+                                         Margin="0,0,10,0" />
+                                <Button Content="Seleccionar Cliente"
+                                        Command="{Binding SeleccionarClienteCommand}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Background="#dcdcdc"/>
                             </StackPanel>
-                        </StackPanel>
-                    </GroupBox>
-            </StackPanel>
-        </ScrollViewer>
+                        </GroupBox>
 
-        <!-- Botones de acción -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Content="Guardar" Command="{Binding GuardarCommand}" Background="#dcdcdc"
-                    Style="{StaticResource MaterialDesignRaisedButton}" Width="100" Margin="5" />
-            <Button Content="Cancelar" Command="{Binding CancelarCommand}" Background="#ab2a3e"
-                    Style="{StaticResource MaterialDesignRaisedButton}" Width="100" Margin="5" />
+                        <!-- Información del Vehículo -->
+                        <GroupBox Margin="0,0,0,10">
+                            <GroupBox.Header>
+                                <TextBlock Text="Información del Vehículo" FontWeight="Bold" />
+                            </GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Text="{Binding VehiculoSeleccionado.Matricula}" 
+                                         IsReadOnly="True"
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                         Width="300" 
+                                         Margin="0,0,10,0" />
+                                <Button Content="Seleccionar Vehículo"
+                                        Command="{Binding SeleccionarVehiculoCommand}"
+                                        IsEnabled="{Binding ClienteSeleccionado, 
+                                                    Converter={StaticResource NullToBooleanConverter}}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Background="#dcdcdc"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Pestaña 2: Detalles de la reparación -->
+            <TabItem Header="Detalles">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="10">
+                        <GroupBox Margin="0,0,0,10">
+                            <GroupBox.Header>
+                                <TextBlock Text="Detalles de la reparación" FontWeight="Bold" />
+                            </GroupBox.Header>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="Fecha de Entrada:" 
+                                               VerticalAlignment="Center" 
+                                               Margin="0,0,10,0" />
+                                    <DatePicker SelectedDate="{Binding Orden.FechaEntrada}"
+                                                Width="200" 
+                                                Margin="0,0,10,0" />
+
+                                    <TextBlock Text="Fecha de Salida:" 
+                                               VerticalAlignment="Center" 
+                                               Margin="0,0,10,0" />
+                                    <DatePicker SelectedDate="{Binding Orden.FechaSalida, 
+                                                                        UpdateSourceTrigger=PropertyChanged}"
+                                                Width="200" />
+                                </StackPanel>
+                                <TextBlock Text="Trabajo a realizar / Observaciones:" 
+                                           VerticalAlignment="Top" 
+                                           Margin="0,0,10,0" />
+                                <TextBox Text="{Binding Orden.Descripcion, 
+                                                        UpdateSourceTrigger=PropertyChanged}"
+                                         AcceptsReturn="True" 
+                                         VerticalScrollBarVisibility="Auto" 
+                                         Height="100"
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Pestaña 3: Materiales y mano de obra -->
+            <TabItem Header="Materiales / Mano de Obra">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="10">
+                        <GroupBox Header="Listado de materiales y mano de obra">
+                            <!-- En lugar de un StackPanel, usamos un Grid que nos permita 
+                     asignar espacio proporcional a la DataGrid y a los botones. -->
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <!-- La DataGrid ocupará todo el espacio disponible (*). -->
+                                    <RowDefinition Height="*" />
+                                    <!-- Los botones tendrán altura automática. -->
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <!-- DataGrid en la primera fila (Row=0). -->
+                                <DataGrid Grid.Row="0"
+                              ItemsSource="{Binding LineasOrden}"
+                              SelectedItem="{Binding LineaSeleccionada, Mode=TwoWay}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True" 
+                              Margin="0,0,0,10">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Concepto" 
+                                                Binding="{Binding Concepto}" 
+                                                Width="250" />
+                                        <DataGridTextColumn Header="Cantidad" 
+                                                Binding="{Binding Cantidad, StringFormat=N2}" 
+                                                Width="100" />
+                                        <DataGridTextColumn Header="Precio Unitario" 
+                                                Binding="{Binding PrecioUnitario, StringFormat=N2}" 
+                                                Width="150" />
+                                        <DataGridTextColumn Header="Total" 
+                                                Binding="{Binding Total, StringFormat=N2}" 
+                                                Width="150" />
+                                        <DataGridTextColumn Header="Tipo" 
+                                                Binding="{Binding TipoLinea}" 
+                                                Width="150" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+
+                                <!-- Botones en la segunda fila (Row=1). -->
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Agregar" 
+                                Command="{Binding AgregarLineaCommand}" 
+                                Background="#4CAF50" Foreground="White"
+                                Style="{StaticResource MaterialDesignRaisedButton}" 
+                                Width="100" Margin="5,0,0,0" />
+                                    <Button Content="Editar" 
+                                Command="{Binding EditarLineaCommand}" 
+                                Background="#FFC107" Foreground="Black"
+                                Style="{StaticResource MaterialDesignRaisedButton}" 
+                                Width="100" Margin="5,0,0,0" />
+                                    <Button Content="Eliminar" 
+                                Command="{Binding EliminarLineaCommand}" 
+                                Background="#F44336" Foreground="White"
+                                Style="{StaticResource MaterialDesignRaisedButton}" 
+                                Width="100" Margin="5,0,0,0" />
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <!-- Botones de acción: Guardar/Cancelar, en la fila de abajo -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Guardar" 
+                    Command="{Binding GuardarCommand}" 
+                    Background="#dcdcdc"
+                    Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Width="100" 
+                    Margin="5" />
+            <Button Content="Cancelar" 
+                    Command="{Binding CancelarCommand}" 
+                    Background="#ab2a3e"
+                    Style="{StaticResource MaterialDesignRaisedButton}" 
+                    Width="100" 
+                    Margin="5" />
         </StackPanel>
     </Grid>
 </Window>
