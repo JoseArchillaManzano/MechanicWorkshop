@@ -4,6 +4,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:components="clr-namespace:MechanicWorkshopApp.Components"
              xmlns:local="clr-namespace:MechanicWorkshopApp.Converters"
+             DispatcherUnhandledException="Application_DispatcherUnhandledException"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <!-- Estilos de Material Design -->

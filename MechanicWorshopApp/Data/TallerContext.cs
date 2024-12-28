@@ -15,6 +15,8 @@ namespace MechanicWorkshopApp.Data
         public DbSet<OrdenReparacion> OrdenesReparacion { get; set; }
         public DbSet<LineaOrden> LineasOrden { get; set; }
         public DbSet<TallerConfig> TallerConfig { get; set; }
+        public DbSet<ErrorLog> ErrorLogs { get; set; }
+
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

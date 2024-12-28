@@ -8,6 +8,7 @@ using QuestPDF.Infrastructure;
 using System.Configuration;
 using System.Data;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace MechanicWorkshopApp
 {
@@ -17,7 +18,7 @@ namespace MechanicWorkshopApp
     public partial class App : Application
     {
         public IServiceProvider Services { get; private set; }
-
+        private ErrorLoggingService _errorLoggingService;
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -26,6 +27,7 @@ namespace MechanicWorkshopApp
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             Services = serviceCollection.BuildServiceProvider();
+            _errorLoggingService = new ErrorLoggingService(Services.GetRequiredService<TallerContext>());
         }
 
         private void ConfigureServices(IServiceCollection services)
@@ -134,6 +136,21 @@ namespace MechanicWorkshopApp
                 );
             });
             services.AddTransient<Func<TallerContext>>(sp => () => sp.GetRequiredService<TallerContext>());
+        }
+        private void Application_DispatcherUnhandledException(
+            object sender,
+            DispatcherUnhandledExceptionEventArgs e)
+        {
+            e.Handled = true; // Evitamos que la excepción cierre la app
+            _errorLoggingService.LogException(e.Exception);
+            // Por ejemplo: mostrar un messagebox
+            MessageBox.Show(
+                $"Ocurrió un error no controlado:\n{e.Exception.Message}\n Si se vuelve a repetir contactad con el desarrollador del programa",
+                "Error inesperado",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+
+            // Aquí podrías loguear el error, etc.
         }
 
     }
