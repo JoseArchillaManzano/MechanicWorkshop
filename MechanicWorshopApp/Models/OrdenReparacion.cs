@@ -13,7 +13,6 @@ namespace MechanicWorkshopApp.Models
         public DateTime FechaEntrada { get; set; } = DateTime.UtcNow;
         public DateTime? FechaSalida { get; set; } // Nullable para permitir órdenes sin fecha de salida
         public string Descripcion { get; set; } = string.Empty;
-        public decimal Total { get; set; } = 0m;
 
         // Relación con cliente
         public int ClienteId { get; set; }

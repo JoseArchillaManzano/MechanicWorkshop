@@ -10,7 +10,6 @@ namespace MechanicWorkshopApp.Models
     public class Cliente : IDataErrorInfo, INotifyPropertyChanged
     {
         public int Id { get; set; }
-        public int CodigoCliente { get; set; }
 
         // Campos privados y banderas para rastrear interacción
         private string _nombre;
