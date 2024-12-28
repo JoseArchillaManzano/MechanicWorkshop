@@ -287,7 +287,6 @@ namespace MechanicWorkshopApp.ViewModels
                     _lineaOrdenService.EliminarLineaOrden(lineaEliminada); // Elimina en la base de datos
                 }
             }
-
             if (Orden.Id == 0)
             {
                 _ordenReparacionService.CrearOrden(Orden);
@@ -352,7 +351,17 @@ namespace MechanicWorkshopApp.ViewModels
             }
             GuardarOrden(false);
             var tallerConfig = _tallerConfigService.ObtenerConfiguracion();
-            var facturaGenerator = new FacturaPdfGenerator(Orden, tallerConfig);
+            var copiaOrden = new OrdenReparacion
+            {
+                Id = Orden.Id,
+                Cliente = ClienteSeleccionado,
+                ClienteId = ClienteSeleccionado.Id,
+                Descripcion = Orden.Descripcion,
+                LineasOrden = Orden.LineasOrden,
+                Vehiculo = VehiculoSeleccionado,
+                VehiculoId = VehiculoSeleccionado.Id
+            };
+            var facturaGenerator = new FacturaPdfGenerator(copiaOrden, tallerConfig);
 
             var directorio = @"C:\Facturas";
             var filePath = $"Factura_{Orden.Id}.pdf";
