@@ -106,7 +106,7 @@
                                                         UpdateSourceTrigger=PropertyChanged}"
                                          AcceptsReturn="True" 
                                          VerticalScrollBarVisibility="Auto" 
-                                         Height="100"
+                                         Height="200"
                                          Style="{StaticResource MaterialDesignOutlinedTextBox}" />
                             </StackPanel>
                         </GroupBox>
