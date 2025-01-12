@@ -97,8 +97,6 @@ namespace MechanicWorkshopApp
                     {
                         MessageBox.Show("La operación fue cancelada.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
-                    var ordenReparacionViewModel = provider.GetRequiredService<OrdenReparacionViewModel>();
-                    ordenReparacionViewModel.UpdateOrdenes();
                 });
 
                 return new OrdenReparacionForm(ordenReparacionFormViewModel);
