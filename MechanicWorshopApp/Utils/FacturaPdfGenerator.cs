@@ -3,7 +3,6 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using System.IO;
-using static System.Runtime.InteropServices.Marshalling.IIUnknownCacheStrategy;
 
 namespace MechanicWorkshopApp.Utils
 {
@@ -18,9 +17,9 @@ namespace MechanicWorkshopApp.Utils
             _tallerConfig = tallerConfig;
         }
 
-        public void GenerarFactura(string filePath)
+        public void GenerarOrdenReparacion(string filePath)
         {
-            var directorio = @"C:\Facturas";
+            var directorio = @"C:\OrdenesReparacion";
             if (!Directory.Exists(directorio))
             {
                 Directory.CreateDirectory(directorio);
@@ -33,17 +32,34 @@ namespace MechanicWorkshopApp.Utils
                 container.Page(page =>
                 {
                     page.Margin(30);
-                    page.Header().Element(e => ComposeHeader(e, _ordenReparacion.Id));
-                    page.Content().Element(e => ComposeMateriales(e));
+                    page.Header().Element(e => ComposeHeaderOrdenReparacion(e, _ordenReparacion.Id));
+                    page.Content().Element(e => ComposeTrabajoContenido(e));
                     page.Footer().Element(ComposeFooter);
                 });
+            }).GeneratePdf(rutaFactura);
+        }
 
+        public void GenerarFactura(string filePath, bool isBudget)
+        {
+            var directorio = isBudget ? @"C:\Presupuestos" : @"C:\Facturas";
+            if (!Directory.Exists(directorio))
+            {
+                Directory.CreateDirectory(directorio);
+            }
+
+            var rutaFactura = Path.Combine(directorio, filePath);
+
+            Document.Create(container =>
+            {
                 container.Page(page =>
                 {
                     page.Margin(30);
-                    page.Header().Element(e => ComposeHeader(e, _ordenReparacion.Id));
-                    page.Content().Element(e => ComposeTrabajoContenido(e));
-                    page.Footer().Element(ComposeFooter);
+                    page.Header().Element(e => ComposeHeader(e, _ordenReparacion.Id, isBudget));
+                    page.Content().Element(e => ComposeMateriales(e));
+                    if (!isBudget) 
+                    {
+                        page.Footer().Element(ComposeFooter);
+                    }
                 });
             }).GeneratePdf(rutaFactura);
         }
@@ -51,18 +67,7 @@ namespace MechanicWorkshopApp.Utils
         {
             container.Column(column =>
             {
-                column.Item().PaddingTop(7).PaddingBottom(7).Element(e =>
-                {
-                    e.Text($"Factura Nº {_ordenReparacion.Id}")
-                     .Style(TextStyle.Default.FontSize(16).Bold())
-                     .Underline();
-                });
-
-                column.Item().Element(ComposeInformacionClienteVehiculo);
-
-                column.Item().Text("LISTADO MATERIALES Y MANO DE OBRA").Style(TextStyle.Default.FontSize(14).Bold()).Underline();
-
-                column.Item().Table(table =>
+                column.Item().PaddingTop(15).Table(table =>
                 {
                     table.ColumnsDefinition(columns =>
                     {
@@ -100,7 +105,7 @@ namespace MechanicWorkshopApp.Utils
             });
         }
 
-        private void ComposeHeader(IContainer container, int ordenId)
+        private void ComposeHeader(IContainer container, int ordenId, bool isBudget)
         {
 
             container.Column(column =>
@@ -116,19 +121,47 @@ namespace MechanicWorkshopApp.Utils
                 column.Item().Text($"Emitida el: {DateTime.Now:dd/MM/yyyy}")
                     .Style(TextStyle.Default.FontSize(12))
                     .AlignCenter();
+
+                column.Item().PaddingTop(7).PaddingBottom(7).Element(e =>
+                {
+                    string name = isBudget ? "Presupuesto" : "Factura";
+                    e.Text($"{name} Nº {_ordenReparacion.Id}")
+                     .Style(TextStyle.Default.FontSize(16).Bold())
+                     .Underline();
+                });
+
+                column.Item().Element(ComposeInformacionClienteVehiculo);
+
+                column.Item().Text("LISTADO MATERIALES Y MANO DE OBRA").Style(TextStyle.Default.FontSize(14).Bold()).Underline();
+
+                column.Spacing(15);
             });
         }
 
-        private void ComposeTrabajoContenido(IContainer container)
+        private void ComposeHeaderOrdenReparacion(IContainer container, int ordenId)
         {
+
             container.Column(column =>
             {
+                column.Item().Text(_tallerConfig.Nombre).Style(TextStyle.Default.FontSize(20).Bold());
+                column.Item().PaddingBottom(3).Text($"CIF/NIF: {_tallerConfig.CIF}").Style(TextStyle.Default.FontSize(10));
+                column.Item().PaddingBottom(3).Text($"Dirección:{_tallerConfig.Direccion}").Style(TextStyle.Default.FontSize(10));
+                column.Item().PaddingBottom(3).Text($"Teléfono: {_tallerConfig.Telefono}").Style(TextStyle.Default.FontSize(10));
+                column.Item().PaddingBottom(3).Text($"Registro Industrial: {_tallerConfig.RegistroIndustrial}").Style(TextStyle.Default.FontSize(10));
+
+                column.Spacing(5);
+
+                column.Item().Text($"Emitida el: {DateTime.Now:dd/MM/yyyy}")
+                    .Style(TextStyle.Default.FontSize(12))
+                    .AlignCenter();
+
                 column.Item().PaddingTop(7).PaddingBottom(7).Element(e =>
                 {
                     e.Text($"Orden de Reparación Nº {_ordenReparacion.Id}")
                      .Style(TextStyle.Default.FontSize(16).Bold())
                      .Underline();
                 });
+
                 column.Item().Element(ComposeInformacionClienteVehiculo);
 
                 column.Spacing(10);
@@ -140,7 +173,14 @@ namespace MechanicWorkshopApp.Utils
                      .Style(TextStyle.Default.FontSize(14).Bold())
                      .Underline();
                 });
-                column.Item().Text(string.IsNullOrEmpty(_ordenReparacion.Descripcion)
+            });
+        }
+
+        private void ComposeTrabajoContenido(IContainer container)
+        {
+            container.Column(column =>
+            {
+                column.Item().PaddingTop(15).Text(string.IsNullOrEmpty(_ordenReparacion.Descripcion)
                     ? "No hay observaciones registradas."
                     : _ordenReparacion.Descripcion).Style(TextStyle.Default.FontSize(12));
             });

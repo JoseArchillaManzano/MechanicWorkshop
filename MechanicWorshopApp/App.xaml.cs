@@ -91,16 +91,12 @@ namespace MechanicWorkshopApp
                 {
                     if (result)
                     {
-                        // La orden se guardó correctamente
                         MessageBox.Show("La orden de reparación se guardó correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
-                        // La operación fue cancelada o hubo un error
                         MessageBox.Show("La operación fue cancelada.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
-                    // (Podrías agregar lógica adicional aquí si es necesario)
-                    // Aquí puedes llamar a un método para actualizar la lista de órdenes en la vista principal
                     var ordenReparacionViewModel = provider.GetRequiredService<OrdenReparacionViewModel>();
                     ordenReparacionViewModel.UpdateOrdenes();
                 });
@@ -143,14 +139,11 @@ namespace MechanicWorkshopApp
         {
             e.Handled = true; // Evitamos que la excepción cierre la app
             _errorLoggingService.LogException(e.Exception);
-            // Por ejemplo: mostrar un messagebox
             MessageBox.Show(
                 $"Ocurrió un error no controlado:\n{e.Exception.Message}\n Si se vuelve a repetir contactad con el desarrollador del programa",
                 "Error inesperado",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
-
-            // Aquí podrías loguear el error, etc.
         }
 
     }

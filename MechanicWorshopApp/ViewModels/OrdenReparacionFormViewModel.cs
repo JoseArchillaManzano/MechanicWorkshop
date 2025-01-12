@@ -62,6 +62,8 @@ namespace MechanicWorkshopApp.ViewModels
         public ICommand GuardarCommand { get; }
         public ICommand CancelarCommand { get; }
         public ICommand GenerarFacturaCommand { get; }
+        public ICommand GenerarPresupuestoCommand { get; }
+        public ICommand GenerarOrdenReparacionCommand { get; }
         public OrdenReparacionFormViewModel(
             OrdenReparacionService ordenReparacionService,
             VehiculoService vehiculoService,
@@ -95,6 +97,8 @@ namespace MechanicWorkshopApp.ViewModels
             GuardarCommand = new RelayCommand(() => GuardarOrden(true));
             CancelarCommand = new RelayCommand(Cancelar);
             GenerarFacturaCommand = new RelayCommand(GenerarFactura);
+            GenerarPresupuestoCommand = new RelayCommand(GenerarPresupuesto);
+            GenerarOrdenReparacionCommand = new RelayCommand(GenerarOrdenReparacion);
 
             Orden ??= new OrdenReparacion
             {
@@ -342,6 +346,8 @@ namespace MechanicWorkshopApp.ViewModels
 
         private void GenerarFactura()
         {
+            if (!DatosSonCorrectos()) return;
+
             if (Orden.FechaSalida is null)
             {
                 Orden.FechaSalida = DateTime.Now;
@@ -366,12 +372,80 @@ namespace MechanicWorkshopApp.ViewModels
             var directorio = @"C:\Facturas";
             var filePath = $"Factura_{Orden.Id}.pdf";
 
-            facturaGenerator.GenerarFactura(filePath);
+            facturaGenerator.GenerarFactura(filePath, false);
             var rutaFactura = Path.Combine(directorio, filePath);
 
             MessageBox.Show($"Factura generada correctamente en {rutaFactura}. Los datos que haya podido modificar se han guardado correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
 
             _printerService.AbrirPDFEnVisor(rutaFactura);
+        }
+
+        private void GenerarPresupuesto()
+        {
+            if (!DatosSonCorrectos()) return;
+
+            GuardarOrden(false);
+            var tallerConfig = _tallerConfigService.ObtenerConfiguracion();
+            var copiaOrden = new OrdenReparacion
+            {
+                Id = Orden.Id,
+                Cliente = ClienteSeleccionado,
+                ClienteId = ClienteSeleccionado.Id,
+                Descripcion = Orden.Descripcion,
+                LineasOrden = Orden.LineasOrden,
+                Vehiculo = VehiculoSeleccionado,
+                VehiculoId = VehiculoSeleccionado.Id
+            };
+            var facturaGenerator = new FacturaPdfGenerator(copiaOrden, tallerConfig);
+
+            var directorio = @"C:\Presupuestos";
+            var filePath = $"Presupuesto_{Orden.Id}.pdf";
+
+            facturaGenerator.GenerarFactura(filePath, true);
+            var rutaPresupuesto = Path.Combine(directorio, filePath);
+
+            MessageBox.Show($"Presupuesto generado correctamente en {rutaPresupuesto}. Los datos que haya podido modificar se han guardado correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            _printerService.AbrirPDFEnVisor(rutaPresupuesto);
+        }
+
+        private void GenerarOrdenReparacion()
+        {
+            if (!DatosSonCorrectos()) return;
+
+            GuardarOrden(false);
+            var tallerConfig = _tallerConfigService.ObtenerConfiguracion();
+            var copiaOrden = new OrdenReparacion
+            {
+                Id = Orden.Id,
+                Cliente = ClienteSeleccionado,
+                ClienteId = ClienteSeleccionado.Id,
+                Descripcion = Orden.Descripcion,
+                LineasOrden = Orden.LineasOrden,
+                Vehiculo = VehiculoSeleccionado,
+                VehiculoId = VehiculoSeleccionado.Id
+            };
+            var facturaGenerator = new FacturaPdfGenerator(copiaOrden, tallerConfig);
+
+            var directorio = @"C:\OrdenesReparacion";
+            var filePath = $"OrdenReparacion_{Orden.Id}.pdf";
+
+            facturaGenerator.GenerarOrdenReparacion(filePath);
+            var rutaOrdenReparacion = Path.Combine(directorio, filePath);
+
+            MessageBox.Show($"Orden de reparación generada correctamente en {rutaOrdenReparacion}. Los datos que haya podido modificar se han guardado correctamente.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            _printerService.AbrirPDFEnVisor(rutaOrdenReparacion);
+        }
+
+        private bool DatosSonCorrectos()
+        {
+            if (ClienteSeleccionado is null || VehiculoSeleccionado is null)
+            {
+                MessageBox.Show("Debe seleccionar un cliente y un vehiculo", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                return false;
+            }
+            return true;
         }
     }
 }

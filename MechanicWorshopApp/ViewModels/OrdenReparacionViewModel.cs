@@ -137,7 +137,8 @@ namespace MechanicWorkshopApp.ViewModels
 
             ordenForm.Initialize(ordenReparacion);
             ordenForm.ShowDialog();
-            
+
+            UpdateOrdenes();
         }
 
         private void EditarOrden()
@@ -150,6 +151,8 @@ namespace MechanicWorkshopApp.ViewModels
 
                 ordenForm.Initialize(ordenEditable);
                 ordenForm.ShowDialog();
+
+                UpdateOrdenes();
             }
             else
             {

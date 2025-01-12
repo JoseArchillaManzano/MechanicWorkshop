@@ -9,22 +9,33 @@
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <!-- Fila superior: Botón Generar Factura -->
             <RowDefinition Height="Auto" />
-            <!-- Fila central: TabControl con 3 pestañas -->
             <RowDefinition Height="*" />
-            <!-- Fila inferior: Botones de acción (Guardar, Cancelar) -->
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Botón Generar Factura (arriba a la derecha) -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
+            <Button Command="{Binding GenerarPresupuestoCommand}" ToolTip="Generar Presupuesto"
+                Width="45" Height="45" Margin="0,0,10,0"
+                Style="{StaticResource MaterialDesignFloatingActionButton}" 
+                Background="#2196F3" Cursor="Hand">
+                <materialDesign:PackIcon Kind="FileDocumentOutline"
+                                 Width="24" Height="24" Foreground="White"/>
+            </Button>
+            <Button Command="{Binding GenerarOrdenReparacionCommand}" 
+                ToolTip="Generar Orden de Reparación"
+                Width="45" Height="45" Margin="0,0,10,0"
+                Style="{StaticResource MaterialDesignFloatingActionButton}" 
+                Background="#9C27B0" Cursor="Hand">
+                <materialDesign:PackIcon Kind="Tools" 
+                                 Width="24" Height="24" Foreground="White"/>
+            </Button>
             <Button Command="{Binding GenerarFacturaCommand}" ToolTip="Generar Factura"
-                    Width="45" Height="45" 
-                    Style="{StaticResource MaterialDesignFloatingActionButton}" 
-                    Background="#FF5722" Cursor="Hand">
-                <materialDesign:PackIcon Kind="FilePdfBox"
-                                         Width="24" Height="24" Foreground="White"/>
+                Width="45" Height="45" 
+                Style="{StaticResource MaterialDesignFloatingActionButton}" 
+                Background="#FF5722" Cursor="Hand"> 
+                <materialDesign:PackIcon Kind="ReceiptText"
+                             Width="24" Height="24" Foreground="White"/>
             </Button>
         </StackPanel>
 
